@@ -50,3 +50,8 @@ public class ChessPiece {
         throw new RuntimeException("Not implemented");
     }
 }
+
+//Don't create a class for each type of piece
+//Don't write pieceMOves as a bunch of each moves
+//Create a class that is a move calculator for each type of piece -- in piecemoves just figure out what kind of piece
+//It is and call the wright class method depending on that. Figure out what a switch statement is.

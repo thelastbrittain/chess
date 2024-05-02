@@ -7,7 +7,7 @@ package chess;
  * signature of the existing methods.
  */
 public class ChessMove {
-
+//See rectangle method
     public ChessMove(ChessPosition startPosition, ChessPosition endPosition,
                      ChessPiece.PieceType promotionPiece) {
     }
