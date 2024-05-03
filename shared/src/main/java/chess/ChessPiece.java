@@ -63,6 +63,9 @@ public class ChessPiece {
             case BISHOP:
                 BishopMoves bMoves = new BishopMoves(board, myPosition, teamColor, moves);
                 bMoves.movesAvailable();
+                break;
+            case KING:
+                break;
 
         }
 
