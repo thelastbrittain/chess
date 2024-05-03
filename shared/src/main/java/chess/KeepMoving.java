@@ -37,11 +37,8 @@ public class KeepMoving {
 
 
     }
-
-    public void moveDirection(KeepMoveDirection direction) {
-        Collection<ChessMove> moves = new ArrayList<>();  //Creating a new array to hold the moves
-
-        //Changing the way the piece will move depending on what was passed into the function
+    //A function that takes in the move direction and returns iterators for the row and column in a list of integers
+    private int[] switchFunction (KeepMoveDirection direction) {
         switch (direction){
             case UP:
                 rowDirection = up;
@@ -78,7 +75,17 @@ public class KeepMoving {
                 break;
 
         }
+        return new int[]{rowDirection, colDirection};
+    }
 
+    //Function that takes in a move direction and adds to a predetermined list the possible moves in that direction
+    public void moveDirection(KeepMoveDirection direction) {
+
+        Collection<ChessMove> moves = new ArrayList<>();  //Creating a new array to hold the moves
+
+        int [] rowCol = switchFunction(direction);
+        int rowDirection = rowCol[0];
+        int colDirection = rowCol[1];
 
         //running the script that will check all of the moves in a direction
         int tempRow = this.position.getRow();
@@ -111,49 +118,15 @@ public class KeepMoving {
 
     }
 
+    //Same function as above but only moves once in a direction
     public void moveDirectionSingle(KeepMoveDirection direction) {
         Collection<ChessMove> moves = new ArrayList<>();  //Creating a new array to hold the moves
 
-        //Changing the way the piece will move depending on what was passed into the function
-        switch (direction){
-            case UP:
-                rowDirection = up;
-                colDirection = 0;
-                break;
-            case DOWN:
-                rowDirection = down;
-                colDirection = 0;
-                break;
-            case LEFT:
-                rowDirection = 0;
-                colDirection = left;
-                break;
-            case RIGHT:
-                rowDirection = 0;
-                colDirection = right;
-                break;
-
-            case UPRIGHT:
-                rowDirection = up;
-                colDirection = right;
-                break;
-            case UPLEFT:
-                rowDirection = up;
-                colDirection = left;
-                break;
-            case DOWNRIGHT:
-                rowDirection = down;
-                colDirection = right;
-                break;
-            case DOWNLEFT:
-                rowDirection = down;
-                colDirection = left;
-                break;
-
-        }
+        int [] rowCol = switchFunction(direction);
+        int rowDirection = rowCol[0];
+        int colDirection = rowCol[1];
 
 
-        //running the script that will check all of the moves in a direction
         int tempRow = this.position.getRow();
         int tempColumn = this.position.getColumn();
         int iterator = 1;
