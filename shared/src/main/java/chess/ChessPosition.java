@@ -14,8 +14,8 @@ public class ChessPosition {
     private int column;
 
     public ChessPosition(int row, int col) {
-        this.row = 8- row ;
-        this.column = col + 1;
+        this.row = row;
+        this.column = col;
     }
 
     /**
@@ -36,7 +36,7 @@ public class ChessPosition {
 
     @Override
     public String toString(){
-        return "Row,Column (" + row + "," + column + ")";
+        return "Row,Column (" + this.getRow() + "," + this.getColumn() + ")";
     }
 
     @Override

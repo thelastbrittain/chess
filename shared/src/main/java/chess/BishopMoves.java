@@ -24,16 +24,18 @@ public class BishopMoves {
     public Collection<ChessMove> movesAvailable(){
         Collection<ChessMove> moves = new ArrayList<>();
         //four while loops, to make sure it's in bounds
-        int tempRow = position.getRow();
+        int tempRow = this.position.getRow();
         int tempColumn = position.getColumn();
 
-        while ((tempRow - 1) >0 && (tempColumn + 1) < 7){  //Going up and left
-            tempRow --;
-            tempColumn ++;
+        while ((tempRow) < 8 && (tempColumn) > 0){  //Going up and left
+            tempRow ++;
+            tempColumn --;
             ChessPosition tempPosition = new ChessPosition(tempRow, tempColumn);
             if (board.getPiece(tempPosition) == null) {   //if no piece is there, add that spot to the list
                 ChessMove newPiece = new ChessMove(position, tempPosition, null);
                 moves.add(newPiece);
+                ChessPiece tempPiece =  new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
+                board.addPiece(tempPosition, tempPiece);
 
             }
             else if (board.getPiece(tempPosition) != null){ //if there is a piece there, check if it's friend or foe
