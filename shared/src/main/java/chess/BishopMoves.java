@@ -13,10 +13,12 @@ import java.util.Collection;
 public class BishopMoves {
     private ChessBoard board;
     private ChessPosition position;
+    private ChessGame.TeamColor teamColor;
 
-    public BishopMoves(ChessBoard board, ChessPosition position){
+    public BishopMoves(ChessBoard board, ChessPosition position, ChessGame.TeamColor teamColor){
         this.board = board;
         this.position = position;
+        this.teamColor = teamColor;
     }
 
     public Collection<ChessMove> movesAvailable(){
@@ -29,15 +31,23 @@ public class BishopMoves {
             tempRow --;
             tempColumn ++;
             ChessPosition tempPosition = new ChessPosition(tempRow, tempColumn);
-            if (board.getPiece(tempPosition) == null) {
+            if (board.getPiece(tempPosition) == null) {   //if no piece is there, add that spot to the list
                 ChessMove newPiece = new ChessMove(position, tempPosition, null);
                 moves.add(newPiece);
 
             }
+            else if (board.getPiece(tempPosition) != null){ //if there is a piece there, check if it's friend or foe
+                ChessGame.TeamColor enemyColor = board.getPiece(tempPosition).getTeamColor();
+                if (teamColor != enemyColor){  //if foe, add that spot to possible moves, then break
+                    moves.add(new ChessMove(position, tempPosition, null));
+                    break;
+                }
+                else {break;}  //if friend, break
+            }
         }
-        //if in bounds, check if a different piece is there
-        //if piece is there, check team
-        //if enemy team, good
+
+
+
 
 
 

@@ -56,11 +56,12 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         //Check what type of piece it is
         //Switch statement calling various functions calling other functions based on what the piece is.
-        ChessPiece.PieceType pieceType = getPieceType();
+        ChessPiece.PieceType pieceType = this.getPieceType(); //edited this and added this. see if it works.
+        ChessGame.TeamColor teamColor = this.getTeamColor();  //added this as well.
         Collection<ChessMove> moves = new ArrayList<>();
         switch (pieceType){
             case BISHOP:
-                BishopMoves bMoves = new BishopMoves(board, myPosition);
+                BishopMoves bMoves = new BishopMoves(board, myPosition, teamColor);
                 moves = bMoves.movesAvailable();
 
         }
@@ -68,6 +69,11 @@ public class ChessPiece {
         return moves;
 
 
+    }
+
+    @Override
+    public String toString() {
+        return type + " " + teamColor;
     }
 }
 
