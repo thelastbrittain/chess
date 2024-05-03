@@ -61,12 +61,14 @@ public class ChessPiece {
         Collection<ChessMove> moves = new ArrayList<>();
         switch (pieceType){
             case BISHOP:
-                BishopMoves bMoves = new BishopMoves(board, myPosition, teamColor, moves);
+                PieceMoves bMoves = new PieceMoves(board, myPosition, teamColor, moves, pieceType);
                 bMoves.movesAvailable();
                 break;
             case KING:
-                KingMoves kMoves = new KingMoves(board, myPosition, teamColor, moves);
+                PieceMoves kMoves = new PieceMoves(board, myPosition, teamColor, moves, pieceType);
                 kMoves.movesAvailable();
+                break;
+            case KNIGHT:
                 break;
         }
 
