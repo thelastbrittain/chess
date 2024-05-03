@@ -60,7 +60,8 @@ public class ChessPiece {
         Collection<ChessMove> moves = new ArrayList<>();
         switch (pieceType){
             case BISHOP:
-
+                BishopMoves bMoves = new BishopMoves(board, myPosition);
+                moves = bMoves.movesAvailable();
 
         }
 

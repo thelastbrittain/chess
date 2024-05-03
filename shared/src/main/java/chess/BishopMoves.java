@@ -12,24 +12,27 @@ import java.util.Collection;
  */
 public class BishopMoves {
     private ChessBoard board;
-    private ChessPiece piece;
     private ChessPosition position;
 
-    public BishopMoves(ChessBoard board, ChessPiece piece, ChessPosition position){
+    public BishopMoves(ChessBoard board, ChessPosition position){
         this.board = board;
-        this.piece = piece;
         this.position = position;
     }
 
     public Collection<ChessMove> movesAvailable(){
         Collection<ChessMove> moves = new ArrayList<>();
         //four while loops, to make sure it's in bounds
-        ChessPosition tempPosition = position;
-        while ((tempPosition.getRow() - 1) >0 && (tempPosition.getColumn() + 1) < 7){  //Going up and left
-            //find out if anything is there
+        int tempRow = position.getRow();
+        int tempColumn = position.getColumn();
+
+        while ((tempRow - 1) >0 && (tempColumn + 1) < 7){  //Going up and left
+            tempRow --;
+            tempColumn ++;
+            ChessPosition tempPosition = new ChessPosition(tempRow, tempColumn);
             if (board.getPiece(tempPosition) == null) {
                 ChessMove newPiece = new ChessMove(position, tempPosition, null);
                 moves.add(newPiece);
+
             }
         }
         //if in bounds, check if a different piece is there
