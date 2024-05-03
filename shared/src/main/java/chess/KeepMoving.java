@@ -90,7 +90,8 @@ public class KeepMoving {
         //running the script that will check all of the moves in a direction
         int tempRow = this.position.getRow();
         int tempColumn = this.position.getColumn();
-        while (tempRow > 1 && tempRow < 8 && tempColumn > 1 && tempColumn < 8) {
+
+        while (inbounds(tempRow, tempColumn)) {
             tempRow += (rowDirection);
             tempColumn += (colDirection);
 
@@ -131,7 +132,7 @@ public class KeepMoving {
         int tempColumn = this.position.getColumn();
         int iterator = 1;
 
-        while (tempRow > 1 && tempRow < 8 && tempColumn > 1 && tempColumn < 8 && iterator == 1) { //making sure the program only runs once.
+        while (inbounds(tempRow, tempColumn) && iterator == 1) { //making sure the program only runs once.
             iterator ++;
             tempRow += (rowDirection);
             tempColumn += (colDirection);
@@ -158,6 +159,15 @@ public class KeepMoving {
             ogList.add(move);
         }
 
+    }
+
+    public boolean inbounds(int row, int col){
+        if (row > 1 && row < 8 && col > 1 && col < 8) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
 }
