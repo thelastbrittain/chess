@@ -65,8 +65,9 @@ public class ChessPiece {
                 bMoves.movesAvailable();
                 break;
             case KING:
+                KingMoves kMoves = new KingMoves(board, myPosition, teamColor, moves);
+                kMoves.movesAvailable();
                 break;
-
         }
 
         return moves;
