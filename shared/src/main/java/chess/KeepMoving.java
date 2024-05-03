@@ -25,7 +25,9 @@ public class KeepMoving {
     private int colDirection;
 
     public enum KeepMoveDirection {
-        UP, DOWN, LEFT, RIGHT, UPRIGHT, DOWNRIGHT, UPLEFT, DOWNLEFT;
+        UP, DOWN, LEFT, RIGHT, UPRIGHT, DOWNRIGHT, UPLEFT, DOWNLEFT,
+        KNIGHTUPRIGHT, KNIGHTMIDDLERIGHTUP, KNIGHTMIDDLERIGHTDOWN, KNIGHTDOWNRIGHT,
+        KNIGHTUPLEFT, KNIGHTMIDDLELEFTUP, KNIGHTMIDDLELEFTDOWN, KNIGHTDOWNLEFT;
     }
 
     public KeepMoving(ChessBoard board, ChessPosition position, ChessGame.TeamColor teamColor, Collection<ChessMove> ogList) {
@@ -73,6 +75,34 @@ public class KeepMoving {
                 rowDirection = down;
                 colDirection = left;
                 break;
+
+            case KNIGHTUPRIGHT:
+                rowDirection = 2;
+                colDirection = right;
+                break;
+            case KNIGHTMIDDLERIGHTUP:
+                rowDirection = up;
+                colDirection = 2;
+                break;
+            case KNIGHTMIDDLERIGHTDOWN:
+                rowDirection = down;
+                colDirection = 2;
+                break;
+            case KNIGHTDOWNRIGHT:
+                rowDirection = -2;
+                colDirection = right;
+            case KNIGHTUPLEFT:
+                rowDirection = 2;
+                colDirection = left;
+            case KNIGHTMIDDLELEFTUP:
+                rowDirection = up;
+                colDirection = -2;
+            case KNIGHTMIDDLELEFTDOWN:
+                rowDirection = down;
+                colDirection = -2;
+            case KNIGHTDOWNLEFT:
+                rowDirection = -2;
+                colDirection = left;
 
         }
         return new int[]{rowDirection, colDirection};
@@ -136,6 +166,10 @@ public class KeepMoving {
             iterator ++;
             tempRow += (rowDirection);
             tempColumn += (colDirection);
+
+            if (! inbounds(tempRow, tempColumn)) { //this statement is only useful when testing knights
+                break;
+            }
 
             ChessPosition tempPosition = new ChessPosition(tempRow, tempColumn);
             if (board.getPiece(tempPosition) == null) {   //if no piece is there, add that spot to the list
