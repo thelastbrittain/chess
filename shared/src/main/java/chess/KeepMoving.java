@@ -12,7 +12,6 @@ import java.util.Collection;
  */
 public class KeepMoving {
     private ChessBoard board;
-    private KeepMoveDirection direction;
     private ChessPosition position;
     private ChessGame.TeamColor teamColor;
     private Collection<ChessMove> ogList;
@@ -29,13 +28,20 @@ public class KeepMoving {
         UP, DOWN, LEFT, RIGHT, UPRIGHT, DOWNRIGHT, UPLEFT, DOWNLEFT;
     }
 
-    public KeepMoving(ChessBoard board, ChessPosition position, KeepMoveDirection direction,ChessGame.TeamColor teamColor, Collection<ChessMove> ogList) {
+    public KeepMoving(ChessBoard board, ChessPosition position, ChessGame.TeamColor teamColor, Collection<ChessMove> ogList) {
         this.board = board;
-        this.direction = direction;
         this.position = position;
         this.teamColor = teamColor;
         this.ogList = ogList;
 
+
+
+    }
+
+    public void moveDirection(KeepMoveDirection direction) {
+        Collection<ChessMove> moves = new ArrayList<>();  //Creating a new array to hold the moves
+
+        //Changing the way the piece will move depending on what was passed into the function
         switch (direction){
             case UP:
                 rowDirection = up;
@@ -73,12 +79,8 @@ public class KeepMoving {
 
         }
 
-    }
 
-    public void moveDirection() {
-        Collection<ChessMove> moves = new ArrayList<>();
-
-
+        //running the script that will check all of the moves in a direction
         int tempRow = this.position.getRow();
         int tempColumn = this.position.getColumn();
         while (tempRow > 1 && tempRow < 8 && tempColumn > 1 && tempColumn < 8) {
@@ -102,6 +104,7 @@ public class KeepMoving {
                 }
             }
         }
+        //so that there are not lists inside of list, this adds each move into the original list
         for (ChessMove move : moves) {
             ogList.add(move);
         }
@@ -110,12 +113,3 @@ public class KeepMoving {
 
 }
 
-/**
- *
- * if the piece is in bounds
- * row + or -
- * col +  or -
- * check if piece there
- *
- *
- */

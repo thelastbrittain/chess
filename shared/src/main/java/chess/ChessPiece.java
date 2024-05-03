@@ -61,8 +61,8 @@ public class ChessPiece {
         Collection<ChessMove> moves = new ArrayList<>();
         switch (pieceType){
             case BISHOP:
-                BishopMoves bMoves = new BishopMoves(board, myPosition, teamColor);
-                moves = bMoves.movesAvailable();
+                BishopMoves bMoves = new BishopMoves(board, myPosition, teamColor, moves);
+                bMoves.movesAvailable();
 
         }
 

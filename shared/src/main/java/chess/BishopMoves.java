@@ -14,115 +14,22 @@ public class BishopMoves {
     private ChessBoard board;
     private ChessPosition position;
     private ChessGame.TeamColor teamColor;
+    private Collection<ChessMove> ogList;
 
-    public BishopMoves(ChessBoard board, ChessPosition position, ChessGame.TeamColor teamColor){
+    public BishopMoves(ChessBoard board, ChessPosition position, ChessGame.TeamColor teamColor, Collection<ChessMove> ogList){
         this.board = board;
         this.position = position;
         this.teamColor = teamColor;
+        this.ogList = ogList;
     }
 
-    public Collection<ChessMove> movesAvailable(){
-        Collection<ChessMove> moves = new ArrayList<>();
+    public void movesAvailable() {
+        KeepMoving bishopKeepMoving = new KeepMoving(board, position, teamColor, ogList);
+        bishopKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.UPRIGHT);
+        bishopKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.UPLEFT);
+        bishopKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.DOWNRIGHT);
+        bishopKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.DOWNLEFT);
 
-        //four while loops, to make sure it's in bounds
-
-        int tempRow = this.position.getRow();
-        int tempColumn = this.position.getColumn();
-        while ((tempRow) < 8 && (tempColumn) > 1){  //Going up and left
-            tempRow ++;
-            tempColumn --;
-            ChessPosition tempPosition = new ChessPosition(tempRow, tempColumn);
-            if (board.getPiece(tempPosition) == null) {   //if no piece is there, add that spot to the list
-                ChessMove newPiece = new ChessMove(position, tempPosition, null);
-                moves.add(newPiece);
-                ChessPiece tempPiece =  new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN); //code used to put a pawn in the available spot for visual aid
-                board.addPiece(tempPosition, tempPiece);
-
-            }
-            else if (board.getPiece(tempPosition) != null){ //if there is a piece there, check if it's friend or foe
-                ChessGame.TeamColor enemyColor = board.getPiece(tempPosition).getTeamColor();
-                if (teamColor != enemyColor){  //if foe, add that spot to possible moves, then break
-                    moves.add(new ChessMove(position, tempPosition, null));
-                    break;
-                }
-                else {break;}  //if friend, break
-            }
-        }
-
-        tempRow = this.position.getRow();
-        tempColumn = this.position.getColumn();
-        while ((tempRow) < 8 && (tempColumn) < 8){  //Going up and right
-            tempRow ++;
-            tempColumn ++;
-            ChessPosition tempPosition = new ChessPosition(tempRow, tempColumn);
-            if (board.getPiece(tempPosition) == null) {   //if no piece is there, add that spot to the list
-                ChessMove newPiece = new ChessMove(position, tempPosition, null);
-                moves.add(newPiece);
-                ChessPiece tempPiece =  new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN); //code used to put a pawn in the available spot for visual aid
-                board.addPiece(tempPosition, tempPiece);
-
-            }
-            else if (board.getPiece(tempPosition) != null){ //if there is a piece there, check if it's friend or foe
-                ChessGame.TeamColor enemyColor = board.getPiece(tempPosition).getTeamColor();
-                if (teamColor != enemyColor){  //if foe, add that spot to possible moves, then break
-                    moves.add(new ChessMove(position, tempPosition, null));
-                    break;
-                }
-                else {break;}  //if friend, break
-            }
-        }
-
-        tempRow = this.position.getRow();
-        tempColumn = this.position.getColumn();
-        while ((tempRow) > 1 && (tempColumn) < 8){  //Going down and right
-            tempRow --;
-            tempColumn ++;
-            ChessPosition tempPosition = new ChessPosition(tempRow, tempColumn);
-            if (board.getPiece(tempPosition) == null) {   //if no piece is there, add that spot to the list
-                ChessMove newPiece = new ChessMove(position, tempPosition, null);
-                moves.add(newPiece);
-                ChessPiece tempPiece =  new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN); //code used to put a pawn in the available spot for visual aid
-                board.addPiece(tempPosition, tempPiece);
-
-            }
-            else if (board.getPiece(tempPosition) != null){ //if there is a piece there, check if it's friend or foe
-                ChessGame.TeamColor enemyColor = board.getPiece(tempPosition).getTeamColor();
-                if (teamColor != enemyColor){  //if foe, add that spot to possible moves, then break
-                    moves.add(new ChessMove(position, tempPosition, null));
-                    break;
-                }
-                else {break;}  //if friend, break
-            }
-        }
-
-        tempRow = this.position.getRow();
-        tempColumn = this.position.getColumn();
-        while ((tempRow) > 1 && (tempColumn) > 1){  //Going down and left
-            tempRow --;
-            tempColumn --;
-            ChessPosition tempPosition = new ChessPosition(tempRow, tempColumn);
-            if (board.getPiece(tempPosition) == null) {   //if no piece is there, add that spot to the list
-                ChessMove newPiece = new ChessMove(position, tempPosition, null);
-                moves.add(newPiece);
-                ChessPiece tempPiece =  new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN); //code used to put a pawn in the available spot for visual aid
-                board.addPiece(tempPosition, tempPiece);
-
-            }
-            else if (board.getPiece(tempPosition) != null){ //if there is a piece there, check if it's friend or foe
-                ChessGame.TeamColor enemyColor = board.getPiece(tempPosition).getTeamColor();
-                if (teamColor != enemyColor){  //if foe, add that spot to possible moves, then break
-                    moves.add(new ChessMove(position, tempPosition, null));
-                    break;
-                }
-                else {break;}  //if friend, break
-            }
-        }
-
-
-
-        return moves;
     }
-
-
-
 }
+
