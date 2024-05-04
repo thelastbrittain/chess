@@ -44,7 +44,7 @@ public class ChessBoard {
 //        ChessPosition testPosition = new ChessPosition(5,5);
 //        this.addPiece(testPosition, testPiece); Tests to make sure it clears the board
         clearBoard();
-////        addPawns();
+        addPawns();
 ////        addRooks();
 ////        addKnights();
 ////        addBishops();
@@ -58,6 +58,16 @@ public class ChessBoard {
             for (int j = 0; j < 8; j++) {
                 squares[i][j] = null;
             }
+        }
+    }
+    public void addPawns(){
+        for (int col = 0; col < 8; col++){
+            ChessPiece pawn = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
+            squares[6][col] = pawn;
+        }
+        for (int col = 0; col < 8; col++){
+            ChessPiece pawn = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
+            squares[1][col] = pawn;
         }
     }
 
