@@ -73,9 +73,9 @@ public class ChessPiece {
                 kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.UPLEFT, true);
                 kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.DOWNRIGHT, true);
                 kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.DOWNLEFT, true);
-                kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.RIGHT, true);
                 kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.LEFT, true);
                 kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.UP, true);
+                kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.RIGHT, true);
                 kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.DOWN, true);
                 break;
             case KNIGHT:
@@ -87,12 +87,31 @@ public class ChessPiece {
                 knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTUPRIGHT, true);
                 knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTMIDDLERIGHTUP, true);
                 knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTMIDDLERIGHTDOWN, true);
-                knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTDOWNRIGHT,true);
+                knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTDOWNRIGHT, true);
                 break;
             case PAWN:
                 PawnMoveCalculator pawnMove = new PawnMoveCalculator(board, myPosition, teamColor, moves);
                 pawnMove.calculateMoves();
                 break;
+            case QUEEN:
+                KeepMoving queenMove = new KeepMoving(board, myPosition, teamColor, moves);
+                queenMove.moveDirection(KeepMoving.KeepMoveDirection.UPRIGHT, false);
+                queenMove.moveDirection(KeepMoving.KeepMoveDirection.UPLEFT, false);
+                queenMove.moveDirection(KeepMoving.KeepMoveDirection.DOWNRIGHT, false);
+                queenMove.moveDirection(KeepMoving.KeepMoveDirection.DOWNLEFT, false);
+                queenMove.moveDirection(KeepMoving.KeepMoveDirection.RIGHT, false);
+                queenMove.moveDirection(KeepMoving.KeepMoveDirection.LEFT, false);
+                queenMove.moveDirection(KeepMoving.KeepMoveDirection.UP, false);
+                queenMove.moveDirection(KeepMoving.KeepMoveDirection.DOWN, false);
+                break;
+            case ROOK:
+                KeepMoving rookMove = new KeepMoving(board, myPosition, teamColor, moves);
+                rookMove.moveDirection(KeepMoving.KeepMoveDirection.RIGHT, false);
+                rookMove.moveDirection(KeepMoving.KeepMoveDirection.LEFT, false);
+                rookMove.moveDirection(KeepMoving.KeepMoveDirection.UP, false);
+                rookMove.moveDirection(KeepMoving.KeepMoveDirection.DOWN, false);
+                break;
+
         }
         return moves;
     }
