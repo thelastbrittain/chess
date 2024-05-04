@@ -114,7 +114,7 @@ public class KeepMoving {
     }
 
     //Function that takes in a move direction and adds to a predetermined list the possible moves in that direction
-    public void moveDirection(KeepMoveDirection direction) {
+    public void moveDirection(KeepMoveDirection direction, boolean oneMove) {
 
         Collection<ChessMove> moves = new ArrayList<>();  //Creating a new array to hold the moves
 
@@ -126,9 +126,15 @@ public class KeepMoving {
         int tempRow = this.position.getRow();
         int tempColumn = this.position.getColumn();
 
-        while (inbounds(tempRow, tempColumn)) {
+        int iterator = 1;
+        int number;
+        if (oneMove == true){number = 1;}
+        else {number = 0;}
+
+        while (inbounds(tempRow, tempColumn) && iterator == 1) {
             tempRow += (rowDirection);
             tempColumn += (colDirection);
+            iterator += number;
 
             if (! inbounds(tempRow, tempColumn)) { //just to double check
                 break;
@@ -155,54 +161,8 @@ public class KeepMoving {
         for (ChessMove move : moves) {
             ogList.add(move);
         }
-
     }
 
-    //Same function as above but only moves once in a direction
-    public void moveDirectionSingle(KeepMoveDirection direction) {
-        Collection<ChessMove> moves = new ArrayList<>();  //Creating a new array to hold the moves
-
-        int [] rowCol = switchFunction(direction);
-        int rowDirection = rowCol[0];
-        int colDirection = rowCol[1];
-
-
-        int tempRow = this.position.getRow();
-        int tempColumn = this.position.getColumn();
-        int iterator = 1;
-
-        while (inbounds(tempRow, tempColumn) && iterator == 1) { //making sure the program only runs once.
-            iterator ++;
-            tempRow += (rowDirection);
-            tempColumn += (colDirection);
-
-            if (! inbounds(tempRow, tempColumn)) { //this statement is only useful when testing knights
-                break;
-            }
-
-            ChessPosition tempPosition = new ChessPosition(tempRow, tempColumn);
-            if (board.getPiece(tempPosition) == null) {   //if no piece is there, add that spot to the list
-                ChessMove newPiece = new ChessMove(position, tempPosition, null);
-                moves.add(newPiece);
-                ChessPiece tempPiece = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN); //code used to put a pawn in the available spot for visual aid
-                board.addPiece(tempPosition, tempPiece);
-
-            } else if (board.getPiece(tempPosition) != null) { //if there is a piece there, check if it's friend or foe
-                ChessGame.TeamColor enemyColor = board.getPiece(tempPosition).getTeamColor();
-                if (teamColor != enemyColor) {  //if foe, add that spot to possible moves, then break
-                    moves.add(new ChessMove(position, tempPosition, null));
-                    break;
-                } else {   //if friend, break
-                    break;
-                }
-            }
-        }
-        //so that there are not lists inside of list, this adds each move into the original list
-        for (ChessMove move : moves) {
-            ogList.add(move);
-        }
-
-    }
 
     public boolean inbounds(int row, int col){
         if (row >= 1 && row <= 8 && col >= 1 && col <= 8) {

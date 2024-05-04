@@ -28,32 +28,32 @@ public class PieceMoves {
         switch (pieceType) {
             case BISHOP:
                 KeepMoving bishopKeepMoving = new KeepMoving(board, position, teamColor, ogList);
-                bishopKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.UPRIGHT);
-                bishopKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.UPLEFT);
-                bishopKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.DOWNRIGHT);
-                bishopKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.DOWNLEFT);
+                bishopKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.UPRIGHT, false);
+                bishopKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.UPLEFT, false);
+                bishopKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.DOWNRIGHT, false);
+                bishopKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.DOWNLEFT, false);
                 break;
             case KING:
                 KeepMoving kingKeepMoving = new KeepMoving(board, position, teamColor, ogList);
-                kingKeepMoving.moveDirectionSingle(KeepMoving.KeepMoveDirection.UPRIGHT);
-                kingKeepMoving.moveDirectionSingle(KeepMoving.KeepMoveDirection.UPLEFT);
-                kingKeepMoving.moveDirectionSingle(KeepMoving.KeepMoveDirection.DOWNRIGHT);
-                kingKeepMoving.moveDirectionSingle(KeepMoving.KeepMoveDirection.DOWNLEFT);
-                kingKeepMoving.moveDirectionSingle(KeepMoving.KeepMoveDirection.RIGHT);
-                kingKeepMoving.moveDirectionSingle(KeepMoving.KeepMoveDirection.LEFT);
-                kingKeepMoving.moveDirectionSingle(KeepMoving.KeepMoveDirection.UP);
-                kingKeepMoving.moveDirectionSingle(KeepMoving.KeepMoveDirection.DOWN);
+                kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.UPRIGHT, true);
+                kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.UPLEFT, true);
+                kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.DOWNRIGHT, true);
+                kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.DOWNLEFT, true);
+                kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.RIGHT, true);
+                kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.LEFT, true);
+                kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.UP, true);
+                kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.DOWN, true);
                 break;
             case KNIGHT:
                 KeepMoving knightMove = new KeepMoving(board, position, teamColor, ogList);
-                knightMove.moveDirectionSingle(KeepMoving.KeepMoveDirection.KNIGHTDOWNLEFT);
-                knightMove.moveDirectionSingle(KeepMoving.KeepMoveDirection.KNIGHTMIDDLELEFTDOWN);
-                knightMove.moveDirectionSingle(KeepMoving.KeepMoveDirection.KNIGHTMIDDLELEFTUP);
-                knightMove.moveDirectionSingle(KeepMoving.KeepMoveDirection.KNIGHTUPLEFT);
-                knightMove.moveDirectionSingle(KeepMoving.KeepMoveDirection.KNIGHTUPRIGHT);
-                knightMove.moveDirectionSingle(KeepMoving.KeepMoveDirection.KNIGHTMIDDLERIGHTUP);
-                knightMove.moveDirectionSingle(KeepMoving.KeepMoveDirection.KNIGHTMIDDLERIGHTDOWN);
-                knightMove.moveDirectionSingle(KeepMoving.KeepMoveDirection.KNIGHTDOWNRIGHT);
+                knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTDOWNLEFT, true);
+                knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTMIDDLELEFTDOWN, true);
+                knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTMIDDLELEFTUP, true);
+                knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTUPLEFT, true);
+                knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTUPRIGHT, true);
+                knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTMIDDLERIGHTUP, true);
+                knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTMIDDLERIGHTDOWN, true);
+                knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTDOWNRIGHT,true);
                 break;
         }
 
