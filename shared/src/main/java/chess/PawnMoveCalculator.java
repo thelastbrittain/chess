@@ -29,9 +29,9 @@ public class PawnMoveCalculator {
             goUpRight();
         }
         else {
-//            goDown;
-//            goDownLeft;
-//            goDownRight;
+            goDown();
+            goDownLeft();
+            goDownRight();
         }
     }
 
@@ -113,36 +113,68 @@ public class PawnMoveCalculator {
     }
 
     public void goDown() {
+        //break if on the edge of the board
         if (this.row == 1){return;}
-        ChessPosition upPosition = new ChessPosition(row + 1, col);  //creating object to view up position
+        ChessPosition downPosition = new ChessPosition(row - 1, col);  //creating object to view up position
 
         //double up case
-        if (this.row == 2) {
-            if (board.getPiece(upPosition) == null) {          //if nothing there, create new move and add to list
-                ChessMove upPiece = new ChessMove(position, upPosition, null);
+        if (this.row == 7) {
+            if (board.getPiece(downPosition) == null) {          //if nothing there, create new move and add to list
+                ChessMove upPiece = new ChessMove(position, downPosition, null);
                 ogList.add(upPiece);
 
-                ChessPosition doubleUpPosition = new ChessPosition(row + 2, col);  //now looking at space two up
-                if (board.getPiece(doubleUpPosition) == null) {//if nothing there add move
-                    ChessMove doubleUpPiece = new ChessMove(position, doubleUpPosition, null);
-                    ogList.add(doubleUpPiece);
+                ChessPosition doubleDownPosition = new ChessPosition(row - 2, col);  //now looking at space two up
+                if (board.getPiece(doubleDownPosition) == null) {//if nothing there add move
+                    ChessMove doubleDownPiece = new ChessMove(position, doubleDownPosition, null);
+                    ogList.add(doubleDownPiece);
                 }
             }
         }
         //promotion case
-        else if (this.row == 7) {
-            if (board.getPiece(upPosition) == null) {
-                promotePiece(upPosition);
+        else if (this.row == 2) {
+            if (board.getPiece(downPosition) == null) {
+                promotePiece(downPosition);
             }
         }
-
+        //every other case
         else {
-            if (this.row != 8){
-                if (board.getPiece(upPosition) == null) {                        //of nothing there, create new move and add to list
-                    ChessMove upPiece = new ChessMove(position, upPosition, null);
-                    ogList.add(upPiece);
-                }
+            if (board.getPiece(downPosition) == null) {                        //of nothing there, create new move and add to list
+                ChessMove downPiece = new ChessMove(position, downPosition, null);
+                ogList.add(downPiece);
             }
+        }
+    }
+
+    public void goDownRight() {
+        //break if on the edge
+        if (this.col == 1) {
+            return;}
+        ChessPosition downRightPosition = new ChessPosition(row - 1, col + 1);  //creating object to view up position
+
+        if (board.getPiece(downRightPosition) != null && board.getPiece(downRightPosition).getTeamColor() == ChessGame.TeamColor.WHITE) {
+            if (this.row == 2) {
+                promotePiece(downRightPosition);
+            } else {
+                ChessMove downRightPiece = new ChessMove(position, downRightPosition, null);
+                ogList.add(downRightPiece);
+            }
+
+        }
+    }
+
+    public void goDownLeft() {
+        if (this.col == 1) {
+            return;
+        }
+        ChessPosition downLeftPosition = new ChessPosition(row - 1, col - 1);  //creating object to view up position
+        if (board.getPiece(downLeftPosition) != null && board.getPiece(downLeftPosition).getTeamColor() == ChessGame.TeamColor.WHITE) {                        //of nothing there, create new move and add to list
+            if (this.row == 2) {
+                promotePiece(downLeftPosition);
+            }else {
+                ChessMove downLeftPiece = new ChessMove(position, downLeftPosition, null);
+                ogList.add(downLeftPiece);
+            }
+
         }
     }
 
