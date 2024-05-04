@@ -202,9 +202,8 @@ public class KeepMoving {
                         ogList.add(upRightPiece);
                     }
                 }
-                }
             }
-        }
+        }}
 
     public boolean inbounds(int row, int col){
         if (row >= 1 && row <= 8 && col >= 1 && col <= 8) {

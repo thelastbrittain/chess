@@ -90,7 +90,7 @@ public class ChessPiece {
                 knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTDOWNRIGHT,true);
                 break;
             case PAWN:
-                KeepMoving pawnMove = new KeepMoving(board, myPosition, teamColor, moves);
+                PawnMoveCalculator pawnMove = new PawnMoveCalculator(board, myPosition, teamColor, moves);
                 pawnMove.pawnDirection();
                 break;
         }
