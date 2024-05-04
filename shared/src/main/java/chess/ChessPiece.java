@@ -71,6 +71,11 @@ public class ChessPiece {
             case KNIGHT:
                 PieceMoves nMoves = new PieceMoves(board, myPosition, teamColor, moves, pieceType);
                 nMoves.movesAvailable();
+                break;
+            case PAWN:
+                PieceMoves pMoves = new PieceMoves(board, myPosition, teamColor, moves, pieceType);
+                pMoves.movesAvailable();
+
         }
 
         return moves;

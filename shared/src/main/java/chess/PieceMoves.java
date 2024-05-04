@@ -55,6 +55,10 @@ public class PieceMoves {
                 knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTMIDDLERIGHTDOWN, true);
                 knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTDOWNRIGHT,true);
                 break;
+            case PAWN:
+                KeepMoving pawnMove = new KeepMoving(board, position, teamColor, ogList);
+                pawnMove.pawnDirection();
+                break;
         }
 
 
