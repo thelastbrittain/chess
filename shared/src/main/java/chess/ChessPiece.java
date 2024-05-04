@@ -59,28 +59,42 @@ public class ChessPiece {
         ChessPiece.PieceType pieceType = this.getPieceType(); //edited this and added this. see if it works.
         ChessGame.TeamColor teamColor = this.getTeamColor();  //added this as well.
         Collection<ChessMove> moves = new ArrayList<>();
-        switch (pieceType){
+        switch (pieceType) {
             case BISHOP:
-                PieceMoves bMoves = new PieceMoves(board, myPosition, teamColor, moves, pieceType);
-                bMoves.movesAvailable();
+                KeepMoving bishopKeepMoving = new KeepMoving(board, myPosition, teamColor, moves);
+                bishopKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.UPRIGHT, false);
+                bishopKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.UPLEFT, false);
+                bishopKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.DOWNRIGHT, false);
+                bishopKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.DOWNLEFT, false);
                 break;
             case KING:
-                PieceMoves kMoves = new PieceMoves(board, myPosition, teamColor, moves, pieceType);
-                kMoves.movesAvailable();
+                KeepMoving kingKeepMoving = new KeepMoving(board, myPosition, teamColor, moves);
+                kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.UPRIGHT, true);
+                kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.UPLEFT, true);
+                kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.DOWNRIGHT, true);
+                kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.DOWNLEFT, true);
+                kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.RIGHT, true);
+                kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.LEFT, true);
+                kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.UP, true);
+                kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.DOWN, true);
                 break;
             case KNIGHT:
-                PieceMoves nMoves = new PieceMoves(board, myPosition, teamColor, moves, pieceType);
-                nMoves.movesAvailable();
+                KeepMoving knightMove = new KeepMoving(board, myPosition, teamColor, moves);
+                knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTDOWNLEFT, true);
+                knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTMIDDLELEFTDOWN, true);
+                knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTMIDDLELEFTUP, true);
+                knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTUPLEFT, true);
+                knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTUPRIGHT, true);
+                knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTMIDDLERIGHTUP, true);
+                knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTMIDDLERIGHTDOWN, true);
+                knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTDOWNRIGHT,true);
                 break;
             case PAWN:
-                PieceMoves pMoves = new PieceMoves(board, myPosition, teamColor, moves, pieceType);
-                pMoves.movesAvailable();
-
+                KeepMoving pawnMove = new KeepMoving(board, myPosition, teamColor, moves);
+                pawnMove.pawnDirection();
+                break;
         }
-
         return moves;
-
-
     }
 
     @Override
