@@ -91,7 +91,7 @@ public class ChessPiece {
                 break;
             case PAWN:
                 PawnMoveCalculator pawnMove = new PawnMoveCalculator(board, myPosition, teamColor, moves);
-                pawnMove.pawnDirection();
+                pawnMove.calculateMoves();
                 break;
         }
         return moves;

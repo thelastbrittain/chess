@@ -1,6 +1,8 @@
 package chess;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 public class PawnMoveCalculator {
     private ChessBoard board;
@@ -9,6 +11,7 @@ public class PawnMoveCalculator {
     private Collection<ChessMove> ogList;
     private int row;
     private int col;
+    private List<ChessPiece.PieceType> promotionPieces = Arrays.asList(ChessPiece.PieceType.KING, ChessPiece.PieceType.KNIGHT, ChessPiece.PieceType.ROOK, ChessPiece.PieceType.BISHOP);
 
     public PawnMoveCalculator(ChessBoard board, ChessPosition position, ChessGame.TeamColor teamColor, Collection<ChessMove> ogList) {
         this.board = board;
@@ -21,9 +24,9 @@ public class PawnMoveCalculator {
 
     public void calculateMoves(){
         if (teamColor == ChessGame.TeamColor.WHITE){
-//            goUp;
-//            goUpLeft;
-//            goUpRight;
+            goUp();
+            goUpLeft();
+            goUpRight();
         }
         else {
 //            goDown;
@@ -32,11 +35,24 @@ public class PawnMoveCalculator {
         }
     }
 
-    public void goUP() {
+    //this function takes in a location. If an enemy or nothing is there, it adds 4 moves to the list, Knight, Rook, Bishop, Queen
+    public void promotePiece(ChessPosition newPosition){
+        if (board.getPiece(newPosition) == null || board.getPiece(newPosition).getTeamColor() == ChessGame.TeamColor.BLACK){
+            for (ChessPiece.PieceType piece : promotionPieces){
+                ChessMove move = new ChessMove(position, newPosition, piece);  //if this break bc making new everytime, move this two lines up
+                ogList.add(move);
+            }
+        }
+
+    }
+
+    public void goUp() {
+        if (this.row == 8){return;}
+        ChessPosition upPosition = new ChessPosition(row + 1, col);  //creating object to view up position
+
         //double up case
         if (this.row == 2) {
-            ChessPosition upPosition = new ChessPosition(row + 1, col);  //creating object to view up position
-            if (board.getPiece(upPosition) == null) {                        //of nothing there, create new move and add to list
+            if (board.getPiece(upPosition) == null) {          //if nothing there, create new move and add to list
                 ChessMove upPiece = new ChessMove(position, upPosition, null);
                 ogList.add(upPiece);
 
@@ -45,20 +61,17 @@ public class PawnMoveCalculator {
                     ChessMove doubleUpPiece = new ChessMove(position, doubleUpPosition, null);
                     ogList.add(doubleUpPiece);
                 }
-
             }
         }
         //promotion case
         else if (this.row == 7) {
-            ChessPosition upPosition = new ChessPosition(row + 1, col);  //creating object to view up position
             if (board.getPiece(upPosition) == null) {
-//                promotePiece();
-
+                promotePiece(upPosition);
             }
         }
+
         else {
             if (this.row != 8){
-                ChessPosition upPosition = new ChessPosition(row + 1, col);  //creating object to view up position
                 if (board.getPiece(upPosition) == null) {                        //of nothing there, create new move and add to list
                     ChessMove upPiece = new ChessMove(position, upPosition, null);
                     ogList.add(upPiece);
@@ -66,5 +79,40 @@ public class PawnMoveCalculator {
             }
         }
     }
+
+
+    public void goUpRight() {
+        if (this.col == 8) {
+            return;}
+        ChessPosition upRightPosition = new ChessPosition(row + 1, col + 1);  //creating object to view up position
+
+        if (this.row == 7) {
+            promotePiece(upRightPosition);
+        } else {
+
+            if (board.getPiece(upRightPosition) == null || board.getPiece(upRightPosition).getTeamColor() == ChessGame.TeamColor.BLACK) {                        //of nothing there, create new move and add to list
+                ChessMove upRightPiece = new ChessMove(position, upRightPosition, null);
+                ogList.add(upRightPiece);
+
+            }
+        }
+    }
+
+    public void goUpLeft() {
+        if (this.col == 1) {
+            return;
+        }
+        ChessPosition upLeftPosition = new ChessPosition(row + 1, col - 1);  //creating object to view up position
+        if (this.row == 7) {
+            promotePiece(upLeftPosition);
+        } else {
+            if (board.getPiece(upLeftPosition) == null || board.getPiece(upLeftPosition).getTeamColor() == ChessGame.TeamColor.BLACK) {                        //of nothing there, create new move and add to list
+                ChessMove upLeftPiece = new ChessMove(position, upLeftPosition, null);
+                ogList.add(upLeftPiece);
+
+            }
+        }
+    }
+
 
 }
