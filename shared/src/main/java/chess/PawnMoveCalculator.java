@@ -147,7 +147,7 @@ public class PawnMoveCalculator {
 
     public void goDownRight() {
         //break if on the edge
-        if (this.col == 1) {
+        if (this.col == 8) {
             return;}
         ChessPosition downRightPosition = new ChessPosition(row - 1, col + 1);  //creating object to view up position
 

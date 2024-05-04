@@ -144,8 +144,8 @@ public class KeepMoving {
             if (board.getPiece(tempPosition) == null) {   //if no piece is there, add that spot to the list
                 ChessMove newPiece = new ChessMove(position, tempPosition, null);
                 moves.add(newPiece);
-                ChessPiece tempPiece = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN); //code used to put a pawn in the available spot for visual aid
-                board.addPiece(tempPosition, tempPiece);
+//                ChessPiece tempPiece = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN); //code used to put a pawn in the available spot for visual aid
+//                board.addPiece(tempPosition, tempPiece);  remember to comment these two lines out before the real deal.
 
             } else if (board.getPiece(tempPosition) != null) { //if there is a piece there, check if it's friend or foe
                 ChessGame.TeamColor enemyColor = board.getPiece(tempPosition).getTeamColor();
