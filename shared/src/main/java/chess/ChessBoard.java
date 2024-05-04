@@ -11,7 +11,7 @@ import java.util.Arrays;
 public class ChessBoard {
     private ChessPiece [][] squares = new  ChessPiece[8][8];
     public ChessBoard() {
-        
+
     }
 
     /**
@@ -40,7 +40,25 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-        throw new RuntimeException("Not implemented");
+//        ChessPiece testPiece = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK);
+//        ChessPosition testPosition = new ChessPosition(5,5);
+//        this.addPiece(testPosition, testPiece); Tests to make sure it clears the board
+        clearBoard();
+////        addPawns();
+////        addRooks();
+////        addKnights();
+////        addBishops();
+////        addKings();
+////        addQueens();
+//
+    }
+
+    public void clearBoard() {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                squares[i][j] = null;
+            }
+        }
     }
 
     @Override
