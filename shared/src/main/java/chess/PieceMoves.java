@@ -44,6 +44,17 @@ public class PieceMoves {
                 kingKeepMoving.moveDirectionSingle(KeepMoving.KeepMoveDirection.UP);
                 kingKeepMoving.moveDirectionSingle(KeepMoving.KeepMoveDirection.DOWN);
                 break;
+            case KNIGHT:
+                KeepMoving knightMove = new KeepMoving(board, position, teamColor, ogList);
+                knightMove.moveDirectionSingle(KeepMoving.KeepMoveDirection.KNIGHTDOWNLEFT);
+                knightMove.moveDirectionSingle(KeepMoving.KeepMoveDirection.KNIGHTMIDDLELEFTDOWN);
+                knightMove.moveDirectionSingle(KeepMoving.KeepMoveDirection.KNIGHTMIDDLELEFTUP);
+                knightMove.moveDirectionSingle(KeepMoving.KeepMoveDirection.KNIGHTUPLEFT);
+                knightMove.moveDirectionSingle(KeepMoving.KeepMoveDirection.KNIGHTUPRIGHT);
+                knightMove.moveDirectionSingle(KeepMoving.KeepMoveDirection.KNIGHTMIDDLERIGHTUP);
+                knightMove.moveDirectionSingle(KeepMoving.KeepMoveDirection.KNIGHTMIDDLERIGHTDOWN);
+                knightMove.moveDirectionSingle(KeepMoving.KeepMoveDirection.KNIGHTDOWNRIGHT);
+                break;
         }
 
 

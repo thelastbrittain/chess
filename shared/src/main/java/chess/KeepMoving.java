@@ -91,18 +91,23 @@ public class KeepMoving {
             case KNIGHTDOWNRIGHT:
                 rowDirection = -2;
                 colDirection = right;
+                break;
             case KNIGHTUPLEFT:
                 rowDirection = 2;
                 colDirection = left;
+                break;
             case KNIGHTMIDDLELEFTUP:
                 rowDirection = up;
                 colDirection = -2;
+                break;
             case KNIGHTMIDDLELEFTDOWN:
                 rowDirection = down;
                 colDirection = -2;
+                break;
             case KNIGHTDOWNLEFT:
                 rowDirection = -2;
                 colDirection = left;
+                break;
 
         }
         return new int[]{rowDirection, colDirection};
@@ -124,6 +129,10 @@ public class KeepMoving {
         while (inbounds(tempRow, tempColumn)) {
             tempRow += (rowDirection);
             tempColumn += (colDirection);
+
+            if (! inbounds(tempRow, tempColumn)) { //just to double check
+                break;
+            }
 
             ChessPosition tempPosition = new ChessPosition(tempRow, tempColumn);
             if (board.getPiece(tempPosition) == null) {   //if no piece is there, add that spot to the list
@@ -196,7 +205,7 @@ public class KeepMoving {
     }
 
     public boolean inbounds(int row, int col){
-        if (row > 1 && row < 8 && col > 1 && col < 8) {
+        if (row >= 1 && row <= 8 && col >= 1 && col <= 8) {
             return true;
         }
         else {
