@@ -188,16 +188,19 @@ public class KeepMoving {
                     ChessMove upPiece = new ChessMove(position, upPosition, null);  //look into logic of promotion later
                     ogList.add(upPiece);
                 }
-
-                ChessPosition upLeftPosition = new ChessPosition(row+1, col-1);
-                if (board.getPiece(upLeftPosition) != null && board.getPiece(upLeftPosition).getTeamColor() == ChessGame.TeamColor.BLACK){
-                    ChessMove upLeftPiece = new ChessMove(position, upLeftPosition, null);
-                    ogList.add(upLeftPiece);
+                if (inbounds(row+1, col-1)){
+                    ChessPosition upLeftPosition = new ChessPosition(row+1, col-1);
+                    if (board.getPiece(upLeftPosition) != null && board.getPiece(upLeftPosition).getTeamColor() == ChessGame.TeamColor.BLACK) {
+                        ChessMove upLeftPiece = new ChessMove(position, upLeftPosition, null);
+                        ogList.add(upLeftPiece);
+                    }
                 }
-                ChessPosition upRightPosition = new ChessPosition(row+1, col+1);
-                if (board.getPiece(upRightPosition) != null && board.getPiece(upRightPosition).getTeamColor() == ChessGame.TeamColor.BLACK){
-                    ChessMove upRightPiece = new ChessMove(position, upRightPosition, null);
-                    ogList.add(upRightPiece);
+                if (inbounds(row+1, col+1)) {
+                    ChessPosition upRightPosition = new ChessPosition(row + 1, col + 1);
+                    if (board.getPiece(upRightPosition) != null && board.getPiece(upRightPosition).getTeamColor() == ChessGame.TeamColor.BLACK) {
+                        ChessMove upRightPiece = new ChessMove(position, upRightPosition, null);
+                        ogList.add(upRightPiece);
+                    }
                 }
                 }
             }
