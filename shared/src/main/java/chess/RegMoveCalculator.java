@@ -1,16 +1,16 @@
 package chess;
 
-// a class to make it easier to program moves
+// a class to makogList
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * Purpose: A function that takes in a direction and then makes a while loop to keep going that direction. Returns a list of possible moves.
- * Parameters: direction to move, the chess board
- * Methods:
+ * Purpose: A function that takes in a direction and then makes a while loop to keep going that direction. RetuogList.
+ * Parameters: board, position, teamColor, listToAddTo (ogList)
+ * Methods: Switch function (sets the move positions based on move direction
  */
-public class KeepMoving {
+public class RegMoveCalculator {
     private ChessBoard board;
     private ChessPosition position;
     private ChessGame.TeamColor teamColor;
@@ -30,7 +30,7 @@ public class KeepMoving {
         KNIGHTUPLEFT, KNIGHTMIDDLELEFTUP, KNIGHTMIDDLELEFTDOWN, KNIGHTDOWNLEFT;
     }
 
-    public KeepMoving(ChessBoard board, ChessPosition position, ChessGame.TeamColor teamColor, Collection<ChessMove> ogList) {
+    public RegMoveCalculator(ChessBoard board, ChessPosition position, ChessGame.TeamColor teamColor, Collection<ChessMove> ogList) {
         this.board = board;
         this.position = position;
         this.teamColor = teamColor;
@@ -113,16 +113,14 @@ public class KeepMoving {
         return new int[]{rowDirection, colDirection};
     }
 
-    //Function that takes in a move direction and adds to a predetermined list the possible moves in that direction
+    //Function that takes in a move direction and adds to a predetermogList in that direction
     public void moveDirection(KeepMoveDirection direction, boolean oneMove) {
-
-        Collection<ChessMove> moves = new ArrayList<>();  //Creating a new array to hold the moves
 
         int [] rowCol = switchFunction(direction);
         int rowDirection = rowCol[0];
         int colDirection = rowCol[1];
 
-        //running the script that will check all of the moves in a direction
+        //running the script thatogList in a direction
         int tempRow = this.position.getRow();
         int tempColumn = this.position.getColumn();
 
@@ -143,23 +141,19 @@ public class KeepMoving {
             ChessPosition tempPosition = new ChessPosition(tempRow, tempColumn);
             if (board.getPiece(tempPosition) == null) {   //if no piece is there, add that spot to the list
                 ChessMove newPiece = new ChessMove(position, tempPosition, null);
-                moves.add(newPiece);
+                ogList.add(newPiece);
 //                ChessPiece tempPiece = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN); //code used to put a pawn in the available spot for visual aid
 //                board.addPiece(tempPosition, tempPiece);  remember to comment these two lines out before the real deal.
 
             } else if (board.getPiece(tempPosition) != null) { //if there is a piece there, check if it's friend or foe
                 ChessGame.TeamColor enemyColor = board.getPiece(tempPosition).getTeamColor();
-                if (teamColor != enemyColor) {  //if foe, add that spot to possible moves, then break
-                    moves.add(new ChessMove(position, tempPosition, null));
+                if (teamColor != enemyColor) {  //if foe, addogList, then break
+                    ogList.add(new ChessMove(position, tempPosition, null));
                     break;
                 } else {   //if friend, break
                     break;
                 }
             }
-        }
-        //so that there are not lists inside of list, this adds each move into the original list
-        for (ChessMove move : moves) {
-            ogList.add(move);
         }
     }
 

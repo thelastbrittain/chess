@@ -62,55 +62,55 @@ public class ChessPiece {
         Collection<ChessMove> moves = new ArrayList<>();
         switch (pieceType) {
             case BISHOP:
-                KeepMoving bishopKeepMoving = new KeepMoving(board, myPosition, teamColor, moves);
-                bishopKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.UPRIGHT, false);
-                bishopKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.UPLEFT, false);
-                bishopKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.DOWNRIGHT, false);
-                bishopKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.DOWNLEFT, false);
+                RegMoveCalculator bishopKeepMoving = new RegMoveCalculator(board, myPosition, teamColor, moves);
+                bishopKeepMoving.moveDirection(RegMoveCalculator.KeepMoveDirection.UPRIGHT, false);
+                bishopKeepMoving.moveDirection(RegMoveCalculator.KeepMoveDirection.UPLEFT, false);
+                bishopKeepMoving.moveDirection(RegMoveCalculator.KeepMoveDirection.DOWNRIGHT, false);
+                bishopKeepMoving.moveDirection(RegMoveCalculator.KeepMoveDirection.DOWNLEFT, false);
                 break;
             case KING:
-                KeepMoving kingKeepMoving = new KeepMoving(board, myPosition, teamColor, moves);
-                kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.UPRIGHT, true);
-                kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.UPLEFT, true);
-                kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.DOWNRIGHT, true);
-                kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.DOWNLEFT, true);
-                kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.LEFT, true);
-                kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.UP, true);
-                kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.RIGHT, true);
-                kingKeepMoving.moveDirection(KeepMoving.KeepMoveDirection.DOWN, true);
+                RegMoveCalculator kingKeepMoving = new RegMoveCalculator(board, myPosition, teamColor, moves);
+                kingKeepMoving.moveDirection(RegMoveCalculator.KeepMoveDirection.UPRIGHT, true);
+                kingKeepMoving.moveDirection(RegMoveCalculator.KeepMoveDirection.UPLEFT, true);
+                kingKeepMoving.moveDirection(RegMoveCalculator.KeepMoveDirection.DOWNRIGHT, true);
+                kingKeepMoving.moveDirection(RegMoveCalculator.KeepMoveDirection.DOWNLEFT, true);
+                kingKeepMoving.moveDirection(RegMoveCalculator.KeepMoveDirection.LEFT, true);
+                kingKeepMoving.moveDirection(RegMoveCalculator.KeepMoveDirection.UP, true);
+                kingKeepMoving.moveDirection(RegMoveCalculator.KeepMoveDirection.RIGHT, true);
+                kingKeepMoving.moveDirection(RegMoveCalculator.KeepMoveDirection.DOWN, true);
                 break;
             case KNIGHT:
-                KeepMoving knightMove = new KeepMoving(board, myPosition, teamColor, moves);
-                knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTDOWNLEFT, true);
-                knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTMIDDLELEFTDOWN, true);
-                knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTMIDDLELEFTUP, true);
-                knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTUPLEFT, true);
-                knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTUPRIGHT, true);
-                knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTMIDDLERIGHTUP, true);
-                knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTMIDDLERIGHTDOWN, true);
-                knightMove.moveDirection(KeepMoving.KeepMoveDirection.KNIGHTDOWNRIGHT, true);
+                RegMoveCalculator knightMove = new RegMoveCalculator(board, myPosition, teamColor, moves);
+                knightMove.moveDirection(RegMoveCalculator.KeepMoveDirection.KNIGHTDOWNLEFT, true);
+                knightMove.moveDirection(RegMoveCalculator.KeepMoveDirection.KNIGHTMIDDLELEFTDOWN, true);
+                knightMove.moveDirection(RegMoveCalculator.KeepMoveDirection.KNIGHTMIDDLELEFTUP, true);
+                knightMove.moveDirection(RegMoveCalculator.KeepMoveDirection.KNIGHTUPLEFT, true);
+                knightMove.moveDirection(RegMoveCalculator.KeepMoveDirection.KNIGHTUPRIGHT, true);
+                knightMove.moveDirection(RegMoveCalculator.KeepMoveDirection.KNIGHTMIDDLERIGHTUP, true);
+                knightMove.moveDirection(RegMoveCalculator.KeepMoveDirection.KNIGHTMIDDLERIGHTDOWN, true);
+                knightMove.moveDirection(RegMoveCalculator.KeepMoveDirection.KNIGHTDOWNRIGHT, true);
                 break;
             case PAWN:
                 PawnMoveCalculator pawnMove = new PawnMoveCalculator(board, myPosition, teamColor, moves);
                 pawnMove.calculateMoves();
                 break;
             case QUEEN:
-                KeepMoving queenMove = new KeepMoving(board, myPosition, teamColor, moves);
-                queenMove.moveDirection(KeepMoving.KeepMoveDirection.UPRIGHT, false);
-                queenMove.moveDirection(KeepMoving.KeepMoveDirection.UPLEFT, false);
-                queenMove.moveDirection(KeepMoving.KeepMoveDirection.DOWNRIGHT, false);
-                queenMove.moveDirection(KeepMoving.KeepMoveDirection.DOWNLEFT, false);
-                queenMove.moveDirection(KeepMoving.KeepMoveDirection.RIGHT, false);
-                queenMove.moveDirection(KeepMoving.KeepMoveDirection.LEFT, false);
-                queenMove.moveDirection(KeepMoving.KeepMoveDirection.UP, false);
-                queenMove.moveDirection(KeepMoving.KeepMoveDirection.DOWN, false);
+                RegMoveCalculator queenMove = new RegMoveCalculator(board, myPosition, teamColor, moves);
+                queenMove.moveDirection(RegMoveCalculator.KeepMoveDirection.UPRIGHT, false);
+                queenMove.moveDirection(RegMoveCalculator.KeepMoveDirection.UPLEFT, false);
+                queenMove.moveDirection(RegMoveCalculator.KeepMoveDirection.DOWNRIGHT, false);
+                queenMove.moveDirection(RegMoveCalculator.KeepMoveDirection.DOWNLEFT, false);
+                queenMove.moveDirection(RegMoveCalculator.KeepMoveDirection.RIGHT, false);
+                queenMove.moveDirection(RegMoveCalculator.KeepMoveDirection.LEFT, false);
+                queenMove.moveDirection(RegMoveCalculator.KeepMoveDirection.UP, false);
+                queenMove.moveDirection(RegMoveCalculator.KeepMoveDirection.DOWN, false);
                 break;
             case ROOK:
-                KeepMoving rookMove = new KeepMoving(board, myPosition, teamColor, moves);
-                rookMove.moveDirection(KeepMoving.KeepMoveDirection.RIGHT, false);
-                rookMove.moveDirection(KeepMoving.KeepMoveDirection.LEFT, false);
-                rookMove.moveDirection(KeepMoving.KeepMoveDirection.UP, false);
-                rookMove.moveDirection(KeepMoving.KeepMoveDirection.DOWN, false);
+                RegMoveCalculator rookMove = new RegMoveCalculator(board, myPosition, teamColor, moves);
+                rookMove.moveDirection(RegMoveCalculator.KeepMoveDirection.RIGHT, false);
+                rookMove.moveDirection(RegMoveCalculator.KeepMoveDirection.LEFT, false);
+                rookMove.moveDirection(RegMoveCalculator.KeepMoveDirection.UP, false);
+                rookMove.moveDirection(RegMoveCalculator.KeepMoveDirection.DOWN, false);
                 break;
 
         }

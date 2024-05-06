@@ -54,14 +54,14 @@ public class ChessBoard {
 //
     }
 
-    public void clearBoard() {
+    private void clearBoard() {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 squares[i][j] = null;
             }
         }
     }
-    public void addPawns(){
+    private void addPawns(){
         for (int col = 0; col < 8; col++){
             ChessPiece pawn = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
             squares[6][col] = pawn;
@@ -71,7 +71,7 @@ public class ChessBoard {
             squares[1][col] = pawn;
         }
     }
-    public void addRooks(){
+    private void addRooks(){
         //Black rooks
         ChessPiece rook = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK);
         squares[0][0] = rook;
@@ -85,7 +85,7 @@ public class ChessBoard {
         squares[7][7] = rook4;
 
     }
-    public void addKnights(){
+    private void addKnights(){
         //Black Knight
         ChessPiece Knight = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT);
         squares[0][1] = Knight;
@@ -100,7 +100,7 @@ public class ChessBoard {
 
     }
 
-    public void addBishops(){
+    private void addBishops(){
         //Black bishops
         ChessPiece bishop = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP);
         squares[0][2] = bishop;
@@ -115,7 +115,7 @@ public class ChessBoard {
 
     }
 
-    public void addQueens(){
+    private void addQueens(){
         //Black Queen
         ChessPiece Queen = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.QUEEN);
         squares[0][3] = Queen;
@@ -125,7 +125,7 @@ public class ChessBoard {
         squares[7][3] = Queen2;
     }
 
-    public void addKings(){
+    private void addKings(){
         //Black King
         ChessPiece King = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KING);
         squares[0][4] = King;
