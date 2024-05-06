@@ -40,13 +40,9 @@ public class PawnMoveCalculator {
             ChessMove move = new ChessMove(position, newPosition, piece);  //if this break bc making new everytime, move this two lines up
             ogList.add(move);
         }
-
     }
 
     private void goDirection(int rowChange, int colChange) {
-        //creating variables for promotion/doubleMove
-        boolean doubleMove = false;
-        boolean promotion = false;
         //create new row and col
         int newRow = row + rowChange;
         int newCol = col + colChange;
@@ -55,6 +51,9 @@ public class PawnMoveCalculator {
             return;
         }
 
+        //creating variables for promotion/doubleMove
+        boolean doubleMove = false;
+        boolean promotion = false;
         //setting the promotion and double move bools
         if (teamColor == ChessGame.TeamColor.WHITE) {
             if (row == 2 && colChange == 0) {
