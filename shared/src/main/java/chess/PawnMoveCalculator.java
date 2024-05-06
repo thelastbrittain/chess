@@ -36,7 +36,7 @@ public class PawnMoveCalculator {
     }
 
     //this function takes in a location. If an enemy or nothing is there, it adds 4 moves to the list, Knight, Rook, Bishop, Queen
-    public void promotePiece(ChessPosition newPosition){
+    private void promotePiece(ChessPosition newPosition){
         for (ChessPiece.PieceType piece : promotionPieces){
             ChessMove move = new ChessMove(position, newPosition, piece);  //if this break bc making new everytime, move this two lines up
             ogList.add(move);
@@ -44,7 +44,7 @@ public class PawnMoveCalculator {
 
     }
 
-    public void goUp() {
+    private void goUp() {
         if (this.row == 8){return;}
         ChessPosition upPosition = new ChessPosition(row + 1, col);  //creating object to view up position
 
@@ -79,7 +79,7 @@ public class PawnMoveCalculator {
     }
 
 
-    public void goUpRight() {
+    private void goUpRight() {
         if (this.col == 8) {
             return;}
         ChessPosition upRightPosition = new ChessPosition(row + 1, col + 1);  //creating object to view up position
@@ -95,7 +95,7 @@ public class PawnMoveCalculator {
         }
     }
 
-    public void goUpLeft() {
+    private void goUpLeft() {
         if (this.col == 1) {
             return;
         }
@@ -112,7 +112,7 @@ public class PawnMoveCalculator {
         }
     }
 
-    public void goDown() {
+    private void goDown() {
         //break if on the edge of the board
         if (this.row == 1){return;}
         ChessPosition downPosition = new ChessPosition(row - 1, col);  //creating object to view up position
@@ -145,7 +145,7 @@ public class PawnMoveCalculator {
         }
     }
 
-    public void goDownRight() {
+    private void goDownRight() {
         //break if on the edge
         if (this.col == 8) {
             return;}
@@ -162,7 +162,7 @@ public class PawnMoveCalculator {
         }
     }
 
-    public void goDownLeft() {
+    private void goDownLeft() {
         if (this.col == 1) {
             return;
         }
@@ -174,12 +174,6 @@ public class PawnMoveCalculator {
                 ChessMove downLeftPiece = new ChessMove(position, downLeftPosition, null);
                 ogList.add(downLeftPiece);
             }
-
         }
     }
-
-
-
-
-
 }

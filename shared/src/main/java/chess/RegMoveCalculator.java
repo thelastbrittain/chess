@@ -130,7 +130,7 @@ public class RegMoveCalculator {
         int rowDirection = rowCol[0];
         int colDirection = rowCol[1];
 
-        //running the script thatogList in a direction
+
         int tempRow = this.position.getRow();
         int tempColumn = this.position.getColumn();
 
