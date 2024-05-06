@@ -44,6 +44,44 @@ public class PawnMoveCalculator {
 
     }
 
+    private void goDirection(int rowChange, int colChange){
+        //create new row and col
+        int newRow = row + rowChange;
+        int newCol = col + colChange;
+        //make sure new rol/col are in bounds
+        if (newRow > 8 || newCol > 8 || newRow < 0 || newCol < 0){return;}
+
+        //if type is white,
+            //if start row is 2 {check double up = true}
+            //if start is 7 {promotion = true}
+        //if type is black,
+            //if row is 7 {doubleUp = true}
+            //if row is 2 {promotion = true}
+        if (teamColor == ChessGame.TeamColor.WHITE){
+            if (row == 2){
+        }
+
+        //make new position
+        //get the piece at the new position
+
+        //if col change == 0
+            //if place is empty
+                //if promotion
+                //add move
+                //if double move
+                    //add another move
+
+        //else
+            //if space not empty and space is enemy team
+                //if promotion
+                    //add 4 moves
+                //add move
+
+
+
+    }
+
+
     private void goUp() {
         if (this.row == 8){return;}
         ChessPosition upPosition = new ChessPosition(row + 1, col);  //creating object to view up position
