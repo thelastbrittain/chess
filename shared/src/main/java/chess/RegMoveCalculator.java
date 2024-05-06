@@ -39,7 +39,13 @@ public class RegMoveCalculator {
 
 
     }
-    //A function that takes in the move direction and returns iterators for the row and column in a list of integers
+
+    /**
+     *
+     * @param direction takes in which direction the person wants to go
+     * @return returns a list of the row and col direction.
+     * This is to be used for the moveDirection method so that row and col direction can be iterators.
+     */
     private int[] switchFunction (KeepMoveDirection direction) {
         switch (direction){
             case UP:
@@ -113,7 +119,11 @@ public class RegMoveCalculator {
         return new int[]{rowDirection, colDirection};
     }
 
-    //Function that takes in a move direction and adds to a predetermogList in that direction
+    /**
+     *
+     * @param direction a variable to check which direction to move in.
+     * @param oneMove a parameter to see if the loop should only activate once (for king/knight), or if it should go until it hits a wall/other piece.
+     */
     public void moveDirection(KeepMoveDirection direction, boolean oneMove) {
 
         int [] rowCol = switchFunction(direction);
@@ -157,47 +167,6 @@ public class RegMoveCalculator {
         }
     }
 
-    public void pawnDirection(){
-        int row = position.getRow();
-        int col = position.getColumn();
-
-        if (this.teamColor == ChessGame.TeamColor.WHITE){
-            if (row == 2){                                                      //this is the case if it's the pawn's first move.
-                ChessPosition upPosition = new ChessPosition(row+1, col);  //creating object to view up position
-                if (board.getPiece(upPosition) == null){                        //of nothing there, create new move and add to list
-                    ChessMove upPiece = new ChessMove(position, upPosition, null);
-                    ogList.add(upPiece);
-
-                    ChessPosition doubleUpPosition = new ChessPosition(row+2, col);  //now looking at space two up
-                    if (board.getPiece(doubleUpPosition) == null){//if nothing there add move
-                        ChessMove doubleUpPiece = new ChessMove(position, doubleUpPosition, null);
-                        ogList.add(doubleUpPiece);
-                    }
-
-                }
-            }
-            else {
-                ChessPosition upPosition = new ChessPosition(row+1, col);  //creating object to view up position
-                if (board.getPiece(upPosition) == null){                        //of nothing there, create new move and add to list
-                    ChessMove upPiece = new ChessMove(position, upPosition, null);  //look into logic of promotion later
-                    ogList.add(upPiece);
-                }
-                if (inbounds(row+1, col-1)){
-                    ChessPosition upLeftPosition = new ChessPosition(row+1, col-1);
-                    if (board.getPiece(upLeftPosition) != null && board.getPiece(upLeftPosition).getTeamColor() == ChessGame.TeamColor.BLACK) {
-                        ChessMove upLeftPiece = new ChessMove(position, upLeftPosition, null);
-                        ogList.add(upLeftPiece);
-                    }
-                }
-                if (inbounds(row+1, col+1)) {
-                    ChessPosition upRightPosition = new ChessPosition(row + 1, col + 1);
-                    if (board.getPiece(upRightPosition) != null && board.getPiece(upRightPosition).getTeamColor() == ChessGame.TeamColor.BLACK) {
-                        ChessMove upRightPiece = new ChessMove(position, upRightPosition, null);
-                        ogList.add(upRightPiece);
-                    }
-                }
-            }
-        }}
 
     public boolean inbounds(int row, int col){
         if (row >= 1 && row <= 8 && col >= 1 && col <= 8) {
