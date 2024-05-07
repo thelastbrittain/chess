@@ -29,8 +29,6 @@ public class ChessPiece {
         KNIGHT,
         ROOK,
         PAWN;
-
-
     }
 
     /**
@@ -55,14 +53,13 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        //Check what type of piece it is
-        //Switch statement calling various functions calling other functions based on what the piece is.
-        ChessPiece.PieceType pieceType = this.getPieceType(); //edited this and added this. see if it works.
-        ChessGame.TeamColor teamColor = this.getTeamColor();  //added this as well.
         Collection<ChessMove> moves = new ArrayList<>();
-        RegMoveCalculator moveCalculator = new RegMoveCalculator(board, myPosition, teamColor, moves);
-        moveCalculator.regPieceMoveLogic(pieceType);
-
+        if (type != PieceType.PAWN) { RegMoveCalculator moveCalculator = new RegMoveCalculator(board, myPosition, teamColor, moves, type);
+            moveCalculator.regPieceMoveLogic();}
+        else {
+            PawnMoveCalculator pawnMoveCalculator = new PawnMoveCalculator(board, myPosition, teamColor, moves);
+            pawnMoveCalculator.calculateMoves();
+        }
         return moves;
     }
 

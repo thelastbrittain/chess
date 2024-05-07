@@ -15,29 +15,17 @@ public class RegMoveCalculator {
     private ChessPosition position;
     private ChessGame.TeamColor teamColor;
     private Collection<ChessMove> ogList;
+    private ChessPiece.PieceType pieceType;
 
-    private int up = 1;
-    private int down = -1;
-    private int left = -1;
-    private int right = 1;
-
-    private int rowDirection;
-    private int colDirection;
-
-    public enum KeepMoveDirection {
-        UP, DOWN, LEFT, RIGHT, UPRIGHT, DOWNRIGHT, UPLEFT, DOWNLEFT,
-        KNIGHTUPRIGHT, KNIGHTMIDDLERIGHTUP, KNIGHTMIDDLERIGHTDOWN, KNIGHTDOWNRIGHT,
-        KNIGHTUPLEFT, KNIGHTMIDDLELEFTUP, KNIGHTMIDDLELEFTDOWN, KNIGHTDOWNLEFT;
-    }
-
-    public RegMoveCalculator(ChessBoard board, ChessPosition position, ChessGame.TeamColor teamColor, Collection<ChessMove> ogList) {
+    public RegMoveCalculator(ChessBoard board, ChessPosition position, ChessGame.TeamColor teamColor, Collection<ChessMove> ogList,ChessPiece.PieceType pieceType) {
         this.board = board;
         this.position = position;
         this.teamColor = teamColor;
         this.ogList = ogList;
+        this.pieceType = pieceType;
     }
 
-    public void regPieceMoveLogic (ChessPiece.PieceType pieceType) {
+    public void regPieceMoveLogic () {
         switch (pieceType) {
             case QUEEN:
                 moveDirectionMultiple(1,0);
