@@ -6,9 +6,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * Purpose: A function that takes in a direction and then makes a while loop to keep going that direction. RetuogList.
- * Parameters: board, position, teamColor, listToAddTo (ogList)
- * Methods: Switch function (sets the move positions based on move direction
+ * Purpose: A class that is meant to add possible moves to a list of possible moves
+ * Attributes: board, position, teamColor, ogList, pieceType
+ * Methods: regPieceMoveLogic - handles all of the logic for what happens with the pieces using a switch statement
+ * based on pieceType
+ * moveDirection Multiple - takes a row and col iterator. Tries every possible move going in that direction. Adds to the
+ * list potential moves going that direction.
+ * moveDirectionSingle - same things as above but only tries to move once instead of moving in a loop.
+ * inBounds - takes a row and a col and returns a bool based on if they are in bounds or not
  */
 public class RegMoveCalculator {
     private ChessBoard board;

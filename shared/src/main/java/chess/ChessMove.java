@@ -5,8 +5,8 @@ import java.util.Objects;
 /**
  * Represents moving a chess piece on a chessboard
  * <p>
- * Note: You can add to this class, but you may not alter
- * signature of the existing methods.
+ * Attributes: start position, end position, promotion piece
+ * Methods: get start position, getEndPosition, getPromotionPiece, basic overrides
  */
 public class ChessMove {
 //See rectangle method

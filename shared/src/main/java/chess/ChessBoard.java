@@ -6,20 +6,19 @@ import java.util.Objects;
 /**
  * A chessboard that can hold and rearrange chess pieces.
  * <p>
- * Note: You can add to this class, but you may not alter
- * signature of the existing methods.
+ * attributes: the actualy chessboard (8*8 array of arrays of type ChessPiece called squares), a default constructor
+ * Methods: addPiece, getPiece, resetBoard, clearBoard, addPieces, overrides. (Arrays.toString)
  */
 public class ChessBoard {
-    private ChessPiece [][] squares = new  ChessPiece[8][8];
+    private ChessPiece [][] squares = new ChessPiece[8][8];
     public ChessBoard() {
 
     }
 
     /**
      * Adds a chess piece to the chessboard
-     *
-     * @param position where to add the piece to
-     * @param piece    the piece to add
+     * Takes 8-row and col-1 because the dimensions of the playing board and the array board are different
+     * Puts a piece at that location in the array of arrays
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
         squares[8 - position.getRow()][position.getColumn() - 1] = piece;
@@ -28,17 +27,14 @@ public class ChessBoard {
     /**
      * Gets a chess piece on the chessboard
      *
-     * @param position The position to get the piece from
-     * @return Either the piece at the position, or null if no piece is at that
-     * position
+     * returns the piece at the position. Translates the input position to the array format
      */
     public ChessPiece getPiece(ChessPosition position) {
         return squares[8 - position.getRow()][position.getColumn() - 1];
     }
 
     /**
-     * Sets the board to the default starting board
-     * (How the game of chess normally starts)
+     *
      */
     public void resetBoard() {
         clearBoard();

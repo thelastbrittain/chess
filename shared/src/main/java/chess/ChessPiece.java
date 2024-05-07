@@ -7,8 +7,10 @@ import java.util.Objects;
 /**
  * Represents a single chess piece
  * <p>
- * Note: You can add to this class, but you may not alter
- * signature of the existing methods.
+ * attributes: teamColor, pieceType, ennum of PieceTypes
+ * Methods: getColor, getTeam
+ * PieceMoves (returns collection of possible moves given a board and a position), has one logic line for pawns,
+ * and one for every other piece type. Basic overrides
  */
 public class ChessPiece {
     private ChessGame.TeamColor teamColor;
