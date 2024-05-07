@@ -22,6 +22,7 @@ public class PawnMoveCalculator {
         this.col = position.getColumn();
     }
 
+    //the logic.
     public void calculateMoves() {
         if (teamColor == ChessGame.TeamColor.WHITE) {
             goDirection(1,0);
