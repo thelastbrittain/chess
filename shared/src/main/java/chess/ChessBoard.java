@@ -41,17 +41,13 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-//        ChessPiece testPiece = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK);
-//        ChessPosition testPosition = new ChessPosition(5,5);
-//        this.addPiece(testPosition, testPiece); Tests to make sure it clears the board
         clearBoard();
         addPawns();
-        addRooks();
-        addKnights();
-        addBishops();
-        addKings();
-        addQueens();
-//
+        addPiece(ChessPiece.PieceType.ROOK, 0,7);
+        addPiece(ChessPiece.PieceType.KNIGHT, 1,6);
+        addPiece(ChessPiece.PieceType.BISHOP, 2,5);
+        addRoyal(ChessPiece.PieceType.QUEEN, 3);
+        addRoyal(ChessPiece.PieceType.KING, 4);
     }
 
     private void clearBoard() {
@@ -61,78 +57,23 @@ public class ChessBoard {
             }
         }
     }
+
+    private void addPiece(ChessPiece.PieceType type, int col, int col2){
+        squares[7][col] = new ChessPiece(ChessGame.TeamColor.WHITE, type);
+        squares[7][col2] = new ChessPiece(ChessGame.TeamColor.WHITE, type);
+        squares[0][col] = new ChessPiece(ChessGame.TeamColor.BLACK, type);
+        squares[0][col2] = new ChessPiece(ChessGame.TeamColor.BLACK, type);
+    }
+    private void addRoyal(ChessPiece.PieceType type, int col){
+        squares[7][col] = new ChessPiece(ChessGame.TeamColor.WHITE, type);
+        squares[0][col] = new ChessPiece(ChessGame.TeamColor.BLACK, type);
+    }
+
     private void addPawns(){
-        for (int col = 0; col < 8; col++){
-            ChessPiece pawn = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
-            squares[6][col] = pawn;
+        for (int col = 0; col < 8; col++) {
+            squares[6][col] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
+            squares[1][col] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
         }
-        for (int col = 0; col < 8; col++){
-            ChessPiece pawn = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
-            squares[1][col] = pawn;
-        }
-    }
-    private void addRooks(){
-        //Black rooks
-        ChessPiece rook = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK);
-        squares[0][0] = rook;
-        ChessPiece rook2 = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK);
-        squares[0][7] = rook2;
-
-        //White rooks
-        ChessPiece rook3 = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK);
-        squares[7][0] = rook3;
-        ChessPiece rook4 = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK);
-        squares[7][7] = rook4;
-
-    }
-    private void addKnights(){
-        //Black Knight
-        ChessPiece Knight = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT);
-        squares[0][1] = Knight;
-        ChessPiece Knight2 = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT);
-        squares[0][6] = Knight2;
-
-        //White Knight
-        ChessPiece Knight3 = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KNIGHT);
-        squares[7][1] = Knight3;
-        ChessPiece Knight4 = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KNIGHT);
-        squares[7][6] = Knight4;
-
-    }
-
-    private void addBishops(){
-        //Black bishops
-        ChessPiece bishop = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP);
-        squares[0][2] = bishop;
-        ChessPiece bishop2 = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP);
-        squares[0][5] = bishop2;
-
-        //White bishops
-        ChessPiece bishop3 = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.BISHOP);
-        squares[7][2] = bishop3;
-        ChessPiece bishop4 = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.BISHOP);
-        squares[7][5] = bishop4;
-
-    }
-
-    private void addQueens(){
-        //Black Queen
-        ChessPiece Queen = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.QUEEN);
-        squares[0][3] = Queen;
-
-        //White  Queen
-        ChessPiece Queen2 = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.QUEEN);
-        squares[7][3] = Queen2;
-    }
-
-    private void addKings(){
-        //Black King
-        ChessPiece King = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KING);
-        squares[0][4] = King;
-
-        //White  King
-        ChessPiece King2 = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KING);
-        squares[7][4] = King2;
     }
 
     @Override
