@@ -47,7 +47,7 @@ public class PawnMoveCalculator {
         int newRow = row + rowChange;
         int newCol = col + colChange;
         //make sure new rol/col are in bounds
-        if (newRow > 8 || newCol > 8 || newRow < 0 || newCol < 0) {
+        if (newRow > 8 || newCol > 8 || newRow < 1 || newCol < 1) {
             return;
         }
 
