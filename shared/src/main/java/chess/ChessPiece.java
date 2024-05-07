@@ -54,7 +54,8 @@ public class ChessPiece {
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         Collection<ChessMove> moves = new ArrayList<>();
-        if (type != PieceType.PAWN) { RegMoveCalculator moveCalculator = new RegMoveCalculator(board, myPosition, teamColor, moves, type);
+        if (type != PieceType.PAWN) {
+            RegMoveCalculator moveCalculator = new RegMoveCalculator(board, myPosition, teamColor, moves, type);
             moveCalculator.regPieceMoveLogic();}
         else {
             PawnMoveCalculator pawnMoveCalculator = new PawnMoveCalculator(board, myPosition, teamColor, moves);
