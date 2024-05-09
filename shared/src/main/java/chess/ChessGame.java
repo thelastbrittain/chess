@@ -1,5 +1,6 @@
 package chess;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -49,8 +50,15 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        throw new RuntimeException("Not implemented");
-        //Two ways:
+        Collection<ChessMove> validMoves = new ArrayList<>();
+        //Two ways: call pieceMoves, then filter through the list and see if they are okay
+            //pros: wouldn't need to change my pieceMoves code,
+        // before returning list of moves, first check if they are okay
+
+        //FirstWay:
+            //call piece moves:
+
+        return validMoves;
     }
 
     /**
@@ -60,7 +68,7 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        throw new RuntimeException("Not implemented");
+        throw new InvalidMoveException();
     }
 
     /**
@@ -93,6 +101,31 @@ public class ChessGame {
     public boolean isInStalemate(TeamColor teamColor) {
         throw new RuntimeException("Not implemented");
     }
+
+    private boolean isSafe(ChessBoard board, TeamColor teamColor, ChessPosition kingPosition) {
+        //look at each position on the board
+            //if piece is not teamColor
+                //call pieceMoves on it and get the list it return
+                // if the end position is the same as the KingPosition,  return false.
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++){
+                ChessPosition enemyPosition = new ChessPosition(i, j);
+                ChessPiece currentPiece = board.getPiece(enemyPosition);
+                if (currentPiece != null && currentPiece.getTeamColor() != teamColor) {
+                    Collection<ChessMove> enemyMoves = currentPiece.pieceMoves(board, enemyPosition);
+                    for (ChessMove enemyMove : enemyMoves){
+                        if(enemyMove.getEndPosition() == kingPosition){
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        return true;
+    }
+
 
     /**
      * Sets this game's chessboard with a given board
