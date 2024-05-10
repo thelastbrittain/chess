@@ -78,7 +78,74 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        ChessPosition kingPosition = getKingPosition(teamColor);
+        if (!isSafe(teamColor, this.board)) {
+            //get a list of all possibly friendly moves
+            //for each item in the list
+                //generate a new board
+                //do the move on the board
+                //pass board into isSafe
+                //if it is ever safe, return false, break the loop
+            Collection<ChessMove> allFriendlyMoves = findFriendlyMoves(teamColor);
+            for (ChessMove move : allFriendlyMoves) {
+                //generate new board
+                //do move on board
+                //pass this board into isSafe
+            }
+
+        }
+        return true;
+    }
+
+    private Collection<ChessMove> findFriendlyMoves(TeamColor teamColor) {
+        Collection<ChessMove> allFriendlyMoves = new ArrayList<>();
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++){
+                ChessPosition friendlyPosition = new ChessPosition(i, j);
+                ChessPiece friendlyPiece = board.getPiece(friendlyPosition);
+                if (friendlyPiece != null && friendlyPiece.getTeamColor() == teamColor) {
+                    Collection<ChessMove> tempMoves = friendlyPiece.pieceMoves(this.board, friendlyPosition);
+                    for (ChessMove move : tempMoves) {
+                        allFriendlyMoves.add(move);
+                    }
+                }
+            }
+        }
+        return allFriendlyMoves;
+    }
+
+    //A function that takes a teamColor and that team's kingPosition and checks if it is currently safe.
+    //Returns a bool true if safe, false if not.
+    private boolean isSafe(TeamColor teamColor, ChessBoard board) {
+        ChessPosition kingPosition = getKingPosition(teamColor);
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++){  // look at each position on the board
+                ChessPosition enemyPosition = new ChessPosition(i, j);
+                ChessPiece currentPiece = board.getPiece(enemyPosition);  //get's the piece at that position
+                if (currentPiece != null && currentPiece.getTeamColor() != teamColor) { //if there is an enemy piece
+                    Collection<ChessMove> enemyMoves = currentPiece.pieceMoves(board, enemyPosition); //look at all its moves
+                    for (ChessMove enemyMove : enemyMoves){ //if end position of enemyMove is kingPosition, king is in danger.
+                        if(enemyMove.getEndPosition() == kingPosition){
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    private ChessPosition getKingPosition(TeamColor teamColor) {
+        ChessPiece mockKing = new ChessPiece(teamColor, ChessPiece.PieceType.KING);
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++){
+                ChessPosition kingPosition = new ChessPosition(i, j);
+                if (board.getPiece(kingPosition).equals(mockKing)) {
+                    return kingPosition;
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -102,27 +169,6 @@ public class ChessGame {
         throw new RuntimeException("Not implemented");
     }
 
-    //A function that takes a teamColor and that team's kingPosition and checks if it is currently safe.
-    //Returns a bool true if safe, false if not.
-    private boolean isSafe(TeamColor teamColor, ChessPosition kingPosition) {
-        for (int i = 1; i <= 8; i++) {
-            for (int j = 1; j <= 8; j++){  // look at each position on the board
-                ChessPosition enemyPosition = new ChessPosition(i, j);
-                ChessPiece currentPiece = board.getPiece(enemyPosition);  //get's the piece at that position
-                if (currentPiece != null && currentPiece.getTeamColor() != teamColor) { //if there is an enemy piece
-                    Collection<ChessMove> enemyMoves = currentPiece.pieceMoves(board, enemyPosition); //look at all its moves
-                    for (ChessMove enemyMove : enemyMoves){ //if end position of enemyMove is kingPosition, king is in danger.
-                        if(enemyMove.getEndPosition() == kingPosition){
-                            return false;
-                        }
-                    }
-                }
-            }
-        }
-        return true;
-    }
-
-    //might need to write a function that finds the king's position on the board
 
 
     /**
