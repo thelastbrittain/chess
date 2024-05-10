@@ -9,7 +9,7 @@ import java.util.Objects;
  * attributes: the actualy chessboard (8*8 array of arrays of type ChessPiece called squares), a default constructor
  * Methods: addPiece, getPiece, resetBoard, clearBoard, addPieces, overrides. (Arrays.toString)
  */
-public class ChessBoard {
+public class ChessBoard implements Cloneable {
     private ChessPiece [][] squares = new ChessPiece[8][8];
     public ChessBoard() {
 
@@ -101,7 +101,15 @@ public class ChessBoard {
 
     @Override
     protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
+        ChessBoard clone = (ChessBoard) super.clone();
+        ChessPiece[][] clonedSquares = new ChessPiece[8][8];
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                clonedSquares[i][j] = (ChessPiece) squares[i][j].clone();
+            }
+        }
+        clone.squares = clonedSquares;
+        return clone;
     }
 }
 

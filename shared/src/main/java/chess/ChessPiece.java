@@ -12,7 +12,7 @@ import java.util.Objects;
  * PieceMoves (returns collection of possible moves given a board and a position), has one logic line for pawns,
  * and one for every other piece type. Basic overrides
  */
-public class ChessPiece {
+public class ChessPiece implements Cloneable{
     private ChessGame.TeamColor teamColor;
     private ChessPiece.PieceType type;
 
@@ -82,6 +82,11 @@ public class ChessPiece {
     @Override
     public int hashCode() {
         return Objects.hash(teamColor, type);
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
     }
 }
 
