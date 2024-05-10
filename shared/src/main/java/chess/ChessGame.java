@@ -102,18 +102,16 @@ public class ChessGame {
         throw new RuntimeException("Not implemented");
     }
 
-    private boolean isSafe(ChessBoard board, TeamColor teamColor, ChessPosition kingPosition) {
-        //look at each position on the board
-            //if piece is not teamColor
-                //call pieceMoves on it and get the list it return
-                // if the end position is the same as the KingPosition,  return false.
+    //A function that takes a teamColor and that team's kingPosition and checks if it is currently safe.
+    //Returns a bool true if safe, false if not.
+    private boolean isSafe(TeamColor teamColor, ChessPosition kingPosition) {
         for (int i = 1; i <= 8; i++) {
-            for (int j = 1; j <= 8; j++){
+            for (int j = 1; j <= 8; j++){  // look at each position on the board
                 ChessPosition enemyPosition = new ChessPosition(i, j);
-                ChessPiece currentPiece = board.getPiece(enemyPosition);
-                if (currentPiece != null && currentPiece.getTeamColor() != teamColor) {
-                    Collection<ChessMove> enemyMoves = currentPiece.pieceMoves(board, enemyPosition);
-                    for (ChessMove enemyMove : enemyMoves){
+                ChessPiece currentPiece = board.getPiece(enemyPosition);  //get's the piece at that position
+                if (currentPiece != null && currentPiece.getTeamColor() != teamColor) { //if there is an enemy piece
+                    Collection<ChessMove> enemyMoves = currentPiece.pieceMoves(board, enemyPosition); //look at all its moves
+                    for (ChessMove enemyMove : enemyMoves){ //if end position of enemyMove is kingPosition, king is in danger.
                         if(enemyMove.getEndPosition() == kingPosition){
                             return false;
                         }
@@ -121,10 +119,10 @@ public class ChessGame {
                 }
             }
         }
-
-
         return true;
     }
+
+    //might need to write a function that finds the king's position on the board
 
 
     /**
