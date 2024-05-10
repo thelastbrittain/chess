@@ -96,25 +96,6 @@ public class ChessGame {
         return false;
     }
 
-
-    private Collection<ChessMove> findFriendlyMoves(TeamColor teamColor) {
-        Collection<ChessMove> allFriendlyMoves = new ArrayList<>();
-        for (int i = 1; i <= 8; i++) {
-            for (int j = 1; j <= 8; j++){
-                ChessPosition friendlyPosition = new ChessPosition(i, j);
-                ChessPiece friendlyPiece = board.getPiece(friendlyPosition);
-                if (friendlyPiece != null && friendlyPiece.getTeamColor() == teamColor) {
-                    Collection<ChessMove> tempMoves = friendlyPiece.pieceMoves(this.board, friendlyPosition);
-                    for (ChessMove move : tempMoves) {
-                        allFriendlyMoves.add(move);
-                    }
-                }
-            }
-        }
-        return allFriendlyMoves;
-    }
-
-
     private ChessPosition getKingPosition(TeamColor teamColor) {
         ChessPiece mockKing = new ChessPiece(teamColor, ChessPiece.PieceType.KING);
         for (int i = 1; i <= 8; i++) {
@@ -135,7 +116,31 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        if (isInCheck(teamColor)) {
+            Collection<ChessMove> allFriendlyMoves = findFriendlyMoves(teamColor);
+            for (ChessMove move : allFriendlyMoves) {
+                try {
+
+                }
+            }
+        };
+    }
+
+    private Collection<ChessMove> findFriendlyMoves(TeamColor teamColor) {
+        Collection<ChessMove> allFriendlyMoves = new ArrayList<>();
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++){
+                ChessPosition friendlyPosition = new ChessPosition(i, j);
+                ChessPiece friendlyPiece = board.getPiece(friendlyPosition);
+                if (friendlyPiece != null && friendlyPiece.getTeamColor() == teamColor) {
+                    Collection<ChessMove> tempMoves = friendlyPiece.pieceMoves(this.board, friendlyPosition);
+                    for (ChessMove move : tempMoves) {
+                        allFriendlyMoves.add(move);
+                    }
+                }
+            }
+        }
+        return allFriendlyMoves;
     }
 
     /**
