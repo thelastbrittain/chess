@@ -116,14 +116,20 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
+        //if in check mate, clone board, try a friendly move. If it makes it safe, chill
+
         if (isInCheck(teamColor)) {
             Collection<ChessMove> allFriendlyMoves = findFriendlyMoves(teamColor);
             for (ChessMove move : allFriendlyMoves) {
                 try {
-
+                    board.clone();
+                    board.
+                } catch (CloneNotSupportedException e) {
+                    throw new RuntimeException(e);
                 }
             }
-        };
+        }
+        return true;
     }
 
     private Collection<ChessMove> findFriendlyMoves(TeamColor teamColor) {

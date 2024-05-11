@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Objects;
 
 /**
@@ -13,6 +14,20 @@ public class ChessBoard implements Cloneable {
     private ChessPiece [][] squares = new ChessPiece[8][8];
     public ChessBoard() {
 
+    }
+
+    //method that takes a chess move. It removes the piece at the start position and puts a new piece at the end position
+    //the function takes into account a potential promotion.
+    public void makeMove(ChessMove move){
+        ChessPiece.PieceType pieceType;
+        ChessGame.TeamColor teamColor = getPiece(move.getStartPosition()).getTeamColor();
+
+        if (move.getPromotionPiece() == null){
+            pieceType = getPiece(move.getStartPosition()).getPieceType();
+        } else {pieceType = move.getPromotionPiece();}
+
+        removePiece(move.getStartPosition());
+        addPiece(move.getEndPosition(), new ChessPiece(teamColor, pieceType));
     }
 
     /**
@@ -31,6 +46,10 @@ public class ChessBoard implements Cloneable {
      */
     public ChessPiece getPiece(ChessPosition position) {
         return squares[8 - position.getRow()][position.getColumn() - 1];
+    }
+
+    private void removePiece(ChessPosition position){
+        squares[8 - position.getRow()][position.getColumn() - 1] = null;
     }
 
     /**
