@@ -77,7 +77,10 @@ public class ChessGame {
      * @param teamColor which team to check for check
      * @return True if the specified team is in check
      */
-    public boolean isInCheck(TeamColor teamColor) {
+    public boolean isInCheck(ChessGame.TeamColor teamColor) {
+        return isInCheckHelper(teamColor, this.board);}
+
+    private boolean isInCheckHelper(ChessGame.TeamColor teamColor, ChessBoard board) {
         ChessPosition kingPosition = getKingPosition(teamColor);
         for (int i = 1; i <= 8; i++) {
             for (int j = 1; j <= 8; j++){  // look at each position on the board
@@ -93,8 +96,7 @@ public class ChessGame {
                 }
             }
         }
-        return false;
-    }
+        return false;}
 
     private ChessPosition getKingPosition(TeamColor teamColor) {
         ChessPiece mockKing = new ChessPiece(teamColor, ChessPiece.PieceType.KING);
@@ -114,22 +116,25 @@ public class ChessGame {
      *
      * @param teamColor which team to check for checkmate
      * @return True if the specified team is in checkmate
+     * if already in check, created a new cloned board. Tries every possible move. If none of the moves take
+     * the team out of check, then returns true that it is in checkMate.
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        //if in check mate, clone board, try a friendly move. If it makes it safe, chill
-
         if (isInCheck(teamColor)) {
             Collection<ChessMove> allFriendlyMoves = findFriendlyMoves(teamColor);
             for (ChessMove move : allFriendlyMoves) {
                 try {
-                    board.clone();
-                    board.
+                    ChessBoard cloneBoard = (ChessBoard) this.board.clone();
+                    cloneBoard.makeMove(move);
+                    if (!isInCheckHelper(teamColor, cloneBoard)) {
+                        return false;
+                    }
                 } catch (CloneNotSupportedException e) {
                     throw new RuntimeException(e);
                 }
             }
-        }
-        return true;
+            return true;
+        } else {return false;}
     }
 
     private Collection<ChessMove> findFriendlyMoves(TeamColor teamColor) {

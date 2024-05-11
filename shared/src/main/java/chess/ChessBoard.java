@@ -20,14 +20,7 @@ public class ChessBoard implements Cloneable {
     //the function takes into account a potential promotion.
     public void makeMove(ChessMove move){
         ChessPiece.PieceType pieceType;
-        ChessGame.TeamColor teamColor = getPiece(move.getStartPosition()).getTeamColor();
 
-        if (move.getPromotionPiece() == null){
-            pieceType = getPiece(move.getStartPosition()).getPieceType();
-        } else {pieceType = move.getPromotionPiece();}
-
-        removePiece(move.getStartPosition());
-        addPiece(move.getEndPosition(), new ChessPiece(teamColor, pieceType));
     }
 
     /**
@@ -124,7 +117,7 @@ public class ChessBoard implements Cloneable {
         ChessPiece[][] clonedSquares = new ChessPiece[8][8];
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                clonedSquares[i][j] = (ChessPiece) squares[i][j].clone();
+                clonedSquares[i][j] = (clonedSquares[i][j] != null) ? (ChessPiece) squares[i][j].clone() : null;
             }
         }
         clone.squares = clonedSquares;
