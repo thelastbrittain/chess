@@ -2,6 +2,7 @@ package chess;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * For a class that can manage a chess game, making moves on a board
@@ -50,14 +51,22 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        Collection<ChessMove> validMoves = new ArrayList<>();
-        //Two ways: call pieceMoves, then filter through the list and see if they are okay
-            //pros: wouldn't need to change my pieceMoves code,
-        // before returning list of moves, first check if they are okay
+        Collection<ChessMove> validMoves = board.getPiece(startPosition).pieceMoves(board, startPosition);
+        ChessGame.TeamColor teamColor = board.getPiece(startPosition).getTeamColor();
 
-        //FirstWay:
-            //call piece moves:
-
+        Iterator<ChessMove> iterator = validMoves.iterator();
+        for (; iterator.hasNext(); ) {
+            ChessMove move = iterator.next();
+            try {
+                ChessBoard cloneBoard = (ChessBoard) this.board.clone();
+                makeMoveHelper(move, cloneBoard);
+                if (isInCheckHelper(teamColor, cloneBoard)) {
+                    iterator.remove();
+                }
+            } catch (CloneNotSupportedException e) {
+                throw new RuntimeException(e);
+            }
+        }
         return validMoves;
     }
 
@@ -83,6 +92,31 @@ public class ChessGame {
         board.addPiece(move.getEndPosition(), new ChessPiece(teamColor, pieceType));
     }
 
+    /**
+     * Determines if the given team is in checkmate
+     *
+     * @param teamColor which team to check for checkmate
+     * @return True if the specified team is in checkmate
+     * if already in check, created a new cloned board. Tries every possible move. If none of the moves take
+     * the team out of check, then returns true that it is in checkMate.
+     */
+    public boolean isInCheckmate(TeamColor teamColor) {
+        if (isInCheck(teamColor)) {
+            Collection<ChessMove> allFriendlyMoves = findFriendlyMoves(teamColor);
+            for (ChessMove move : allFriendlyMoves) {
+                try {
+                    ChessBoard cloneBoard = (ChessBoard) this.board.clone();
+                    makeMoveHelper(move, cloneBoard);
+                    if (!isInCheckHelper(teamColor, cloneBoard)) {
+                        return false;
+                    }
+                } catch (CloneNotSupportedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            return true;
+        } else {return false;}
+    }
     /**
      * Determines if the given team is in check
      *
@@ -121,32 +155,6 @@ public class ChessGame {
             }
         }
         return null;
-    }
-
-    /**
-     * Determines if the given team is in checkmate
-     *
-     * @param teamColor which team to check for checkmate
-     * @return True if the specified team is in checkmate
-     * if already in check, created a new cloned board. Tries every possible move. If none of the moves take
-     * the team out of check, then returns true that it is in checkMate.
-     */
-    public boolean isInCheckmate(TeamColor teamColor) {
-        if (isInCheck(teamColor)) {
-            Collection<ChessMove> allFriendlyMoves = findFriendlyMoves(teamColor);
-            for (ChessMove move : allFriendlyMoves) {
-                try {
-                    ChessBoard cloneBoard = (ChessBoard) this.board.clone();
-                    makeMoveHelper(move, cloneBoard);
-                    if (!isInCheckHelper(teamColor, cloneBoard)) {
-                        return false;
-                    }
-                } catch (CloneNotSupportedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            return true;
-        } else {return false;}
     }
 
     private Collection<ChessMove> findFriendlyMoves(TeamColor teamColor) {
