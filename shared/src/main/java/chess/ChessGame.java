@@ -67,8 +67,20 @@ public class ChessGame {
      * @param move chess move to preform
      * @throws InvalidMoveException if move is invalid
      */
-    public void makeMove(ChessMove move) throws InvalidMoveException {
-        throw new InvalidMoveException();
+    public void makeMove(ChessMove move) {
+        makeMoveHelper(move, this.board);
+    }
+
+    private void makeMoveHelper(ChessMove move, ChessBoard board) {
+        ChessPiece.PieceType pieceType;
+        ChessGame.TeamColor teamColor = board.getPiece(move.getStartPosition()).getTeamColor();
+
+        if (move.getPromotionPiece() == null){
+            pieceType = board.getPiece(move.getStartPosition()).getPieceType();
+        } else {pieceType = move.getPromotionPiece();}
+
+        board.removePiece(move.getStartPosition());
+        board.addPiece(move.getEndPosition(), new ChessPiece(teamColor, pieceType));
     }
 
     /**
@@ -125,7 +137,7 @@ public class ChessGame {
             for (ChessMove move : allFriendlyMoves) {
                 try {
                     ChessBoard cloneBoard = (ChessBoard) this.board.clone();
-                    cloneBoard.makeMove(move);
+                    makeMoveHelper(move, cloneBoard);
                     if (!isInCheckHelper(teamColor, cloneBoard)) {
                         return false;
                     }

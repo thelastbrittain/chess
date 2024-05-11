@@ -18,10 +18,6 @@ public class ChessBoard implements Cloneable {
 
     //method that takes a chess move. It removes the piece at the start position and puts a new piece at the end position
     //the function takes into account a potential promotion.
-    public void makeMove(ChessMove move){
-        ChessPiece.PieceType pieceType;
-
-    }
 
     /**
      * Adds a chess piece to the chessboard
@@ -41,7 +37,7 @@ public class ChessBoard implements Cloneable {
         return squares[8 - position.getRow()][position.getColumn() - 1];
     }
 
-    private void removePiece(ChessPosition position){
+    public void removePiece(ChessPosition position){
         squares[8 - position.getRow()][position.getColumn() - 1] = null;
     }
 
@@ -117,7 +113,7 @@ public class ChessBoard implements Cloneable {
         ChessPiece[][] clonedSquares = new ChessPiece[8][8];
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                clonedSquares[i][j] = (clonedSquares[i][j] != null) ? (ChessPiece) squares[i][j].clone() : null;
+                clonedSquares[i][j] = (squares[i][j] != null) ? (ChessPiece) squares[i][j].clone() : null;
             }
         }
         clone.squares = clonedSquares;
