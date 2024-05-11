@@ -93,7 +93,7 @@ public class ChessGame {
         return isInCheckHelper(teamColor, this.board);}
 
     private boolean isInCheckHelper(ChessGame.TeamColor teamColor, ChessBoard board) {
-        ChessPosition kingPosition = getKingPosition(teamColor);
+        ChessPosition kingPosition = getKingPosition(teamColor, board);
         for (int i = 1; i <= 8; i++) {
             for (int j = 1; j <= 8; j++){  // look at each position on the board
                 ChessPosition enemyPosition = new ChessPosition(i, j);
@@ -110,7 +110,7 @@ public class ChessGame {
         }
         return false;}
 
-    private ChessPosition getKingPosition(TeamColor teamColor) {
+    private ChessPosition getKingPosition(TeamColor teamColor,ChessBoard board) {
         ChessPiece mockKing = new ChessPiece(teamColor, ChessPiece.PieceType.KING);
         for (int i = 1; i <= 8; i++) {
             for (int j = 1; j <= 8; j++){
