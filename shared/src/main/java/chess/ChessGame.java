@@ -209,7 +209,7 @@ public class ChessGame {
                 ChessPosition friendlyPosition = new ChessPosition(i, j);
                 ChessPiece friendlyPiece = board.getPiece(friendlyPosition);
                 if (friendlyPiece != null && friendlyPiece.getTeamColor() == teamColor) {
-                    allMoves = friendlyPiece.pieceMoves(this.board, friendlyPosition);
+                    allMoves = validMoves(friendlyPosition);
                     if (allMoves.size() != 0) {
                         return false;
                     }
