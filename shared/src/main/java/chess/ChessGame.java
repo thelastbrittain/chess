@@ -203,6 +203,8 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
+        if (getTeamTurn() != teamColor) {return false;}
+        if (isInCheck(teamColor)) {return false;}
         Collection<ChessMove> allMoves;
         for (int i = 1; i <= 8; i++) {
             for (int j = 1; j <= 8; j++){
