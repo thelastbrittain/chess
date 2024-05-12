@@ -59,11 +59,13 @@ public class ChessGame {
             ChessMove move = iterator.next();
             try {
                 ChessBoard cloneBoard = (ChessBoard) this.board.clone();
-                makeMoveHelper(move, cloneBoard);
+                doMove(move, cloneBoard);
                 if (isInCheckHelper(teamColor, cloneBoard)) {
                     iterator.remove();
                 }
             } catch (CloneNotSupportedException e) {
+                throw new RuntimeException(e);
+            } catch (InvalidMoveException e) {
                 throw new RuntimeException(e);
             }
         }
@@ -76,11 +78,28 @@ public class ChessGame {
      * @param move chess move to preform
      * @throws InvalidMoveException if move is invalid
      */
-    public void makeMove(ChessMove move) {
+    public void makeMove(ChessMove move) throws InvalidMoveException {
         makeMoveHelper(move, this.board);
     }
 
-    private void makeMoveHelper(ChessMove move, ChessBoard board) {
+    private void makeMoveHelper(ChessMove move, ChessBoard board) throws InvalidMoveException {
+        //if there is no piece at start position, throw error.
+        //if move not in valid moves, throw error.
+        if (board.getPiece(move.getStartPosition()) == null){throw new InvalidMoveException("No piece there. ");}
+        ChessGame.TeamColor teamColor= board.getPiece(move.getStartPosition()).getTeamColor();
+        Collection<ChessMove> validMoves = validMoves(move.getStartPosition());
+        if (!validMoves.contains(move)) {throw new InvalidMoveException("Move not valid. ");}
+        if (getTeamTurn() !=  teamColor){throw new InvalidMoveException("It is not your turn. ");};
+
+        doMove(move, board);
+
+        if (getTeamTurn() == TeamColor.WHITE)
+            {setTeamTurn(TeamColor.BLACK);} else {setTeamTurn(TeamColor.WHITE);}
+    }
+
+    private void doMove(ChessMove move, ChessBoard board) throws InvalidMoveException {
+        //if there is no piece at start position, throw error.
+        //if move not in valid moves, throw error.
         ChessPiece.PieceType pieceType;
         ChessGame.TeamColor teamColor = board.getPiece(move.getStartPosition()).getTeamColor();
 
@@ -106,11 +125,13 @@ public class ChessGame {
             for (ChessMove move : allFriendlyMoves) {
                 try {
                     ChessBoard cloneBoard = (ChessBoard) this.board.clone();
-                    makeMoveHelper(move, cloneBoard);
+                    doMove(move, cloneBoard);
                     if (!isInCheckHelper(teamColor, cloneBoard)) {
                         return false;
                     }
                 } catch (CloneNotSupportedException e) {
+                    throw new RuntimeException(e);
+                } catch (InvalidMoveException e) {
                     throw new RuntimeException(e);
                 }
             }
