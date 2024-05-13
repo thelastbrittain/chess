@@ -97,16 +97,12 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        makeMoveHelper(move, this.board);
-    }
-
-    private void makeMoveHelper(ChessMove move, ChessBoard board) throws InvalidMoveException {
-        if (!moveChecks(move, board)){return;}
+        if (!moveChecks(move)){return;}
         doMove(move, board);
         changeTurn();
     }
 
-    private boolean moveChecks(ChessMove move, ChessBoard board) throws InvalidMoveException {
+    private boolean moveChecks(ChessMove move) throws InvalidMoveException {
         if (board.getPiece(move.getStartPosition()) == null){throw new InvalidMoveException("No piece there. ");}
 
         ChessGame.TeamColor teamColor= board.getPiece(move.getStartPosition()).getTeamColor();
@@ -119,6 +115,7 @@ public class ChessGame {
     }
 
     //this is a method that does that actual moving of the pieces on the board. It assumes the move is valid.
+    //This function is used for makeMove as well as validMoves.
     private void doMove(ChessMove move, ChessBoard board) throws InvalidMoveException {
         ChessPiece.PieceType pieceType;
         ChessGame.TeamColor teamColor = board.getPiece(move.getStartPosition()).getTeamColor();
