@@ -19,39 +19,7 @@ public class ChessGame {
         board.resetBoard();
     }
 
-    /**
-     * @return Which team's turn it is
-     */
-    public TeamColor getTeamTurn() {
-        return this.teamTurn;
-    }
 
-    /**
-     * Set's which teams turn it is
-     *
-     * @param team the team whose turn it is
-     */
-    public void setTeamTurn(TeamColor team) {
-        this.teamTurn = team;
-    }
-
-    /**
-     * Sets this game's chessboard with a given board
-     *
-     * @param board the new board to use
-     */
-    public void setBoard(ChessBoard board) {
-        this.board = board;
-    }
-
-    /**
-     * Gets the current chessboard
-     *
-     * @return the chessboard
-     */
-    public ChessBoard getBoard() {
-        return board;
-    }
 
     /**
      * Enum identifying the 2 possible teams in a chess game
@@ -132,8 +100,6 @@ public class ChessGame {
         if (getTeamTurn() == TeamColor.WHITE)
         {setTeamTurn(TeamColor.BLACK);} else {setTeamTurn(TeamColor.WHITE);}
     }
-
-
 
     /**
      * Determines if the given team is in checkmate
@@ -222,5 +188,39 @@ public class ChessGame {
         Collection<ChessMove> allMoves = findValidFriendlyMoves(teamColor);
         if (allMoves.size() > 0) {return false;}
         else {return true;}
+    }
+
+    /**
+     * @return Which team's turn it is
+     */
+    public TeamColor getTeamTurn() {
+        return this.teamTurn;
+    }
+
+    /**
+     * Set's which teams turn it is
+     *
+     * @param team the team whose turn it is
+     */
+    public void setTeamTurn(TeamColor team) {
+        this.teamTurn = team;
+    }
+
+    /**
+     * Sets this game's chessboard with a given board
+     *
+     * @param board the new board to use
+     */
+    public void setBoard(ChessBoard board) {
+        this.board = board;
+    }
+
+    /**
+     * Gets the current chessboard
+     *
+     * @return the chessboard
+     */
+    public ChessBoard getBoard() {
+        return board;
     }
 }
