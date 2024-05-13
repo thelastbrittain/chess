@@ -36,6 +36,24 @@ public class ChessGame {
     }
 
     /**
+     * Sets this game's chessboard with a given board
+     *
+     * @param board the new board to use
+     */
+    public void setBoard(ChessBoard board) {
+        this.board = board;
+    }
+
+    /**
+     * Gets the current chessboard
+     *
+     * @return the chessboard
+     */
+    public ChessBoard getBoard() {
+        return board;
+    }
+
+    /**
      * Enum identifying the 2 possible teams in a chess game
      */
     public enum TeamColor {
@@ -83,13 +101,13 @@ public class ChessGame {
     }
 
     private void makeMoveHelper(ChessMove move, ChessBoard board) throws InvalidMoveException {
-        //if there is no piece at start position, throw error.
-        //if move not in valid moves, throw error.
         if (board.getPiece(move.getStartPosition()) == null){throw new InvalidMoveException("No piece there. ");}
+
         ChessGame.TeamColor teamColor= board.getPiece(move.getStartPosition()).getTeamColor();
+        if (getTeamTurn() !=  teamColor){throw new InvalidMoveException("It is not your turn. ");}
+
         Collection<ChessMove> validMoves = validMoves(move.getStartPosition());
         if (!validMoves.contains(move)) {throw new InvalidMoveException("Move not valid. ");}
-        if (getTeamTurn() !=  teamColor){throw new InvalidMoveException("It is not your turn. ");};
 
         doMove(move, board);
 
@@ -98,8 +116,6 @@ public class ChessGame {
     }
 
     private void doMove(ChessMove move, ChessBoard board) throws InvalidMoveException {
-        //if there is no piece at start position, throw error.
-        //if move not in valid moves, throw error.
         ChessPiece.PieceType pieceType;
         ChessGame.TeamColor teamColor = board.getPiece(move.getStartPosition()).getTeamColor();
 
@@ -121,21 +137,10 @@ public class ChessGame {
      */
     public boolean isInCheckmate(TeamColor teamColor) {
         if (isInCheck(teamColor)) {
-            Collection<ChessMove> allFriendlyMoves = findFriendlyMoves(teamColor);
-            for (ChessMove move : allFriendlyMoves) {
-                try {
-                    ChessBoard cloneBoard = (ChessBoard) this.board.clone();
-                    doMove(move, cloneBoard);
-                    if (!isInCheckHelper(teamColor, cloneBoard)) {
-                        return false;
-                    }
-                } catch (CloneNotSupportedException e) {
-                    throw new RuntimeException(e);
-                } catch (InvalidMoveException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            return true;
+            Collection<ChessMove> allFriendlyMoves = findValidFriendlyMoves(teamColor);
+            if (allFriendlyMoves.size() > 0) {
+                return false;
+            } else {return true;}
         } else {return false;}
     }
     /**
@@ -178,14 +183,14 @@ public class ChessGame {
         return null;
     }
 
-    private Collection<ChessMove> findFriendlyMoves(TeamColor teamColor) {
+    private Collection<ChessMove> findValidFriendlyMoves(TeamColor teamColor) {
         Collection<ChessMove> allFriendlyMoves = new ArrayList<>();
         for (int i = 1; i <= 8; i++) {
             for (int j = 1; j <= 8; j++){
                 ChessPosition friendlyPosition = new ChessPosition(i, j);
                 ChessPiece friendlyPiece = board.getPiece(friendlyPosition);
                 if (friendlyPiece != null && friendlyPiece.getTeamColor() == teamColor) {
-                    Collection<ChessMove> tempMoves = friendlyPiece.pieceMoves(this.board, friendlyPosition);
+                    Collection<ChessMove> tempMoves = validMoves(friendlyPosition);
                     for (ChessMove move : tempMoves) {
                         allFriendlyMoves.add(move);
                     }
@@ -218,25 +223,5 @@ public class ChessGame {
                 }
             }
         } return true;
-    }
-
-
-
-    /**
-     * Sets this game's chessboard with a given board
-     *
-     * @param board the new board to use
-     */
-    public void setBoard(ChessBoard board) {
-        this.board = board;
-    }
-
-    /**
-     * Gets the current chessboard
-     *
-     * @return the chessboard
-     */
-    public ChessBoard getBoard() {
-        return board;
     }
 }
