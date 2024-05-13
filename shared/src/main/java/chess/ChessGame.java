@@ -101,6 +101,12 @@ public class ChessGame {
     }
 
     private void makeMoveHelper(ChessMove move, ChessBoard board) throws InvalidMoveException {
+        if (!moveChecks(move, board)){return;}
+        doMove(move, board);
+        changeTurn();
+    }
+
+    private boolean moveChecks(ChessMove move, ChessBoard board) throws InvalidMoveException {
         if (board.getPiece(move.getStartPosition()) == null){throw new InvalidMoveException("No piece there. ");}
 
         ChessGame.TeamColor teamColor= board.getPiece(move.getStartPosition()).getTeamColor();
@@ -109,12 +115,10 @@ public class ChessGame {
         Collection<ChessMove> validMoves = validMoves(move.getStartPosition());
         if (!validMoves.contains(move)) {throw new InvalidMoveException("Move not valid. ");}
 
-        doMove(move, board);
-
-        if (getTeamTurn() == TeamColor.WHITE)
-            {setTeamTurn(TeamColor.BLACK);} else {setTeamTurn(TeamColor.WHITE);}
+        return true;
     }
 
+    //this is a method that does that actual moving of the pieces on the board. It assumes the move is valid.
     private void doMove(ChessMove move, ChessBoard board) throws InvalidMoveException {
         ChessPiece.PieceType pieceType;
         ChessGame.TeamColor teamColor = board.getPiece(move.getStartPosition()).getTeamColor();
@@ -126,6 +130,13 @@ public class ChessGame {
         board.removePiece(move.getStartPosition());
         board.addPiece(move.getEndPosition(), new ChessPiece(teamColor, pieceType));
     }
+
+    private void changeTurn(){
+        if (getTeamTurn() == TeamColor.WHITE)
+        {setTeamTurn(TeamColor.BLACK);} else {setTeamTurn(TeamColor.WHITE);}
+    }
+
+
 
     /**
      * Determines if the given team is in checkmate
