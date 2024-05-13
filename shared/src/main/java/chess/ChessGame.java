@@ -210,18 +210,9 @@ public class ChessGame {
     public boolean isInStalemate(TeamColor teamColor) {
         if (getTeamTurn() != teamColor) {return false;}
         if (isInCheck(teamColor)) {return false;}
-        Collection<ChessMove> allMoves;
-        for (int i = 1; i <= 8; i++) {
-            for (int j = 1; j <= 8; j++){
-                ChessPosition friendlyPosition = new ChessPosition(i, j);
-                ChessPiece friendlyPiece = board.getPiece(friendlyPosition);
-                if (friendlyPiece != null && friendlyPiece.getTeamColor() == teamColor) {
-                    allMoves = validMoves(friendlyPosition);
-                    if (allMoves.size() != 0) {
-                        return false;
-                    }
-                }
-            }
-        } return true;
+
+        Collection<ChessMove> allMoves = findValidFriendlyMoves(teamColor);
+        if (allMoves.size() > 0) {return false;}
+        else {return true;}
     }
 }
