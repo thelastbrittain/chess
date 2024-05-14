@@ -96,6 +96,11 @@ public class ChessGame {
 
         board.removePiece(move.getStartPosition());
         board.addPiece(move.getEndPosition(), new ChessPiece(teamColor, pieceType));
+
+        //if piece is pawn
+            //check promotion stuff
+            //check en passant
+                //remove piece to the left/right
     }
 
     private void endTurn() throws CloneNotSupportedException {
