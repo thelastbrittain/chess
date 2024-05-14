@@ -28,14 +28,10 @@ public class PawnMoveCalculator {
             goDirection(1,0);
             goDirection(1,1);
             goDirection(1,-1);
-//            enPassant(5,1);
-//            enPassant(5,-1);
         } else {
             goDirection(-1, 0);
             goDirection(-1, 1);
             goDirection(-1,-1);
-//            enPassant(4,1);
-//            enPassant(4,-1);
         }
     }
 
@@ -109,37 +105,5 @@ public class PawnMoveCalculator {
                 }
             }
         }
-    }
-
-    private void enPassant(int row, int col){
-        int rowChange;
-        if (row == 5) {
-            rowChange = 1;
-        }else{
-            rowChange = - 1;}
-
-        if (correctCurrentPosition(row, col) && correctPreviousPosition(row,col)){
-            ogList.add(new ChessMove(position, new ChessPosition(row + rowChange, col), null));
-        }
-    }
-
-    private boolean correctCurrentPosition(int row, int col){
-        if (!(this.row == row || !(inbound(col)) )){return false;}
-        ChessPosition enemyPosition = new ChessPosition(row, col);
-        ChessPiece enemyPiece = board.getPiece(enemyPosition);
-        if (enemyPiece == null || enemyPiece.getPieceType() != ChessPiece.PieceType.PAWN || enemyPiece.getTeamColor() == teamColor){return false;}
-
-        return true;
-    }
-
-    private boolean correctPreviousPosition(int row, int col){
-        //if row == 5, if the previous board had this spot empty, and there was a pawn at this spot +- colx2, return true
-
-        return true;
-    }
-
-    private boolean inbound(int col){
-        if (col < 1 || col > 8){return false;}
-        else {return true;}
     }
 }

@@ -99,14 +99,6 @@ public class ChessGame {
     }
 
     private void endTurn() throws CloneNotSupportedException {
-        try {
-            ChessBoard oldBoard = (ChessBoard) board.clone();
-            board.addBoard(oldBoard);
-            }
-         catch (CloneNotSupportedException e) {
-             throw new RuntimeException(e);
-         }
-
         if (getTeamTurn() == TeamColor.WHITE)
         {setTeamTurn(TeamColor.BLACK);} else {setTeamTurn(TeamColor.WHITE);}
     }
