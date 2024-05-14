@@ -112,15 +112,15 @@ public class PawnMoveCalculator {
     }
 
     private void enPassant(int row, int col){
-        int rowChange;
-        if (row == 5) {
-            rowChange = 1;
-        }else{
-            rowChange = - 1;}
+        int rowChange = changeRow(row);
 
         if (correctCurrentPosition(row, col) && correctPreviousPosition(row,col)){
             ogList.add(new ChessMove(position, new ChessPosition(row + rowChange, col), null));
         }
+    }
+    private int changeRow(int row){
+        if (row == 5) {return 1;}
+        else {return - 1;}
     }
 
     private boolean correctCurrentPosition(int row, int col){
@@ -133,9 +133,17 @@ public class PawnMoveCalculator {
     }
 
     private boolean correctPreviousPosition(int row, int col){
-        //if row == 5, if the previous board had this spot empty, and there was a pawn at this spot +- colx2, return true
+        //if row == 5, if the previous board had this spot empty, and there was a pawn at this spot +- rowx2, return true
+        int rowChange = changeRow(row);
+        rowChange += changeRow(row);
 
-        return true;
+        ChessBoard prevBoard = board.getLastChessBoard();
+        ChessPosition prevEnemyPosition  = new ChessPosition(row + rowChange, col);
+        ChessPosition currentEnemyPosition = new ChessPosition(row, col);
+
+        if (prevBoard.getPiece(currentEnemyPosition) == null && prevBoard.getPiece(prevEnemyPosition).getPieceType() == ChessPiece.PieceType.PAWN){return true;}
+
+        return false;
     }
 
     private boolean inbound(int col){
