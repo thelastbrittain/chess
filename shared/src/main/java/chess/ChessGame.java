@@ -65,7 +65,11 @@ public class ChessGame {
     public void makeMove(ChessMove move) throws InvalidMoveException {
         if (!moveChecks(move)){return;}
         doMove(move, board);
-        changeTurn();
+        try {
+            endTurn();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private boolean moveChecks(ChessMove move) throws InvalidMoveException {
@@ -94,7 +98,15 @@ public class ChessGame {
         board.addPiece(move.getEndPosition(), new ChessPiece(teamColor, pieceType));
     }
 
-    private void changeTurn(){
+    private void endTurn() throws CloneNotSupportedException {
+        try {
+            ChessBoard oldBoard = (ChessBoard) board.clone();
+            board.addBoard(oldBoard);
+            }
+         catch (CloneNotSupportedException e) {
+             throw new RuntimeException(e);
+         }
+
         if (getTeamTurn() == TeamColor.WHITE)
         {setTeamTurn(TeamColor.BLACK);} else {setTeamTurn(TeamColor.WHITE);}
     }

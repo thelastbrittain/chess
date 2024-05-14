@@ -28,14 +28,14 @@ public class PawnMoveCalculator {
             goDirection(1,0);
             goDirection(1,1);
             goDirection(1,-1);
-            enPassant(5,1);
-            enPassant(5,-1);
+//            enPassant(5,1);
+//            enPassant(5,-1);
         } else {
             goDirection(-1, 0);
             goDirection(-1, 1);
             goDirection(-1,-1);
-            enPassant(4,1);
-            enPassant(4,-1);
+//            enPassant(4,1);
+//            enPassant(4,-1);
         }
     }
 
@@ -118,7 +118,7 @@ public class PawnMoveCalculator {
         }else{
             rowChange = - 1;}
 
-        if (correctCurrentPosition(row, col) && correctPreviousPosition()){
+        if (correctCurrentPosition(row, col) && correctPreviousPosition(row,col)){
             ogList.add(new ChessMove(position, new ChessPosition(row + rowChange, col), null));
         }
     }

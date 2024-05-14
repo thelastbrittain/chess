@@ -28,7 +28,7 @@ public class ChessBoard implements Cloneable {
         allBoards.add(board);
     }
 
-    public ChessBoard lastChessBoard(){
+    public ChessBoard getLastChessBoard(){
         if (allBoards.isEmpty()) {return null;}
         return ((ArrayList<ChessBoard>)allBoards).get(allBoards.size()-1);
     }
