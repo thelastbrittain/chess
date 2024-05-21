@@ -1,7 +1,5 @@
 package dataaccess;
 
-import model.GameData;
-
 public class GameDAO {
     public GameDAO () {
 
