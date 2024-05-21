@@ -1,18 +1,9 @@
 package dataaccess;
 
-public class GameDAO {
-    public GameDAO () {
-
-    }
-
-//    public void clear() {}
-//
-//    public GameData createGame() {}
-//
-//    public GameData getGame() {}
-//
-//    public GameData listGames() {}
-//
-//    public void updateGame(){}
-
+public interface GameDAO {
+     void clear ();
+     void createGame();
+     void getGame();
+     void listGames();
+     void updateGame();
 }

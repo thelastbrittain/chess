@@ -1,11 +1,6 @@
 package dataaccess;
 
-public class UserDAO {
-    public UserDAO(){
-
-    }
-//    public UserData createUser(){}
-//
-//    public UserData getUser(){}
-
+public interface UserDAO {
+        void createUser();
+        void getUser();
 }

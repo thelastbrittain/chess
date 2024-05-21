@@ -1,15 +1,7 @@
 package dataaccess;
 
-public class AuthDAO {
-    public AuthDAO(){
-
-    }
-
-//    public AuthData createAuth() {}
-//
-//    public AuthData getAuth() {}
-//
-//    public void deleteAuth(){}
-
-
+public interface AuthDAO {
+    void createAuth();
+    void getAuth();
+    void deleteAuth();
 }
