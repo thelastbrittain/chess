@@ -1,11 +1,27 @@
 package dataaccess;
 
-public class MemoryUserDAO {
-    public MemoryUserDAO(){
+import model.UserData;
+
+import java.util.Collection;
+
+public class MemoryUserDAO  implements UserDAO {
+    private Collection<UserData> userDataList;
+
+    public MemoryUserDAO() {
 
     }
-//    public UserData createUser(){}
-//
-//    public UserData getUser(){}
 
+    public UserData createUser(UserData newUser) {
+        userDataList.add(newUser);
+        return newUser;
+    }
+
+    public UserData getUser(String username) {
+        for (UserData currentUser : userDataList) {
+            if (currentUser.username().equals(username)) {
+                return currentUser;
+            }
+        };
+        return null;
+    }
 }
