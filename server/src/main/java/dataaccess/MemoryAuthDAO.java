@@ -22,13 +22,13 @@ public class MemoryAuthDAO implements AuthDAO{
     }
 
     @Override
-    public AuthData verifyAuth(String authToken) {
+    public boolean isVerifiedAuth(String authToken) {
         for (AuthData auth: authDataList){
             if (auth.authToken().equals(authToken)){
-                return auth;
+                return true;
             }
         }
-        return null;
+        return false;
     }
 
     @Override

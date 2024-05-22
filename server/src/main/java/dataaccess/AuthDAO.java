@@ -4,6 +4,6 @@ import model.AuthData;
 
 public interface AuthDAO {
     String createAuth(String username);
-    AuthData verifyAuth(String authToken);
+    boolean isVerifiedAuth(String authToken);
     void deleteAuth(String authToken);
 }
