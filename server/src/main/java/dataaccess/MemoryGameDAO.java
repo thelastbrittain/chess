@@ -17,8 +17,10 @@ public class MemoryGameDAO implements GameDAO{
     }
 
     @Override
-    public void clearApplication(AuthData authData, UserData userData) {
-
+    public void clearApplication(AuthDAO authData, UserDAO userData) {
+        authData.clearAuths();
+        userData.clearUsers();
+        this.clearGames();
     }
 
     private int createGameID(){
@@ -48,6 +50,9 @@ public class MemoryGameDAO implements GameDAO{
 
     @Override
     public void updateGame(int gameID, String username) {
+    }
 
+    public void clearGames(){
+        gameDataList.clear();
     }
 }
