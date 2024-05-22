@@ -3,9 +3,7 @@ package handler;
 import com.google.gson.Gson;
 import dataaccess.AuthDAO;
 import dataaccess.UserDAO;
-import request.LoginRequest;
-import request.LogoutRequest;
-import response.LoginResponse;
+import request.AuthToken;
 import service.UserService;
 import spark.Request;
 import spark.Response;
@@ -24,9 +22,11 @@ public class LogoutHandler implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
         Gson gson = new Gson();
-        LogoutRequest logoutRequest = (LogoutRequest)gson.fromJson(request.headers("Authorization"), LogoutRequest.class);
+
+        AuthToken authToken = new AuthToken(request.headers("Authorization"));
         UserService logoutService = new UserService(userDAO, authDAO);
-        logoutService.logout(logoutRequest.authToken());
+
+        logoutService.logout(authToken.authToken());
         response.status(200);
         return String.valueOf(200);
     }
