@@ -26,6 +26,8 @@ public class MemoryUserDAO  implements UserDAO {
     }
 
     public void clearUsers(){
+        if (!userDataList.isEmpty()){
         userDataList.clear();
+        }
     }
 }

@@ -53,6 +53,8 @@ public class MemoryGameDAO implements GameDAO{
     }
 
     public void clearGames(){
-        gameDataList.clear();
+        if (!gameDataList.isEmpty()) {
+            gameDataList.clear();
+        }
     }
 }

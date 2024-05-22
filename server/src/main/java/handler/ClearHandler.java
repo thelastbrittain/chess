@@ -1,17 +1,30 @@
 package handler;
 
+import dataaccess.AuthDAO;
+import dataaccess.GameDAO;
+import dataaccess.UserDAO;
+import service.GameService;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
 public class ClearHandler implements Route {
+    UserDAO userDAO;
+    AuthDAO authDAO;
+    GameDAO gameDAO;
+
+    public ClearHandler(UserDAO userDAO, AuthDAO authDAO, GameDAO gameDAO) {
+        this.userDAO = userDAO;
+        this.authDAO = authDAO;
+        this.gameDAO = gameDAO;
+    }
+
     @Override
     public Object handle(Request request, Response response) throws Exception {
-        //there won't be anything in the request body, so no need to generate an object
-        //create a service object
-        //call clear on that object
-        //return a success string
 
-        return null;
+        GameService clearService = new GameService(userDAO, authDAO, gameDAO);
+        int myResponse = clearService.clearApplication();
+
+        return String.valueOf(myResponse);
     }
 }
