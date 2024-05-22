@@ -1,17 +1,18 @@
 package dataaccess;
 
+
 import chess.ChessGame;
-import model.AuthData;
 import model.GameData;
-import model.UserData;
+
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+
 
 public class MemoryGameDAO implements GameDAO{
     private Collection<GameData> gameDataList = new ArrayList<>();
     private int InitialGameID;
+
 
     public MemoryGameDAO(){
         InitialGameID = 1;
@@ -31,13 +32,14 @@ public class MemoryGameDAO implements GameDAO{
     public int createGame(String gameName) {
         int newGameID = createGameID();
         GameData newGame = new GameData(newGameID, null, null, gameName, new ChessGame());
+        gameDataList.add(newGame);
         return newGameID;
     }
 
     @Override
     public boolean isVerifiedGame(int gameID) {
         for (GameData gameData: gameDataList){
-            if (gameData.gameID() == gameID){
+            if (gameData.getGameID() == gameID){
                 return true;
             }
         }
@@ -50,7 +52,28 @@ public class MemoryGameDAO implements GameDAO{
     }
 
     @Override
-    public void updateGame(int gameID, String username) {
+    public void updateUserInGame(int gameID, String username, TeamColor teamColor) {
+        if (teamColor == TeamColor.BLACK){
+            for (GameData gameData: gameDataList){
+                if (gameData.getGameID() == gameID){
+                    gameData.setBlackUsername(username);
+                }
+            }
+        } else {
+            for (GameData gameData: gameDataList){
+                if (gameData.getGameID() == gameID){
+                    gameData.setWhiteUsername(username);
+                }
+            }
+        }
+    }
+
+    public void updateGame(int gameID, ChessGame newGame){
+        for (GameData gameData: gameDataList){
+            if (gameData.getGameID() == gameID){
+                gameData.setGame(newGame);
+            }
+        }
     }
 
     public void clearGames(){
