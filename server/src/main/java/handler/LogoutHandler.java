@@ -23,10 +23,10 @@ public class LogoutHandler implements Route {
     public Object handle(Request request, Response response) throws Exception {
         Gson gson = new Gson();
 
-        AuthToken authToken = new AuthToken(request.headers("Authorization"));
+        String authToken = request.headers("Authorization");
         UserService logoutService = new UserService(userDAO, authDAO);
 
-        logoutService.logout(authToken.authToken());
+        logoutService.logout(authToken);
         response.status(200);
         return String.valueOf(200);
     }

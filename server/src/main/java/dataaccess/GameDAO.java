@@ -10,7 +10,7 @@ public interface GameDAO {
      int createGame(String gameName);
      boolean isVerifiedGame(int gameID);
      Collection<GameData> listGames();
-     void updateUserInGame(int gameID, String username, TeamColor teamColor);
+     void updateUserInGame(int gameID, String username, ChessGame.TeamColor teamColor);
      void updateGame(int gameID, ChessGame game);
      void clearGames();
 }

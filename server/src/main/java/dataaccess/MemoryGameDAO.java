@@ -52,8 +52,8 @@ public class MemoryGameDAO implements GameDAO{
     }
 
     @Override
-    public void updateUserInGame(int gameID, String username, TeamColor teamColor) {
-        if (teamColor == TeamColor.BLACK){
+    public void updateUserInGame(int gameID, String username, ChessGame.TeamColor teamColor) {
+        if (teamColor == ChessGame.TeamColor.BLACK){
             for (GameData gameData: gameDataList){
                 if (gameData.getGameID() == gameID){
                     gameData.setBlackUsername(username);
