@@ -2,10 +2,11 @@ package dataaccess;
 
 import model.UserData;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class MemoryUserDAO  implements UserDAO {
-    private Collection<UserData> userDataList;
+    private Collection<UserData> userDataList = new ArrayList<>();
 
     public MemoryUserDAO() {
 
@@ -26,8 +27,6 @@ public class MemoryUserDAO  implements UserDAO {
     }
 
     public void clearUsers(){
-        if (!userDataList.isEmpty()){
         userDataList.clear();
-        }
     }
 }

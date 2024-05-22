@@ -5,11 +5,12 @@ import model.AuthData;
 import model.GameData;
 import model.UserData;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class MemoryGameDAO implements GameDAO{
-    private Collection<GameData> gameDataList;
+    private Collection<GameData> gameDataList = new ArrayList<>();
     private int InitialGameID;
 
     public MemoryGameDAO(){
@@ -53,8 +54,6 @@ public class MemoryGameDAO implements GameDAO{
     }
 
     public void clearGames(){
-        if (!gameDataList.isEmpty()) {
-            gameDataList.clear();
-        }
+        gameDataList.clear();
     }
 }
