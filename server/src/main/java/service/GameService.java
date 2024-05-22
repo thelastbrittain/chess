@@ -14,7 +14,10 @@ public class GameService {
     }
 
     public int createGame(CreateGameRequest createGameRequest){
-        if (!authDAO.isVerifiedAuth(createGameRequest.authToken())){return 0;} //return some error code
+        System.out.println("The auth Token in the service is " + createGameRequest.authToken());
+        if (!authDAO.isVerifiedAuth(createGameRequest.authToken())){
+            System.out.println("Auth Token not authorized through the service. ");
+            return 0;} //return some error code
         return gameDAO.createGame(createGameRequest.gameName());  //returns gameID
     }
 }
