@@ -29,4 +29,9 @@ public class UserService {
         return authDAO.createAuth(loginRequest.username());
     }
 
+    public void logout(String authToken){
+        if (!authDAO.isVerifiedAuth(authToken)){return;} // maybe change to return error message
+        authDAO.deleteAuth(authToken);
+    }
+
 }
