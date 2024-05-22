@@ -23,9 +23,11 @@ public class RegisterHandler implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
         Gson gson = new Gson();
-        RegisterRequest registerRequest = (RegisterRequest)gson.fromJson(String.valueOf(request), RegisterRequest.class);
+        RegisterRequest registerRequest = (RegisterRequest)gson.fromJson(request.body(), RegisterRequest.class);
+
         UserService loginService = new UserService(userDAO, authDAO);
         RegisterResponse result = loginService.register(registerRequest);
+        response.status(200);
         return gson.toJson(result);
     }
 }
