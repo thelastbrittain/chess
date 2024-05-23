@@ -1,9 +1,8 @@
 package handler;
 
 import com.google.gson.Gson;
-import dataaccess.AuthDAO;
-import dataaccess.GameDAO;
-import request.AuthToken;
+import dataaccess.interfaces.AuthDAO;
+import dataaccess.interfaces.GameDAO;
 import request.CreateGameRequest;
 import service.GameService;
 import spark.Request;

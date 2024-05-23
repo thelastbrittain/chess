@@ -1,9 +1,8 @@
 package handler;
 
 import com.google.gson.Gson;
-import dataaccess.AuthDAO;
-import dataaccess.UserDAO;
-import request.AuthToken;
+import dataaccess.interfaces.AuthDAO;
+import dataaccess.interfaces.UserDAO;
 import service.UserService;
 import spark.Request;
 import spark.Response;

@@ -1,8 +1,8 @@
 package handler;
 
-import dataaccess.AuthDAO;
-import dataaccess.GameDAO;
-import dataaccess.UserDAO;
+import dataaccess.interfaces.AuthDAO;
+import dataaccess.interfaces.GameDAO;
+import dataaccess.interfaces.UserDAO;
 import service.SystemService;
 import spark.Request;
 import spark.Response;

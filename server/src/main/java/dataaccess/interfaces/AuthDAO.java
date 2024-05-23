@@ -1,6 +1,4 @@
-package dataaccess;
-
-import model.AuthData;
+package dataaccess.interfaces;
 
 public interface AuthDAO {
     String createAuth(String username);

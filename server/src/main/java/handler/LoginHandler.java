@@ -1,13 +1,10 @@
 package handler;
 
 import com.google.gson.Gson;
-import dataaccess.AuthDAO;
-import dataaccess.UserDAO;
-import org.eclipse.jetty.security.LoginService;
+import dataaccess.interfaces.AuthDAO;
+import dataaccess.interfaces.UserDAO;
 import request.LoginRequest;
-import request.RegisterRequest;
 import response.LoginResponse;
-import response.RegisterResponse;
 import service.UserService;
 import spark.Request;
 import spark.Response;
@@ -28,8 +25,16 @@ public class LoginHandler implements Route {
         LoginRequest loginRequest = (LoginRequest)gson.fromJson(request.body(), LoginRequest.class);
 
         UserService loginService = new UserService(userDAO, authDAO);
-        LoginResponse result = new LoginResponse(loginRequest.username(),loginService.login(loginRequest));
-        response.status(200);
-        return gson.toJson(result);
+
+        LoginResponse result = loginService.login(loginRequest);
+        //fail case is that username/password is wrong
+        if (loginRequest.username() == null){
+            response.status(401);
+            return gson.toJson(result);
+        } else {
+            response.status(200);
+            return gson.toJson(result);
+        }
+
     }
 }

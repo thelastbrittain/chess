@@ -1,4 +1,4 @@
-package dataaccess;
+package dataaccess.interfaces;
 
 import chess.ChessGame;
 import model.GameData;

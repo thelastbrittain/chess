@@ -1,15 +1,14 @@
 package handler;
 
 import com.google.gson.Gson;
-import dataaccess.AuthDAO;
-import dataaccess.UserDAO;
+import dataaccess.interfaces.AuthDAO;
+import dataaccess.interfaces.UserDAO;
 import request.RegisterRequest;
 import response.RegisterResponse;
 import service.UserService;
 import spark.Request;
 import spark.Response;
 import spark.Route;
-import com.google.gson.Gson;
 
 public class RegisterHandler implements Route {
     UserDAO userDAO;

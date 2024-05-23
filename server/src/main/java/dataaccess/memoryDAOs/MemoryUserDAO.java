@@ -1,5 +1,6 @@
-package dataaccess;
+package dataaccess.memoryDAOs;
 
+import dataaccess.interfaces.UserDAO;
 import model.UserData;
 
 import java.util.ArrayList;

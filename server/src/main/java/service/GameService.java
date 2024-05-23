@@ -1,9 +1,8 @@
 package service;
 
-import dataaccess.AuthDAO;
-import dataaccess.GameDAO;
+import dataaccess.interfaces.AuthDAO;
+import dataaccess.interfaces.GameDAO;
 import request.CreateGameRequest;
-import request.JoinGameRequest;
 
 public class GameService {
     AuthDAO authDAO;

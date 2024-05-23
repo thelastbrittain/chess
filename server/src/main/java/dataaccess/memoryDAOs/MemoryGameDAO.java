@@ -1,7 +1,10 @@
-package dataaccess;
+package dataaccess.memoryDAOs;
 
 
 import chess.ChessGame;
+import dataaccess.interfaces.AuthDAO;
+import dataaccess.interfaces.GameDAO;
+import dataaccess.interfaces.UserDAO;
 import model.GameData;
 
 
@@ -9,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 
-public class MemoryGameDAO implements GameDAO{
+public class MemoryGameDAO implements GameDAO {
     private Collection<GameData> gameDataList = new ArrayList<>();
     private int InitialGameID;
 

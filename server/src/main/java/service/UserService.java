@@ -1,7 +1,7 @@
 package service;
 
-import dataaccess.AuthDAO;
-import dataaccess.UserDAO;
+import dataaccess.interfaces.AuthDAO;
+import dataaccess.interfaces.UserDAO;
 import model.UserData;
 import request.LoginRequest;
 import request.RegisterRequest;
@@ -24,9 +24,9 @@ public class UserService {
 
         return new RegisterResponse(registerRequest.username(), authToken);
     }
-    public String login(LoginRequest loginRequest){
-        if (!userDAO.isVerifiedUser(loginRequest.username(), loginRequest.password())){return null;} //change to error message
-        return authDAO.createAuth(loginRequest.username());
+    public LoginResponse login(LoginRequest loginRequest){
+        if (!userDAO.isVerifiedUser(loginRequest.username(), loginRequest.password())){return new LoginResponse(null, null, ErrorMessages.UNAUTHORIZED);} //change to error message
+        return new LoginResponse(loginRequest.username(), authDAO.createAuth(loginRequest.username()), null);
     }
 
     public void logout(String authToken){
