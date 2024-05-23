@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import dataaccess.interfaces.AuthDAO;
 import dataaccess.interfaces.GameDAO;
 import request.CreateGameRequest;
+import response.CreateGameResponse;
 import service.GameService;
 import spark.Request;
 import spark.Response;
@@ -23,13 +24,16 @@ public class CreateGameHandler implements Route {
         Gson gson = new Gson();
         String authToken = request.headers("Authorization");
         CreateGameRequest gameName = gson.fromJson(request.body(), CreateGameRequest.class);
-
         CreateGameRequest createGameRequest = new CreateGameRequest(gameName.gameName(), authToken);
-        System.out.println(createGameRequest.authToken() + " " + createGameRequest.gameName());
+
+
         GameService gameService = new GameService(authDAO, gameDAO);
-
-        return gameService.createGame(createGameRequest);
+        CreateGameResponse createGameResponse = gameService.createGame(createGameRequest);
+        if (createGameResponse.message() == null){
+            response.status(200);
+        } else{
+            response.status(401);
+        }
+        return createGameResponse;
     }
-
-
 }

@@ -3,6 +3,7 @@ package service;
 import dataaccess.interfaces.AuthDAO;
 import dataaccess.interfaces.GameDAO;
 import request.CreateGameRequest;
+import response.CreateGameResponse;
 
 public class GameService {
     AuthDAO authDAO;
@@ -13,12 +14,11 @@ public class GameService {
         this.gameDAO = gameDAO;
     }
 
-    public int createGame(CreateGameRequest createGameRequest){
+    public CreateGameResponse createGame(CreateGameRequest createGameRequest){
         System.out.println("The auth Token in the service is " + createGameRequest.authToken());
-        if (!authDAO.isVerifiedAuth(createGameRequest.authToken())){
-            System.out.println("Auth Token not authorized through the service. ");
-            return 0;} //return some error code
-        return gameDAO.createGame(createGameRequest.gameName());  //returns gameID
+        if (!authDAO.isVerifiedAuth(createGameRequest.authToken())){return new CreateGameResponse(null, ErrorMessages.UNAUTHORIZED);} //return some error code
+        int gameID = gameDAO.createGame(createGameRequest.gameName());
+        return new CreateGameResponse(gameID, null);
     }
 
 //    public void joinGame(JoinGameRequest joinGameRequest){
