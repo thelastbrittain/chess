@@ -6,6 +6,7 @@ import model.UserData;
 import request.LoginRequest;
 import request.RegisterRequest;
 import response.LoginResponse;
+import response.LogoutResponse;
 import response.RegisterResponse;
 
 public class UserService {
@@ -29,9 +30,10 @@ public class UserService {
         return new LoginResponse(loginRequest.username(), authDAO.createAuth(loginRequest.username()), null);
     }
 
-    public void logout(String authToken){
-        if (!authDAO.isVerifiedAuth(authToken)){return;} // maybe change to return error message
+    public LogoutResponse logout(String authToken){
+        if (!authDAO.isVerifiedAuth(authToken)){return new LogoutResponse(ErrorMessages.UNAUTHORIZED);} // maybe change to return error message
         authDAO.deleteAuth(authToken);
+        return new LogoutResponse(null);
     }
 
 }

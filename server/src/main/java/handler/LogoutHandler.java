@@ -3,6 +3,7 @@ package handler;
 import com.google.gson.Gson;
 import dataaccess.interfaces.AuthDAO;
 import dataaccess.interfaces.UserDAO;
+import response.LogoutResponse;
 import service.UserService;
 import spark.Request;
 import spark.Response;
@@ -25,8 +26,12 @@ public class LogoutHandler implements Route {
         String authToken = request.headers("Authorization");
         UserService logoutService = new UserService(userDAO, authDAO);
 
-        logoutService.logout(authToken);
-        response.status(200);
-        return String.valueOf(200);
+        LogoutResponse logoutResponse = logoutService.logout(authToken);
+        if (logoutResponse.message() == null){
+            response.status(200);
+        } else {
+            response.status(401);
+        }
+        return logoutResponse;
     }
 }
