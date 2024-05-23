@@ -5,6 +5,7 @@ import dataaccess.interfaces.AuthDAO;
 import dataaccess.interfaces.UserDAO;
 import request.RegisterRequest;
 import response.RegisterResponse;
+import service.ErrorMessages;
 import service.UserService;
 import spark.Request;
 import spark.Response;
@@ -26,7 +27,13 @@ public class RegisterHandler implements Route {
 
         UserService loginService = new UserService(userDAO, authDAO);
         RegisterResponse result = loginService.register(registerRequest);
-        response.status(200);
+        if (result.message() == null){
+            response.status(200);
+        } else {
+            if (result.message().equals(ErrorMessages.ALREADYTAKEN)){
+                response.status(403);
+            }
+        }
         return gson.toJson(result);
     }
 }

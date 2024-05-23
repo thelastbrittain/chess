@@ -18,11 +18,11 @@ public class UserService {
     }
 
     public RegisterResponse register(RegisterRequest registerRequest){
-        if (userDAO.getUser(registerRequest.username()) != null){return null;} //return some sort of message
+        if (userDAO.getUser(registerRequest.username()) != null){return new RegisterResponse(null, null, ErrorMessages.ALREADYTAKEN);} //return some sort of message
         userDAO.createUser(new UserData(registerRequest.username(), registerRequest.password(), registerRequest.email()));
         String authToken = authDAO.createAuth(registerRequest.username());
 
-        return new RegisterResponse(registerRequest.username(), authToken);
+        return new RegisterResponse(registerRequest.username(), authToken, null);
     }
     public LoginResponse login(LoginRequest loginRequest){
         if (!userDAO.isVerifiedUser(loginRequest.username(), loginRequest.password())){return new LoginResponse(null, null, ErrorMessages.UNAUTHORIZED);} //change to error message
