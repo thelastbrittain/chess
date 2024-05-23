@@ -56,17 +56,23 @@ public class MemoryGameDAO implements GameDAO{
         if (teamColor == ChessGame.TeamColor.BLACK){
             for (GameData gameData: gameDataList){
                 if (gameData.getGameID() == gameID){
-                    gameData.setBlackUsername(username);
+                    if (gameData.getBlackUsername() == null) {
+                        gameData.setBlackUsername(username);
+                    }
+                    else {System.out.println("Spot is taken");} //add something better
                 }
             }
         } else {
             for (GameData gameData: gameDataList){
                 if (gameData.getGameID() == gameID){
-                    gameData.setWhiteUsername(username);
+                    if (gameData.getWhiteUsername() == null) {
+                        gameData.setWhiteUsername(username);
+                    }
+                    else {System.out.println("Spot is taken");} //add something better
+                }
                 }
             }
         }
-    }
 
     public void updateGame(int gameID, ChessGame newGame){
         for (GameData gameData: gameDataList){

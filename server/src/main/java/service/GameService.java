@@ -3,6 +3,7 @@ package service;
 import dataaccess.AuthDAO;
 import dataaccess.GameDAO;
 import request.CreateGameRequest;
+import request.JoinGameRequest;
 
 public class GameService {
     AuthDAO authDAO;
@@ -20,4 +21,11 @@ public class GameService {
             return 0;} //return some error code
         return gameDAO.createGame(createGameRequest.gameName());  //returns gameID
     }
+
+//    public void joinGame(JoinGameRequest joinGameRequest){
+//        if (!authDAO.isVerifiedAuth(joinGameRequest.authToken())){return;} //add error message
+//        if (!gameDAO.isVerifiedGame(joinGameRequest.gameID())){return;}   //add error message
+//        gameDAO.updateUserInGame(joinGameRequest.gameID(), joinGameRequest.authToken(), );  //needs username t dangit.
+
+
 }
