@@ -34,6 +34,6 @@ public class CreateGameHandler implements Route {
         } else{
             response.status(401);
         }
-        return createGameResponse;
+        return gson.toJson(createGameResponse);
     }
 }
