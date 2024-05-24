@@ -1,8 +1,10 @@
 package handler;
 
+import com.google.gson.Gson;
 import dataaccess.interfaces.AuthDAO;
 import dataaccess.interfaces.GameDAO;
 import dataaccess.interfaces.UserDAO;
+import response.ClearResponse;
 import service.SystemService;
 import spark.Request;
 import spark.Response;
@@ -21,10 +23,12 @@ public class ClearHandler implements Route {
 
     @Override
     public Object handle(Request request, Response response) throws Exception {
+        Gson gson = new Gson();
 
         SystemService clearService = new SystemService(userDAO, authDAO, gameDAO);
-        int myResponse = clearService.clearApplication();
+        ClearResponse myResponse = clearService.clearApplication();
 
-        return String.valueOf(myResponse);
+        response.status(200);
+        return gson.toJson(myResponse);
     }
 }
