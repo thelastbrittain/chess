@@ -6,6 +6,8 @@ import dataaccess.interfaces.AuthDAO;
 import dataaccess.interfaces.GameDAO;
 import dataaccess.interfaces.UserDAO;
 import model.GameData;
+import response.JoinGameResponse;
+import service.ErrorMessages;
 
 
 import java.util.ArrayList;
@@ -55,27 +57,32 @@ public class MemoryGameDAO implements GameDAO {
     }
 
     @Override
-    public void updateUserInGame(int gameID, String username, ChessGame.TeamColor teamColor) {
-        if (teamColor == ChessGame.TeamColor.BLACK){
-            for (GameData gameData: gameDataList){
-                if (gameData.getGameID() == gameID){
+    public JoinGameResponse updateUserInGame(int gameID, String username, ChessGame.TeamColor teamColor) {
+        if (teamColor == ChessGame.TeamColor.BLACK) {
+            for (GameData gameData : gameDataList) {
+                if (gameData.getGameID() == gameID) {
                     if (gameData.getBlackUsername() == null) {
                         gameData.setBlackUsername(username);
-                    }
-                    else {System.out.println("Spot is taken");} //add something better
+                        return new JoinGameResponse(null);
+                    } else {
+                        return new JoinGameResponse(ErrorMessages.ALREADYTAKEN);
+                    } //add something better
                 }
             }
         } else {
-            for (GameData gameData: gameDataList){
-                if (gameData.getGameID() == gameID){
+            for (GameData gameData : gameDataList) {
+                if (gameData.getGameID() == gameID) {
                     if (gameData.getWhiteUsername() == null) {
                         gameData.setWhiteUsername(username);
-                    }
-                    else {System.out.println("Spot is taken");} //add something better
-                }
+                        return new JoinGameResponse(null);
+                    } else {
+                        return new JoinGameResponse(ErrorMessages.ALREADYTAKEN);
+                    } //add something better
                 }
             }
         }
+        return new JoinGameResponse(ErrorMessages.UNAUTHORIZED);
+    }
 
     public void updateGame(int gameID, ChessGame newGame){
         for (GameData gameData: gameDataList){

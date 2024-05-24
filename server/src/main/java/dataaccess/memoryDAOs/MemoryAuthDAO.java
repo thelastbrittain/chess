@@ -45,6 +45,16 @@ public class MemoryAuthDAO implements AuthDAO {
         authDataList.remove(authDataToRemove);
     }
 
+    @Override
+    public String getUsernameFromAuth(String authToken) {
+        for (AuthData authData: authDataList){
+            if (authData.authToken().equals(authToken)){
+                return authData.username();
+            }
+        }
+        return null;
+    }
+
     public void clearAuths(){
             authDataList.clear();
     }

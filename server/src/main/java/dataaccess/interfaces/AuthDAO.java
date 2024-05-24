@@ -5,4 +5,5 @@ public interface AuthDAO {
     boolean isVerifiedAuth(String authToken);
     void deleteAuth(String authToken);
     void clearAuths();
+    String getUsernameFromAuth(String authToken);
 }
