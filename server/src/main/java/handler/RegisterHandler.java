@@ -25,13 +25,15 @@ public class RegisterHandler implements Route {
         Gson gson = new Gson();
         RegisterRequest registerRequest = (RegisterRequest)gson.fromJson(request.body(), RegisterRequest.class);
 
-        UserService loginService = new UserService(userDAO, authDAO);
-        RegisterResponse result = loginService.register(registerRequest);
+        UserService registerService = new UserService(userDAO, authDAO);
+        RegisterResponse result = registerService.register(registerRequest);
         if (result.message() == null){
             response.status(200);
         } else {
             if (result.message().equals(ErrorMessages.ALREADYTAKEN)){
                 response.status(403);
+            } else if (result.message() == ErrorMessages.BADREQUEST){
+                response.status(400);
             }
         }
         return gson.toJson(result);

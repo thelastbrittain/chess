@@ -28,7 +28,7 @@ public class LoginHandler implements Route {
 
         LoginResponse result = loginService.login(loginRequest);
         //fail case is that username/password is wrong
-        if (loginRequest.username() == null){
+        if (result.username() == null){
             response.status(401);
             return gson.toJson(result);
         } else {
