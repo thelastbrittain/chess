@@ -32,6 +32,6 @@ public class LogoutHandler implements Route {
         } else {
             response.status(401);
         }
-        return logoutResponse;
+        return gson.toJson(logoutResponse);
     }
 }
