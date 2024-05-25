@@ -18,11 +18,6 @@ public class service {
     MemoryAuthDAO authDAO = new MemoryAuthDAO();
     MemoryUserDAO userDAO = new MemoryUserDAO();
 
-    @Test
-    @DisplayName("Register User Invalid AuthToken")
-    void invalidAuthToken(){}
-
-
     /**
      * User Service Tests
      */
