@@ -97,7 +97,7 @@ public class service {
     @Test
     @DisplayName("Create Game Success")
     void createGameSuccess(){
-        CreateGameResponse createGameResponse = createUserAndGame();
+        CreateGameResponse createGameResponse = createUserAndGameReturnGame();
         Assertions.assertNull(createGameResponse.message());
     }
 
@@ -134,6 +134,16 @@ public class service {
         Assertions.assertSame(ErrorMessages.ALREADYTAKEN, secondJoinGameResponse.message());
     }
 
+    @Test
+    @DisplayName("ListGamesSuccess")
+    void listGamesSuccess(){
+        RegisterResponse registerResponse = createUserAndGameReturnUser();
+        ListGamesResponse listGamesResponse = gameService.listGames(registerResponse.authToken());
+
+        Assertions.assertNotNull(listGamesResponse.games());
+
+    }
+
 
     /**
      *Helper Functions
@@ -146,8 +156,14 @@ public class service {
         return userService.logout(userService.register(new RegisterRequest(testUsername, testPassword, testEmail)).authToken());
     }
 
-    CreateGameResponse createUserAndGame(){
+    CreateGameResponse createUserAndGameReturnGame() {
         RegisterResponse registerResponse = registerTestUser();
         return gameService.createGame(new CreateGameRequest(testGame, registerResponse.authToken()));
+    }
+
+    RegisterResponse createUserAndGameReturnUser(){
+        RegisterResponse registerResponse = registerTestUser();
+        gameService.createGame(new CreateGameRequest(testGame, registerResponse.authToken()));
+        return registerResponse;
     }
 }
