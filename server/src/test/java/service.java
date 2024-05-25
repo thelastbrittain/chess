@@ -119,6 +119,21 @@ public class service {
         Assertions.assertNull(joinGameResponse.message());
     }
 
+    @Test
+    @DisplayName("Join User Position in Game Failure")
+    void joinGameFailure(){
+        RegisterResponse registerResponse = registerTestUser();
+        CreateGameResponse createGameResponse = gameService.createGame(new CreateGameRequest(testGame, registerResponse.authToken()));
+
+        JoinGameRequest testJoinGameRequest = new JoinGameRequest(ChessGame.TeamColor.WHITE,
+                createGameResponse.gameID(), registerResponse.authToken());
+
+        JoinGameResponse joinGameResponse = gameService.joinGame(testJoinGameRequest);
+        JoinGameResponse secondJoinGameResponse = gameService.joinGame(testJoinGameRequest);
+
+        Assertions.assertSame(ErrorMessages.ALREADYTAKEN, secondJoinGameResponse.message());
+    }
+
 
     /**
      *Helper Functions
