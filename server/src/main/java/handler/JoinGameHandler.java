@@ -29,24 +29,25 @@ public class JoinGameHandler implements Route {
 
         String authToken = request.headers("Authorization");
         JoinGameRequest colorAndID = gson.fromJson(request.body(), JoinGameRequest.class);
-        ChessGame.TeamColor tColor = ChessGame.TeamColor.BLACK;
 
-        System.out.println(colorAndID.playerColor());
         if (colorAndID.playerColor() == null){response.status(400);
-            return new JoinGameResponse(ErrorMessages.BADREQUEST);}
-        else if (colorAndID.playerColor().equals(ChessGame.TeamColor.WHITE)){
-            tColor = ChessGame.TeamColor.WHITE;
-        } else if (colorAndID.playerColor().equals(ChessGame.TeamColor.BLACK)){
-            tColor = ChessGame.TeamColor.BLACK;
-        }
+            return gson.toJson(new JoinGameResponse(ErrorMessages.BADREQUEST));}
 
-
-
-        JoinGameRequest joinGameRequest = new JoinGameRequest(tColor, colorAndID.gameID(), authToken);
-
-
+        JoinGameRequest joinGameRequest = new JoinGameRequest(colorAndID.playerColor(), colorAndID.gameID(), authToken);
         GameService gameService = new GameService(authDAO, gameDAO);
         JoinGameResponse joinGameResponse = gameService.joinGame(joinGameRequest);
+        if (joinGameResponse.message() == null){
+            response.status(200);
+        }
+        else if (joinGameResponse.message().equals(ErrorMessages.UNAUTHORIZED)){
+            response.status(401);
+        } else if (joinGameResponse.message().equals(ErrorMessages.BADREQUEST)) {
+            response.status(400);
+        } else if (joinGameResponse.message().equals(ErrorMessages.ALREADYTAKEN)){
+            response.status(403);
+        } else {
+            response.status(500);
+        }
 
         return gson.toJson(joinGameResponse);
     }
