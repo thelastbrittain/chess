@@ -1,30 +1,42 @@
+import chess.ChessGame;
 import dataaccess.memoryDAOs.MemoryAuthDAO;
 import dataaccess.memoryDAOs.MemoryGameDAO;
 import dataaccess.memoryDAOs.MemoryUserDAO;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import request.CreateGameRequest;
+import request.JoinGameRequest;
+import request.LoginRequest;
 import request.RegisterRequest;
-import response.RegisterResponse;
+import response.*;
 import service.UserService;
-import spark.utils.Assert;
+import service.GameService;
 import service.ErrorMessages;
+import service.SystemService;
 
 public class service {
     String testUsername = "testUsername";
     String testPassword = "testPassword";
     String testEmail = "testEmail";
+    String testGame = "testGame";
+
     MemoryGameDAO gameDAO = new MemoryGameDAO();
     MemoryAuthDAO authDAO = new MemoryAuthDAO();
     MemoryUserDAO userDAO = new MemoryUserDAO();
+    UserService userService = new UserService(userDAO, authDAO);
+    GameService gameService = new GameService(authDAO, gameDAO);
+    SystemService systemService = new SystemService(userDAO, authDAO, gameDAO);
+
+
+    @Test
+    @BeforeEach
+    void resetServer(){
+        systemService.clearApplication();
+    }
 
     /**
      * User Service Tests
      */
 
-    //Register Tests
-
-    ////giving proper user/pass/email sets response message to 200
     @Test
     @DisplayName("Register Success")
     void registerSuccess(){
@@ -35,7 +47,6 @@ public class service {
         Assertions.assertNotNull(actualResponse.authToken(), "No auth token given");
     }
 
-    ////Sending withouth email returns bad request
     @Test
     @DisplayName("Register No Email Failure")
     void registerEmailFailure(){
@@ -46,17 +57,82 @@ public class service {
         Assertions.assertSame(actualResponse.message(), ErrorMessages.BADREQUEST);
     }
 
-    //Login
+    @Test
+    @DisplayName("Login Success")
+    void loginSuccess(){
+        registerAndLogoutUser();
+        LoginResponse loginResponse = userService.login(new LoginRequest(testUsername, testPassword));
 
-    ////Success
+        Assertions.assertNotNull(loginResponse.authToken());
+    }
 
-    ////Failure
+    @Test
+    @DisplayName("Login Password Failure")
+    void loginFailure() {
+        registerAndLogoutUser();
+        LoginResponse loginResponse = userService.login(new LoginRequest(testUsername, "Incorrect Password"));
+        Assertions.assertSame(ErrorMessages.UNAUTHORIZED, loginResponse.message());
+    }
+
+    @Test
+    @DisplayName("logout success")
+    void logoutSuccess(){
+        LogoutResponse logoutResponse = registerAndLogoutUser();
+        Assertions.assertNull(logoutResponse.message());
+    }
+
+    @Test
+    @DisplayName("Logout Bad Auth Token Failure")
+    void logoutFailure(){
+        RegisterResponse registerRequest = registerTestUser();
+        LogoutResponse logoutResponse = userService.logout("Incorrect Auth");
+
+        Assertions.assertSame(ErrorMessages.UNAUTHORIZED, logoutResponse.message());
+    }
+
+    /**
+     * GameService Tests
+     */
+
+    @Test
+    @DisplayName("Create Game Success")
+    void createGameSuccess(){
+        CreateGameResponse createGameResponse = createUserAndGame();
+        Assertions.assertNull(createGameResponse.message());
+    }
+
+    @Test
+    @DisplayName("Create Game Bad Auth Failure")
+    void createGameFailure(){
+        CreateGameResponse createGameResponse = gameService.createGame(new CreateGameRequest(testGame, "False Auth"));
+        Assertions.assertSame(ErrorMessages.UNAUTHORIZED, createGameResponse.message());
+    }
+
+    @Test
+    @DisplayName("Join Game Success")
+    void joinGameSuccess(){
+        RegisterResponse registerResponse = registerTestUser();
+        CreateGameResponse createGameResponse = gameService.createGame(new CreateGameRequest(testGame, registerResponse.authToken()));
+        JoinGameResponse joinGameResponse = gameService.joinGame(new JoinGameRequest(ChessGame.TeamColor.WHITE,
+                createGameResponse.gameID(), registerResponse.authToken()));
+
+        Assertions.assertNull(joinGameResponse.message());
+    }
 
 
-    //Logout
+    /**
+     *Helper Functions
+     */
+    RegisterResponse registerTestUser(){
+        return userService.register(new RegisterRequest(testUsername, testPassword, testEmail));
+    }
 
-    ////Success
+    LogoutResponse registerAndLogoutUser(){
+        return userService.logout(userService.register(new RegisterRequest(testUsername, testPassword, testEmail)).authToken());
+    }
 
-    ////Failure
-
+    CreateGameResponse createUserAndGame(){
+        RegisterResponse registerResponse = registerTestUser();
+        return gameService.createGame(new CreateGameRequest(testGame, registerResponse.authToken()));
+    }
 }
