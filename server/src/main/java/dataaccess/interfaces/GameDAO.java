@@ -12,6 +12,5 @@ public interface GameDAO {
      boolean isVerifiedGame(int gameID);
      Collection<GameData> listGames();
      JoinGameResponse updateUserInGame(int gameID, String username, ChessGame.TeamColor teamColor);
-     void updateGame(int gameID, ChessGame game);
      void clearGames();
 }
