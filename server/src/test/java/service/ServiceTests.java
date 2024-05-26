@@ -1,3 +1,5 @@
+package service;
+
 import chess.ChessGame;
 import dataaccess.memorydaos.MemoryAuthDAO;
 import dataaccess.memorydaos.MemoryGameDAO;
@@ -8,12 +10,8 @@ import request.JoinGameRequest;
 import request.LoginRequest;
 import request.RegisterRequest;
 import response.*;
-import service.UserService;
-import service.GameService;
-import service.ErrorMessages;
-import service.SystemService;
 
-public class Service {
+public class ServiceTests {
     String testUsername = "testUsername";
     String testPassword = "testPassword";
     String testEmail = "testEmail";
@@ -35,7 +33,7 @@ public class Service {
     }
 
     /**
-     * User Service Tests
+     * User service.Service Tests
      */
 
     @Test
@@ -156,7 +154,7 @@ public class Service {
     }
 
     /**
-     * System Service Tests
+     * System service.Service Tests
      */
     @Test
     @DisplayName("Clear Database Success")
