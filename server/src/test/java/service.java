@@ -144,6 +144,16 @@ public class service {
 
     }
 
+    @Test
+    @DisplayName("List Games Authentication Failure")
+    void listGamesFailure(){
+        RegisterResponse registerResponse = createUserAndGameReturnUser();
+        ListGamesResponse listGamesResponse = gameService.listGames("False Auth");
+
+        Assertions.assertEquals(ErrorMessages.UNAUTHORIZED, listGamesResponse.message());
+
+    }
+
 
     /**
      *Helper Functions
