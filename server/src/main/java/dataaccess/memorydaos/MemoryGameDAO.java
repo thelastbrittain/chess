@@ -1,4 +1,4 @@
-package dataaccess.memoryDAOs;
+package dataaccess.memorydaos;
 
 
 import chess.ChessGame;
@@ -16,11 +16,11 @@ import java.util.Collection;
 
 public class MemoryGameDAO implements GameDAO {
     private Collection<GameData> gameDataList = new ArrayList<>();
-    private int InitialGameID;
+    private int initialGameID;
 
 
     public MemoryGameDAO(){
-        InitialGameID = 1;
+        initialGameID = 1;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class MemoryGameDAO implements GameDAO {
     }
 
     private int createGameID(){
-        return InitialGameID ++;
+        return initialGameID++;
     }
     @Override
     public int createGame(String gameName) {
@@ -82,14 +82,6 @@ public class MemoryGameDAO implements GameDAO {
             }
         }
         return new JoinGameResponse(ErrorMessages.UNAUTHORIZED);
-    }
-
-    public void updateGame(int gameID, ChessGame newGame){
-        for (GameData gameData: gameDataList){
-            if (gameData.getGameID() == gameID){
-                gameData.setGame(newGame);
-            }
-        }
     }
 
     public void clearGames(){

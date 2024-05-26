@@ -1,7 +1,7 @@
 import chess.ChessGame;
-import dataaccess.memoryDAOs.MemoryAuthDAO;
-import dataaccess.memoryDAOs.MemoryGameDAO;
-import dataaccess.memoryDAOs.MemoryUserDAO;
+import dataaccess.memorydaos.MemoryAuthDAO;
+import dataaccess.memorydaos.MemoryGameDAO;
+import dataaccess.memorydaos.MemoryUserDAO;
 import org.junit.jupiter.api.*;
 import request.CreateGameRequest;
 import request.JoinGameRequest;
@@ -13,9 +13,7 @@ import service.GameService;
 import service.ErrorMessages;
 import service.SystemService;
 
-import java.awt.*;
-
-public class service {
+public class Service {
     String testUsername = "testUsername";
     String testPassword = "testPassword";
     String testEmail = "testEmail";
@@ -31,6 +29,7 @@ public class service {
 
     @Test
     @BeforeEach
+    @DisplayName("Clearing the Database")
     void resetServer(){
         systemService.clearApplication();
     }

@@ -29,9 +29,6 @@ public class GameData {
         return blackUsername;
     }
 
-    public String getGameName() {
-        return gameName;
-    }
 
     public ChessGame getGame() {
         return game;
@@ -41,9 +38,6 @@ public class GameData {
         this.game = game;
     }
 
-    public void setGameID(int gameID) {
-        this.gameID = gameID;
-    }
 
     public void setWhiteUsername(String whiteUsername) {
         this.whiteUsername = whiteUsername;
