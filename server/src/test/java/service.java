@@ -13,6 +13,8 @@ import service.GameService;
 import service.ErrorMessages;
 import service.SystemService;
 
+import java.awt.*;
+
 public class service {
     String testUsername = "testUsername";
     String testPassword = "testPassword";
@@ -152,6 +154,16 @@ public class service {
 
         Assertions.assertEquals(ErrorMessages.UNAUTHORIZED, listGamesResponse.message());
 
+    }
+    @Test
+    @DisplayName("Clear Database Success")
+    void clearDatabaseSuccess(){
+        RegisterResponse registerResponse = createUserAndGameReturnUser();
+        systemService.clearApplication();
+
+        ListGamesResponse listGamesResponse = gameService.listGames(registerResponse.authToken());
+
+        Assertions.assertEquals(ErrorMessages.UNAUTHORIZED, listGamesResponse.message());
     }
 
 
