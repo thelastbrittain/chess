@@ -77,7 +77,7 @@ public class service {
     }
 
     @Test
-    @DisplayName("logout success")
+    @DisplayName("logout Success")
     void logoutSuccess(){
         LogoutResponse logoutResponse = registerAndLogoutUser();
         Assertions.assertNull(logoutResponse.message());
@@ -155,6 +155,10 @@ public class service {
         Assertions.assertEquals(ErrorMessages.UNAUTHORIZED, listGamesResponse.message());
 
     }
+
+    /**
+     * System Service Tests
+     */
     @Test
     @DisplayName("Clear Database Success")
     void clearDatabaseSuccess(){
