@@ -26,10 +26,8 @@ public class JoinGameHandler implements Route {
 
     @Override
     public Object handle(Request request, Response response) throws Exception {
-
         String authToken = request.headers("Authorization");
         JoinGameRequest colorAndID = (JoinGameRequest) Translator.fromJsonToObject(request, JoinGameRequest.class);
-
         JoinGameRequest joinGameRequest = new JoinGameRequest(colorAndID.playerColor(), colorAndID.gameID(), authToken);
         GameService gameService = new GameService(authDAO, gameDAO);
         JoinGameResponse joinGameResponse = gameService.joinGame(joinGameRequest);
