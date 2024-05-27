@@ -32,7 +32,7 @@ public class RegisterHandler implements Route {
         } else {
             if (result.message().equals(ErrorMessages.ALREADYTAKEN)){
                 response.status(403);
-            } else if (result.message() == ErrorMessages.BADREQUEST){
+            } else if (result.message().equals(ErrorMessages.BADREQUEST)){
                 response.status(400);
             }
         }
