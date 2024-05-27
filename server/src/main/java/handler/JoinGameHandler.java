@@ -30,9 +30,6 @@ public class JoinGameHandler implements Route {
         String authToken = request.headers("Authorization");
         JoinGameRequest colorAndID = (JoinGameRequest) Translator.fromJsonToObject(request, JoinGameRequest.class);
 
-        if (colorAndID.playerColor() == null){response.status(400);
-            return Translator.fromObjectToJson(new JoinGameResponse(ErrorMessages.BADREQUEST));}
-
         JoinGameRequest joinGameRequest = new JoinGameRequest(colorAndID.playerColor(), colorAndID.gameID(), authToken);
         GameService gameService = new GameService(authDAO, gameDAO);
         JoinGameResponse joinGameResponse = gameService.joinGame(joinGameRequest);

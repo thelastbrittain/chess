@@ -69,7 +69,7 @@ public class MemoryGameDAO implements GameDAO {
                     } //add something better
                 }
             }
-        } else {
+        } else if (teamColor == ChessGame.TeamColor.WHITE){
             for (GameData gameData : gameDataList) {
                 if (gameData.getGameID() == gameID) {
                     if (gameData.getWhiteUsername() == null) {
@@ -80,6 +80,8 @@ public class MemoryGameDAO implements GameDAO {
                     } //add something better
                 }
             }
+        } else {
+            return new JoinGameResponse(ErrorMessages.BADREQUEST);
         }
         return new JoinGameResponse(ErrorMessages.UNAUTHORIZED);
     }
