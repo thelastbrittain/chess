@@ -9,6 +9,7 @@ import service.SystemService;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+import translation.Translator;
 
 public class ClearHandler implements Route {
     UserDAO userDAO;
@@ -23,12 +24,10 @@ public class ClearHandler implements Route {
 
     @Override
     public Object handle(Request request, Response response) throws Exception {
-        Gson gson = new Gson();
-
         SystemService clearService = new SystemService(userDAO, authDAO, gameDAO);
         ClearResponse myResponse = clearService.clearApplication();
 
         response.status(200);
-        return gson.toJson(myResponse);
+        return Translator.fromObjectToJson(myResponse);
     }
 }

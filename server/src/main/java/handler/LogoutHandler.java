@@ -8,6 +8,7 @@ import service.UserService;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+import translation.Translator;
 
 public class LogoutHandler implements Route {
     UserDAO userDAO;
@@ -21,8 +22,6 @@ public class LogoutHandler implements Route {
 
     @Override
     public Object handle(Request request, Response response) throws Exception {
-        Gson gson = new Gson();
-
         String authToken = request.headers("Authorization");
         UserService logoutService = new UserService(userDAO, authDAO);
 
@@ -32,6 +31,6 @@ public class LogoutHandler implements Route {
         } else {
             response.status(401);
         }
-        return gson.toJson(logoutResponse);
+        return Translator.fromObjectToJson(logoutResponse);
     }
 }

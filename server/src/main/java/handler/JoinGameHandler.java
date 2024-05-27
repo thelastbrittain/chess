@@ -13,6 +13,7 @@ import service.GameService;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+import translation.Translator;
 
 public class JoinGameHandler implements Route {
     private AuthDAO authDAO;
@@ -25,13 +26,12 @@ public class JoinGameHandler implements Route {
 
     @Override
     public Object handle(Request request, Response response) throws Exception {
-        Gson gson = new Gson();
 
         String authToken = request.headers("Authorization");
-        JoinGameRequest colorAndID = gson.fromJson(request.body(), JoinGameRequest.class);
+        JoinGameRequest colorAndID = (JoinGameRequest) Translator.fromJsonToObject(request, JoinGameRequest.class);
 
         if (colorAndID.playerColor() == null){response.status(400);
-            return gson.toJson(new JoinGameResponse(ErrorMessages.BADREQUEST));}
+            return Translator.fromObjectToJson(new JoinGameResponse(ErrorMessages.BADREQUEST));}
 
         JoinGameRequest joinGameRequest = new JoinGameRequest(colorAndID.playerColor(), colorAndID.gameID(), authToken);
         GameService gameService = new GameService(authDAO, gameDAO);
@@ -49,6 +49,6 @@ public class JoinGameHandler implements Route {
             response.status(500);
         }
 
-        return gson.toJson(joinGameResponse);
+        return Translator.fromObjectToJson(joinGameResponse);
     }
 }

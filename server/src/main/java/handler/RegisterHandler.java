@@ -23,7 +23,6 @@ public class RegisterHandler implements Route {
 
     @Override
     public Object handle(Request request, Response response) throws Exception {
-        Gson gson = new Gson();
         RegisterRequest registerRequest = (RegisterRequest) Translator.fromJsonToObject(request, RegisterRequest.class);
 
         UserService registerService = new UserService(userDAO, authDAO);

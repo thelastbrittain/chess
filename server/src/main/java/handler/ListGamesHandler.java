@@ -12,6 +12,7 @@ import service.GameService;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+import translation.Translator;
 
 public class ListGamesHandler implements Route {
     private AuthDAO authDAO;
@@ -24,8 +25,6 @@ public class ListGamesHandler implements Route {
 
     @Override
     public Object handle(Request request, Response response) throws Exception {
-        Gson gson = new Gson();
-
         String authToken = request.headers("Authorization");
 
         GameService listGames = new GameService(authDAO, gameDAO);
@@ -36,6 +35,6 @@ public class ListGamesHandler implements Route {
         } else if (listGamesResponse.message().equals(ErrorMessages.UNAUTHORIZED)){
             response.status(401);
         }
-        return gson.toJson(listGamesResponse);
+        return Translator.fromObjectToJson(listGamesResponse);
     }
 }

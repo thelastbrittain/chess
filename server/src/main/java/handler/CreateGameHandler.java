@@ -9,6 +9,7 @@ import service.GameService;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+import translation.Translator;
 
 public class CreateGameHandler implements Route {
     private AuthDAO authDAO;
@@ -21,9 +22,9 @@ public class CreateGameHandler implements Route {
 
     @Override
     public Object handle(Request request, Response response) throws Exception {
-        Gson gson = new Gson();
+
         String authToken = request.headers("Authorization");
-        CreateGameRequest gameName = gson.fromJson(request.body(), CreateGameRequest.class);
+        CreateGameRequest gameName = (CreateGameRequest) Translator.fromJsonToObject(request, CreateGameRequest.class);
         CreateGameRequest createGameRequest = new CreateGameRequest(gameName.gameName(), authToken);
 
 
@@ -34,6 +35,6 @@ public class CreateGameHandler implements Route {
         } else{
             response.status(401);
         }
-        return gson.toJson(createGameResponse);
+        return Translator.fromObjectToJson(createGameResponse);
     }
 }
