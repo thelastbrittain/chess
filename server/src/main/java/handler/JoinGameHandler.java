@@ -36,6 +36,7 @@ public class JoinGameHandler implements Route {
         JoinGameRequest joinGameRequest = new JoinGameRequest(colorAndID.playerColor(), colorAndID.gameID(), authToken);
         GameService gameService = new GameService(authDAO, gameDAO);
         JoinGameResponse joinGameResponse = gameService.joinGame(joinGameRequest);
+
         if (joinGameResponse.message() == null){
             response.status(200);
         }

@@ -22,7 +22,6 @@ public class LoginHandler implements Route {
 
     @Override
     public Object handle(Request request, Response response) throws Exception {
-        Gson gson = new Gson();
         LoginRequest loginRequest = (LoginRequest) Translator.fromJsonToObject(request, LoginRequest.class);;
 
         UserService loginService = new UserService(userDAO, authDAO);

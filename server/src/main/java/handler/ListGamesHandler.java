@@ -26,7 +26,6 @@ public class ListGamesHandler implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
         String authToken = request.headers("Authorization");
-
         GameService listGames = new GameService(authDAO, gameDAO);
         ListGamesResponse listGamesResponse = listGames.listGames(authToken);
 
@@ -35,6 +34,7 @@ public class ListGamesHandler implements Route {
         } else if (listGamesResponse.message().equals(ErrorMessages.UNAUTHORIZED)){
             response.status(401);
         }
+
         return Translator.fromObjectToJson(listGamesResponse);
     }
 }

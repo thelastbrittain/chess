@@ -24,9 +24,9 @@ public class RegisterHandler implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
         RegisterRequest registerRequest = (RegisterRequest) Translator.fromJsonToObject(request, RegisterRequest.class);
-
         UserService registerService = new UserService(userDAO, authDAO);
         RegisterResponse result = registerService.register(registerRequest);
+
         if (result.message() == null){
             response.status(200);
         } else {
@@ -36,6 +36,7 @@ public class RegisterHandler implements Route {
                 response.status(400);
             }
         }
+
         return Translator.fromObjectToJson(result);
     }
 }

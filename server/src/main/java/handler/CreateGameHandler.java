@@ -26,15 +26,15 @@ public class CreateGameHandler implements Route {
         String authToken = request.headers("Authorization");
         CreateGameRequest gameName = (CreateGameRequest) Translator.fromJsonToObject(request, CreateGameRequest.class);
         CreateGameRequest createGameRequest = new CreateGameRequest(gameName.gameName(), authToken);
-
-
         GameService gameService = new GameService(authDAO, gameDAO);
         CreateGameResponse createGameResponse = gameService.createGame(createGameRequest);
+
         if (createGameResponse.message() == null){
             response.status(200);
         } else{
             response.status(401);
         }
+
         return Translator.fromObjectToJson(createGameResponse);
     }
 }

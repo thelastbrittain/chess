@@ -24,13 +24,14 @@ public class LogoutHandler implements Route {
     public Object handle(Request request, Response response) throws Exception {
         String authToken = request.headers("Authorization");
         UserService logoutService = new UserService(userDAO, authDAO);
-
         LogoutResponse logoutResponse = logoutService.logout(authToken);
+
         if (logoutResponse.message() == null){
             response.status(200);
         } else {
             response.status(401);
         }
+
         return Translator.fromObjectToJson(logoutResponse);
     }
 }
