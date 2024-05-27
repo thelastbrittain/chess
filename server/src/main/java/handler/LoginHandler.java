@@ -9,6 +9,7 @@ import service.UserService;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+import translation.Translator;
 
 public class LoginHandler implements Route {
     UserDAO userDAO;
@@ -22,7 +23,7 @@ public class LoginHandler implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
         Gson gson = new Gson();
-        LoginRequest loginRequest = (LoginRequest)gson.fromJson(request.body(), LoginRequest.class);
+        LoginRequest loginRequest = (LoginRequest) Translator.fromJsonToObject(request, LoginRequest.class);;
 
         UserService loginService = new UserService(userDAO, authDAO);
 
@@ -30,11 +31,11 @@ public class LoginHandler implements Route {
         //fail case is that username/password is wrong
         if (result.username() == null){
             response.status(401);
-            return gson.toJson(result);
         } else {
             response.status(200);
-            return gson.toJson(result);
         }
+
+        return Translator.fromObjectToJson(result);
 
     }
 }

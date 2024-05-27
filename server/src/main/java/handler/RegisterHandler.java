@@ -10,6 +10,7 @@ import service.UserService;
 import spark.Request;
 import spark.Response;
 import spark.Route;
+import translation.Translator;
 
 public class RegisterHandler implements Route {
     UserDAO userDAO;
@@ -23,7 +24,7 @@ public class RegisterHandler implements Route {
     @Override
     public Object handle(Request request, Response response) throws Exception {
         Gson gson = new Gson();
-        RegisterRequest registerRequest = (RegisterRequest)gson.fromJson(request.body(), RegisterRequest.class);
+        RegisterRequest registerRequest = (RegisterRequest) Translator.fromJsonToObject(request, RegisterRequest.class);
 
         UserService registerService = new UserService(userDAO, authDAO);
         RegisterResponse result = registerService.register(registerRequest);
@@ -36,6 +37,6 @@ public class RegisterHandler implements Route {
                 response.status(400);
             }
         }
-        return gson.toJson(result);
+        return Translator.fromObjectToJson(result);
     }
 }
