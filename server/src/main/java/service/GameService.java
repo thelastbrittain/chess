@@ -1,6 +1,7 @@
 package service;
 
 import chess.ChessGame;
+import dataaccess.DataAccessException;
 import dataaccess.interfaces.AuthDAO;
 import dataaccess.interfaces.GameDAO;
 import request.CreateGameRequest;
@@ -18,14 +19,14 @@ public class GameService {
         this.gameDAO = gameDAO;
     }
 
-    public CreateGameResponse createGame(CreateGameRequest createGameRequest){
+    public CreateGameResponse createGame(CreateGameRequest createGameRequest) throws DataAccessException {
         System.out.println("The auth Token in the service is " + createGameRequest.authToken());
         if (!authDAO.isVerifiedAuth(createGameRequest.authToken())){return new CreateGameResponse(null, ErrorMessages.UNAUTHORIZED);} //return some error code
         int gameID = gameDAO.createGame(createGameRequest.gameName());
         return new CreateGameResponse(gameID, null);
     }
 
-    public JoinGameResponse joinGame(JoinGameRequest joinGameRequest) {
+    public JoinGameResponse joinGame(JoinGameRequest joinGameRequest) throws DataAccessException{
         if (!authDAO.isVerifiedAuth(joinGameRequest.authToken())) {
             return new JoinGameResponse(ErrorMessages.UNAUTHORIZED);
         } //add error message
@@ -35,7 +36,7 @@ public class GameService {
         return gameDAO.updateUserInGame(joinGameRequest.gameID(), authDAO.getUsernameFromAuth(joinGameRequest.authToken()), joinGameRequest.playerColor());  //needs username t dangit.
     }
 
-    public ListGamesResponse listGames(String authToken){
+    public ListGamesResponse listGames(String authToken) throws DataAccessException{
         if (!authDAO.isVerifiedAuth(authToken)) {return new ListGamesResponse(null, ErrorMessages.UNAUTHORIZED);}
         return new ListGamesResponse(gameDAO.listGames(), null);
     }

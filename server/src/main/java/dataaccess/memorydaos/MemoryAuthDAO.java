@@ -1,7 +1,9 @@
 package dataaccess.memorydaos;
 
+import dataaccess.DataAccessException;
 import dataaccess.interfaces.AuthDAO;
 import model.AuthData;
+import service.ErrorMessages;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,14 +26,13 @@ public class MemoryAuthDAO implements AuthDAO {
     }
 
     @Override
-    public boolean isVerifiedAuth(String authToken) {
+    public boolean isVerifiedAuth(String authToken) throws DataAccessException {
         for (AuthData auth: authDataList){
-            System.out.println("Entered Auth Token: " + authToken + "\n Current Auth Token: " + auth.authToken());
             if (auth.authToken().equals(authToken)){
                 return true;
             }
         }
-        return false;
+        throw new DataAccessException(401, ErrorMessages.UNAUTHORIZED);
     }
 
     @Override

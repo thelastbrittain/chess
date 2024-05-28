@@ -1,6 +1,7 @@
 package handler;
 
 import com.google.gson.Gson;
+import dataaccess.DataAccessException;
 import dataaccess.interfaces.AuthDAO;
 import dataaccess.interfaces.UserDAO;
 import response.LogoutResponse;
@@ -21,16 +22,17 @@ public class LogoutHandler implements Route {
     }
 
     @Override
-    public Object handle(Request request, Response response) throws Exception {
+    public Object handle(Request request, Response response) throws DataAccessException {
         String authToken = request.headers("Authorization");
         UserService logoutService = new UserService(userDAO, authDAO);
         LogoutResponse logoutResponse = logoutService.logout(authToken);
 
-        if (logoutResponse.message() == null){
-            response.status(200);
-        } else {
-            response.status(401);
-        }
+//        if (logoutResponse.message() == null){
+//            response.status(200);
+//        } else {
+//            response.status(401);
+//        }
+        response.status(200);
 
         return Translator.fromObjectToJson(logoutResponse);
     }

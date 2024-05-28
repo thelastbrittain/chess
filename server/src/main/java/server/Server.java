@@ -5,7 +5,10 @@ import dataaccess.memorydaos.MemoryAuthDAO;
 import dataaccess.memorydaos.MemoryGameDAO;
 import dataaccess.memorydaos.MemoryUserDAO;
 import handler.*;
+import response.ErrorResponse;
+import service.ErrorMessages;
 import spark.*;
+import translation.Translator;
 
 public class Server {
 
@@ -36,7 +39,10 @@ public class Server {
 
     private void exceptionHandler(DataAccessException ex, Request request, Response response){
         response.status(ex.getStatusCode());
-        response.body(ex.getMessage());
+        if (ex.getMessage().equals(ErrorMessages.UNAUTHORIZED)){
+            response.body(Translator.fromObjectToJson(new ErrorResponse(ErrorMessages.UNAUTHORIZED)));
+        }
+
     }
 
     public void stop() {

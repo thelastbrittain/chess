@@ -1,5 +1,6 @@
 package service;
 
+import dataaccess.DataAccessException;
 import dataaccess.interfaces.AuthDAO;
 import dataaccess.interfaces.UserDAO;
 import model.UserData;
@@ -32,7 +33,7 @@ public class UserService {
         return new LoginResponse(loginRequest.username(), authDAO.createAuth(loginRequest.username()), null);
     }
 
-    public LogoutResponse logout(String authToken){
+    public LogoutResponse logout(String authToken) throws DataAccessException {
         if (!authDAO.isVerifiedAuth(authToken)){return new LogoutResponse(ErrorMessages.UNAUTHORIZED);} // maybe change to return error message
         authDAO.deleteAuth(authToken);
         return new LogoutResponse(null);

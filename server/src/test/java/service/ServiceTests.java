@@ -1,6 +1,7 @@
 package service;
 
 import chess.ChessGame;
+import dataaccess.DataAccessException;
 import dataaccess.memorydaos.MemoryAuthDAO;
 import dataaccess.memorydaos.MemoryGameDAO;
 import dataaccess.memorydaos.MemoryUserDAO;
@@ -58,7 +59,7 @@ public class ServiceTests {
 
     @Test
     @DisplayName("Login Success")
-    void loginSuccess(){
+    void loginSuccess() throws DataAccessException{
         registerAndLogoutUser();
         LoginResponse loginResponse = userService.login(new LoginRequest(testUsername, testPassword));
 
@@ -67,7 +68,7 @@ public class ServiceTests {
 
     @Test
     @DisplayName("Login Password Failure")
-    void loginFailure() {
+    void loginFailure() throws DataAccessException {
         registerAndLogoutUser();
         LoginResponse loginResponse = userService.login(new LoginRequest(testUsername, "Incorrect Password"));
         Assertions.assertSame(ErrorMessages.UNAUTHORIZED, loginResponse.message());
@@ -75,14 +76,14 @@ public class ServiceTests {
 
     @Test
     @DisplayName("logout Success")
-    void logoutSuccess(){
+    void logoutSuccess() throws DataAccessException{
         LogoutResponse logoutResponse = registerAndLogoutUser();
         Assertions.assertNull(logoutResponse.message());
     }
 
     @Test
     @DisplayName("Logout Bad Auth Token Failure")
-    void logoutFailure(){
+    void logoutFailure() throws DataAccessException{
         RegisterResponse registerRequest = registerTestUser();
         LogoutResponse logoutResponse = userService.logout("Incorrect Auth");
 
@@ -95,21 +96,21 @@ public class ServiceTests {
 
     @Test
     @DisplayName("Create Game Success")
-    void createGameSuccess(){
+    void createGameSuccess() throws DataAccessException{
         CreateGameResponse createGameResponse = createUserAndGameReturnGame();
         Assertions.assertNull(createGameResponse.message());
     }
 
     @Test
     @DisplayName("Create Game Bad Auth Failure")
-    void createGameFailure(){
+    void createGameFailure() throws DataAccessException{
         CreateGameResponse createGameResponse = gameService.createGame(new CreateGameRequest(testGame, "False Auth"));
         Assertions.assertSame(ErrorMessages.UNAUTHORIZED, createGameResponse.message());
     }
 
     @Test
     @DisplayName("Join Game Success")
-    void joinGameSuccess(){
+    void joinGameSuccess() throws DataAccessException{
         RegisterResponse registerResponse = registerTestUser();
         CreateGameResponse createGameResponse = gameService.createGame(new CreateGameRequest(testGame, registerResponse.authToken()));
         JoinGameResponse joinGameResponse = gameService.joinGame(new JoinGameRequest(ChessGame.TeamColor.WHITE,
@@ -120,7 +121,7 @@ public class ServiceTests {
 
     @Test
     @DisplayName("Join User Position in Game Failure")
-    void joinGameFailure(){
+    void joinGameFailure() throws DataAccessException{
         RegisterResponse registerResponse = registerTestUser();
         CreateGameResponse createGameResponse = gameService.createGame(new CreateGameRequest(testGame, registerResponse.authToken()));
 
@@ -135,7 +136,7 @@ public class ServiceTests {
 
     @Test
     @DisplayName("ListGamesSuccess")
-    void listGamesSuccess(){
+    void listGamesSuccess() throws DataAccessException{
         RegisterResponse registerResponse = createUserAndGameReturnUser();
         ListGamesResponse listGamesResponse = gameService.listGames(registerResponse.authToken());
 
@@ -145,7 +146,7 @@ public class ServiceTests {
 
     @Test
     @DisplayName("List Games Authentication Failure")
-    void listGamesFailure(){
+    void listGamesFailure() throws DataAccessException{
         RegisterResponse registerResponse = createUserAndGameReturnUser();
         ListGamesResponse listGamesResponse = gameService.listGames("False Auth");
 
@@ -158,7 +159,7 @@ public class ServiceTests {
      */
     @Test
     @DisplayName("Clear Database Success")
-    void clearDatabaseSuccess(){
+    void clearDatabaseSuccess() throws DataAccessException{
         RegisterResponse registerResponse = createUserAndGameReturnUser();
         systemService.clearApplication();
 
@@ -175,16 +176,16 @@ public class ServiceTests {
         return userService.register(new RegisterRequest(testUsername, testPassword, testEmail));
     }
 
-    LogoutResponse registerAndLogoutUser(){
+    LogoutResponse registerAndLogoutUser() throws DataAccessException {
         return userService.logout(userService.register(new RegisterRequest(testUsername, testPassword, testEmail)).authToken());
     }
 
-    CreateGameResponse createUserAndGameReturnGame() {
+    CreateGameResponse createUserAndGameReturnGame() throws DataAccessException{
         RegisterResponse registerResponse = registerTestUser();
         return gameService.createGame(new CreateGameRequest(testGame, registerResponse.authToken()));
     }
 
-    RegisterResponse createUserAndGameReturnUser(){
+    RegisterResponse createUserAndGameReturnUser() throws DataAccessException{
         RegisterResponse registerResponse = registerTestUser();
         gameService.createGame(new CreateGameRequest(testGame, registerResponse.authToken()));
         return registerResponse;
