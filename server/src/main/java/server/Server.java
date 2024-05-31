@@ -1,12 +1,13 @@
 package server;
 
 import dataaccess.DataAccessException;
-import dataaccess.memorydaos.MemoryAuthDAO;
 import dataaccess.memorydaos.MemoryGameDAO;
-import dataaccess.memorydaos.MemoryUserDAO;
 import dataaccess.sqldaos.SQLUserDAO;
+import dataaccess.sqldaos.SQLAuthDAO;
 import handler.*;
 import spark.*;
+
+import static dataaccess.DatabaseManager.configureDatabase;
 
 public class Server {
 
@@ -16,8 +17,14 @@ public class Server {
         Spark.staticFiles.location("web");
 //        Spark.init();
 
+        try {
+            configureDatabase();
+        } catch (DataAccessException e) {
+            System.out.println("Problem in Server: " + e.getMessage() );
+        }
+
         SQLUserDAO userDAO = new SQLUserDAO();
-        MemoryAuthDAO authDAO = new MemoryAuthDAO();
+        SQLAuthDAO authDAO = new SQLAuthDAO();
         MemoryGameDAO gameDAO = new MemoryGameDAO();
 
         // Register your endpoints and handle exceptions here.

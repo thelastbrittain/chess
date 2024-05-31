@@ -91,7 +91,54 @@ public class DatabaseManager {
                 return 0;
             }
         } catch (SQLException e) {
-            throw new DataAccessException("Problem in Database Manger");
+            throw new DataAccessException("Problem in Database Manger executing an update. ");
         }
     }
+
+    public static void configureDatabase() throws DataAccessException {
+        DatabaseManager.createDatabase();
+        try (var conn = DatabaseManager.getConnection()) {
+            for (var statement : createUserTable) {
+                try (var preparedStatement = conn.prepareStatement(statement)) {
+                    preparedStatement.executeUpdate();
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataAccessException("User table not working");
+        }
+        try (var conn = DatabaseManager.getConnection()) {
+            for (var statement : createAuthTable) {
+                try (var preparedStatement = conn.prepareStatement(statement)) {
+                    preparedStatement.executeUpdate();
+                }
+            }
+        } catch (SQLException ex) {
+            throw new DataAccessException("Auth table not working");
+        }
+    }
+
+
+    private static final String[] createUserTable = {
+            """
+            CREATE TABLE IF NOT EXISTS  user (
+              `username` varchar(256) NOT NULL,
+              `password` varchar(256) NOT NULL,
+              `email` NOT NULL,
+              PRIMARY KEY (`username`),
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+            """
+    };
+
+    private static final String[] createAuthTable = {
+            """
+            CREATE TABLE IF NOT EXISTS  auth (
+              'id' int NOT NULL AUTO_INCREMENT
+              `username` varchar(256) NOT NULL,
+              `authToken` varchar(256),
+              PRIMARY KEY (`id`),
+              INDEX('username')
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+            """
+    };
+
 }

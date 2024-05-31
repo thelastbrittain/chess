@@ -33,6 +33,7 @@ public class MemoryGameDAO implements GameDAO {
     private int createGameID(){
         return initialGameID++;
     }
+
     @Override
     public int createGame(String gameName) {
         int newGameID = createGameID();

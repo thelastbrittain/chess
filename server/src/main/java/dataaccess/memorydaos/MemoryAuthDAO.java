@@ -20,7 +20,6 @@ public class MemoryAuthDAO implements AuthDAO {
         AuthData newAuthorization = new AuthData(username, newAuthToken);
         authDataList.add(newAuthorization);
         return newAuthToken;
-
     }
 
     @Override
