@@ -1,20 +1,22 @@
 package server;
 
+import dataaccess.DataAccessException;
 import dataaccess.memorydaos.MemoryAuthDAO;
 import dataaccess.memorydaos.MemoryGameDAO;
 import dataaccess.memorydaos.MemoryUserDAO;
+import dataaccess.sqldaos.SQLUserDAO;
 import handler.*;
 import spark.*;
 
 public class Server {
 
-    public int run(int desiredPort) {
+    public int run(int desiredPort){
         Spark.port(desiredPort);
 
         Spark.staticFiles.location("web");
 //        Spark.init();
 
-        MemoryUserDAO userDAO = new MemoryUserDAO();
+        SQLUserDAO userDAO = new SQLUserDAO();
         MemoryAuthDAO authDAO = new MemoryAuthDAO();
         MemoryGameDAO gameDAO = new MemoryGameDAO();
 

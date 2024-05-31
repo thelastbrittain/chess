@@ -7,15 +7,28 @@ import dataaccess.DatabaseManager;
 
 import java.sql.SQLException;
 
+import static dataaccess.DatabaseManager.executeUpdate;
+
 public class SQLUserDAO implements UserDAO {
 
-    public SQLUserDAO() throws DataAccessException {
-        configureDatabase();
+    public SQLUserDAO() {
+        try {
+            configureDatabase();
+        } catch (DataAccessException e) {
+            System.out.println("Problem caught in SQLUserDAO");
+        }
     }
 
     @Override
     public UserData createUser(UserData newUser) {
-        return null;
+        var statement = "INSERT INTO  (user, password, email) VALUES (?, ?, ?)";
+        try {
+            var id = executeUpdate(statement, newUser.username(), newUser.password(), newUser.email());
+        } catch (DataAccessException e) {
+            System.out.println(e.getMessage());
+            return new UserData(null,null,null);
+        }
+        return newUser;
     }
 
     @Override
@@ -36,7 +49,7 @@ public class SQLUserDAO implements UserDAO {
     private void configureDatabase() throws DataAccessException {
         DatabaseManager.createDatabase();
         try (var conn = DatabaseManager.getConnection()) {
-            for (var statement : createStatements) {
+            for (var statement : createUserTable) {
                 try (var preparedStatement = conn.prepareStatement(statement)) {
                     preparedStatement.executeUpdate();
                 }
@@ -46,16 +59,13 @@ public class SQLUserDAO implements UserDAO {
         }
     }
 
-    private final String[] createStatements = {
+    private final String[] createUserTable = {
             """
-            CREATE TABLE IF NOT EXISTS  pet (
-              `id` int NOT NULL AUTO_INCREMENT,
-              `name` varchar(256) NOT NULL,
-              `type` ENUM('CAT', 'DOG', 'FISH', 'FROG', 'ROCK') DEFAULT 'CAT',
-              `json` TEXT DEFAULT NULL,
-              PRIMARY KEY (`id`),
-              INDEX(type),
-              INDEX(name)
+            CREATE TABLE IF NOT EXISTS  user (
+              `username` varchar(256) NOT NULL AUTO_INCREMENT,
+              `password` varchar(256) NOT NULL,
+              `email` ENUM('CAT', 'DOG', 'FISH', 'FROG', 'ROCK') DEFAULT 'CAT',
+              PRIMARY KEY (`username`),
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
             """
     };
