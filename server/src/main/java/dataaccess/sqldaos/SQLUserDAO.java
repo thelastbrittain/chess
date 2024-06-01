@@ -3,10 +3,6 @@ package dataaccess.sqldaos;
 import dataaccess.DataAccessException;
 import dataaccess.interfaces.UserDAO;
 import model.UserData;
-import dataaccess.DatabaseManager;
-
-import java.sql.SQLException;
-
 import static dataaccess.DatabaseManager.executeUpdate;
 
 public class SQLUserDAO implements UserDAO {
@@ -17,7 +13,7 @@ public class SQLUserDAO implements UserDAO {
 
     @Override
     public UserData createUser(UserData newUser) {
-        var statement = "INSERT INTO user (user, password, email) VALUES (?, ?, ?)";
+        var statement = "INSERT INTO user (username, password, email) VALUES (?, ?, ?)";
         try {
             var id = executeUpdate(statement, newUser.username(), newUser.password(), newUser.email());
         } catch (DataAccessException e) {

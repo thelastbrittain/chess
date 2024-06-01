@@ -34,6 +34,8 @@ public class RegisterHandler implements Route {
                 response.status(403);
             } else if (result.message().equals(ErrorMessages.BADREQUEST)){
                 response.status(400);
+            } else if (result.message().equals(ErrorMessages.SQLERROR)){
+                response.status(500);
             }
         }
 

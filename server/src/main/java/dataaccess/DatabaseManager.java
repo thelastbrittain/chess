@@ -91,54 +91,53 @@ public class DatabaseManager {
                 return 0;
             }
         } catch (SQLException e) {
-            throw new DataAccessException("Problem in Database Manger executing an update. ");
+            throw new DataAccessException("Problem in Database Manger executing an update: " + e.getMessage() + e);
         }
     }
 
     public static void configureDatabase() throws DataAccessException {
         DatabaseManager.createDatabase();
+        System.out.println("Created the Database");
         try (var conn = DatabaseManager.getConnection()) {
             for (var statement : createUserTable) {
                 try (var preparedStatement = conn.prepareStatement(statement)) {
                     preparedStatement.executeUpdate();
                 }
             }
-        } catch (SQLException ex) {
-            throw new DataAccessException("User table not working");
-        }
-        try (var conn = DatabaseManager.getConnection()) {
+            System.out.println("finished user table");
             for (var statement : createAuthTable) {
                 try (var preparedStatement = conn.prepareStatement(statement)) {
                     preparedStatement.executeUpdate();
                 }
             }
+            System.out.println("Finished Auth table");
         } catch (SQLException ex) {
-            throw new DataAccessException("Auth table not working");
+            throw new DataAccessException("User or Auth table not working" + ex.getMessage());
         }
     }
 
 
     private static final String[] createUserTable = {
             """
-            CREATE TABLE IF NOT EXISTS  user (
-              `username` varchar(256) NOT NULL,
-              `password` varchar(256) NOT NULL,
-              `email` NOT NULL,
-              PRIMARY KEY (`username`),
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
-            """
+    CREATE TABLE IF NOT EXISTS `user` (
+      `username` varchar(256) NOT NULL,
+      `password` varchar(256) NOT NULL,
+      `email` varchar(256) NOT NULL,
+      PRIMARY KEY (`username`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+    """
     };
 
     private static final String[] createAuthTable = {
             """
-            CREATE TABLE IF NOT EXISTS  auth (
-              'id' int NOT NULL AUTO_INCREMENT
-              `username` varchar(256) NOT NULL,
-              `authToken` varchar(256),
-              PRIMARY KEY (`id`),
-              INDEX('username')
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
-            """
+    CREATE TABLE IF NOT EXISTS `auth` (
+      `id` int AUTO_INCREMENT,
+      `username` varchar(256) NOT NULL,
+      `authToken` varchar(256),
+      PRIMARY KEY (`id`),
+      INDEX (`username`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+    """
     };
 
 }
