@@ -1,6 +1,7 @@
 package dataaccess.sqldaos;
 
 import chess.ChessGame;
+import dataaccess.DataAccessException;
 import dataaccess.interfaces.AuthDAO;
 import dataaccess.interfaces.GameDAO;
 import dataaccess.interfaces.UserDAO;
@@ -9,6 +10,8 @@ import response.JoinGameResponse;
 
 import java.util.Collection;
 import java.util.List;
+
+import static dataaccess.DatabaseManager.executeUpdate;
 
 public class SQLGameDAO implements GameDAO {
     @Override
@@ -38,6 +41,11 @@ public class SQLGameDAO implements GameDAO {
 
     @Override
     public void clearGames() {
-
+        var statement = "TRUNCATE game";
+        try {
+            executeUpdate(statement);
+        } catch (DataAccessException e) {
+            System.out.println("Error clearing user table: " + e.getMessage());
+        }
     }
 }
