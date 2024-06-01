@@ -19,7 +19,7 @@ public class GameService {
     }
 
     public CreateGameResponse createGame(CreateGameRequest createGameRequest){
-        if (!authDAO.isVerifiedAuth(createGameRequest.authToken())){return new CreateGameResponse(null, ErrorMessages.UNAUTHORIZED);} //return some error code
+        if (!authDAO.isVerifiedAuth(createGameRequest.authToken())){return new CreateGameResponse(null, ErrorMessages.UNAUTHORIZED);}
         int gameID = gameDAO.createGame(createGameRequest.gameName());
         if (gameID == 0){return new CreateGameResponse(null, ErrorMessages.SQLERROR);}
         return new CreateGameResponse(gameID, null);
@@ -32,7 +32,7 @@ public class GameService {
         if (!gameDAO.isVerifiedGame(joinGameRequest.gameID())) {
             return new JoinGameResponse(ErrorMessages.BADREQUEST);
         }   //add error message
-        return gameDAO.updateUserInGame(joinGameRequest.gameID(), authDAO.getUsernameFromAuth(joinGameRequest.authToken()), joinGameRequest.playerColor());  //needs username t dangit.
+        return gameDAO.updateUserInGame(joinGameRequest.gameID(), authDAO.getUsernameFromAuth(joinGameRequest.authToken()), joinGameRequest.playerColor());
     }
 
     public ListGamesResponse listGames(String authToken){

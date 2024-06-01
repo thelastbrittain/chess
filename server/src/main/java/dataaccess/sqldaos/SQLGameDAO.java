@@ -8,15 +8,14 @@ import dataaccess.interfaces.GameDAO;
 import dataaccess.interfaces.UserDAO;
 import model.GameData;
 import response.JoinGameResponse;
+import service.ErrorMessages;
 import translation.Translator;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import static dataaccess.DatabaseManager.executeUpdate;
-import static dataaccess.DatabaseManager.getConnection;
 
 public class SQLGameDAO implements GameDAO {
     private int initialGameID;
@@ -104,7 +103,56 @@ public class SQLGameDAO implements GameDAO {
 
     @Override
     public JoinGameResponse updateUserInGame(int gameID, String username, ChessGame.TeamColor teamColor) {
-        return null;
+        if (!isEmpty(gameID, teamColor)){return new JoinGameResponse(ErrorMessages.SQLERROR);}
+        System.out.println("The username is: " + username);
+        System.out.println("The gameID is: " + gameID);
+        String statement;
+        if (teamColor.equals(ChessGame.TeamColor.WHITE)){
+            statement = "UPDATE game SET white_username = ? WHERE game_id = ?";
+        } else {
+            statement = "UPDATE game SET black_username = ? WHERE game_id = ?";
+        }
+
+        try {
+            executeUpdate(statement, username, gameID);
+        } catch (DataAccessException e) {
+            System.out.println("Error inserting username: " + e.getMessage());
+            return new JoinGameResponse(ErrorMessages.SQLERROR);
+        }
+        return new JoinGameResponse(null);
+    }
+
+    private boolean isEmpty(int gameID, ChessGame.TeamColor teamColor){
+        String usernameType;
+        String statement;
+        if (teamColor == ChessGame.TeamColor.WHITE){
+            usernameType = "white_username";
+            statement = "SELECT white_username FROM game WHERE game_id = ?";
+        } else {
+            usernameType = "black_username";
+            statement = "SELECT black_username FROM game WHERE game_id = ?";
+        }
+
+        try (var conn = DatabaseManager.getConnection();
+             var ps = conn.prepareStatement(statement)) {
+
+            ps.setInt(1, gameID);
+
+            try (var rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String username = rs.getString(usernameType);
+
+
+                    return (username == null || username.isEmpty());
+                } else {
+                    System.out.println("Game does not exist.");
+                    return false;
+                }
+            }
+        } catch (SQLException | DataAccessException e) {
+            System.out.println("SQL Error in checking if game user is empty: " + e.getMessage());
+            return false;
+        }
     }
 
     @Override
