@@ -1,8 +1,12 @@
 package dataaccess.sqldaos;
 
 import dataaccess.DataAccessException;
+import dataaccess.DatabaseManager;
 import dataaccess.interfaces.UserDAO;
 import model.UserData;
+
+import java.sql.SQLException;
+
 import static dataaccess.DatabaseManager.executeUpdate;
 
 public class SQLUserDAO implements UserDAO {
@@ -35,6 +39,25 @@ public class SQLUserDAO implements UserDAO {
 
     @Override
     public boolean isVerifiedUser(String username, String password) {
+        String query = "SELECT COUNT(*) FROM user WHERE username = ? AND password = ?";
+
+        try (var conn = DatabaseManager.getConnection();
+             var ps = conn.prepareStatement(query)) {
+            ps.setString(1, username);
+            ps.setString(2, password);
+
+            try (var rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int count = rs.getInt(1);
+                    return count > 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error checking user credentials: " + e.getMessage());
+            return false;
+        } catch (DataAccessException e) {
+            System.out.println(e.getMessage());
+        }
         return false;
     }
 
