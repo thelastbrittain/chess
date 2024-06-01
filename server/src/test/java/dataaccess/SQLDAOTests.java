@@ -65,8 +65,27 @@ public class SQLDAOTests {
     }
 
     //Is verified user
+    @Test
+    @DisplayName("Is Verified User Success")
+    public void isVerifiedUserSuccess(){
+        createTestUser();
+        Assertions.assertTrue(userDAO.isVerifiedUser(testUsername,testPassword));
+    }
+
+    @Test
+    @DisplayName("Is Verified User Failure")
+    public void isVerifiedUserFailure(){
+        Assertions.assertFalse(userDAO.isVerifiedUser(testUsername,testPassword));
+    }
 
     //Clear users
+    @Test
+    @DisplayName("Clear Users Success")
+    public void clearUsersSuccess(){
+        createTestUser();
+        userDAO.clearUsers();
+        Assertions.assertFalse(userDAO.userExists(testUsername));
+    }
 
 
     /**

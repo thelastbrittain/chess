@@ -53,17 +53,6 @@ public class SQLUserDAO implements UserDAO {
         return false;
     }
 
-
-    @Override
-    public void clearUsers() {
-        var statement = "DELETE FROM user";
-        try {
-            executeUpdate(statement);
-        } catch (DataAccessException e) {
-            System.out.println("Error clearing user table: " + e.getMessage());
-        }
-    }
-
     @Override
     public boolean isVerifiedUser(String username, String password) {
         String query = "SELECT password FROM user WHERE username = ?";
@@ -85,6 +74,16 @@ public class SQLUserDAO implements UserDAO {
         } catch (SQLException | DataAccessException e) {
             System.out.println("SQL Error retreving password: " + e.getMessage());
             return false;
+        }
+    }
+
+    @Override
+    public void clearUsers() {
+        var statement = "DELETE FROM user";
+        try {
+            executeUpdate(statement);
+        } catch (DataAccessException e) {
+            System.out.println("Error clearing user table: " + e.getMessage());
         }
     }
 }
