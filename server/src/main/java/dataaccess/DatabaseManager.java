@@ -149,11 +149,11 @@ public class DatabaseManager {
     private static final String[] createGameTable = {
             """
     CREATE TABLE IF NOT EXISTS `game` (
-    `game_id` INT AUTO_INCREMENT PRIMARY KEY,
+    `game_id` INT NOT NULL PRIMARY KEY,
     `game_name` VARCHAR(255) NOT NULL,
     `white_username` VARCHAR(256),
     `black_username` VARCHAR(256),
-    `game_info` LONGTEXT,
+    `game_info` LONGTEXT NOT NULL,
     FOREIGN KEY (`white_username`) REFERENCES `User`(`username`),
     FOREIGN KEY (`black_username`) REFERENCES `User`(`username`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci

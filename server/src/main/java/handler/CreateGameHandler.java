@@ -5,6 +5,7 @@ import dataaccess.interfaces.AuthDAO;
 import dataaccess.interfaces.GameDAO;
 import request.CreateGameRequest;
 import response.CreateGameResponse;
+import service.ErrorMessages;
 import service.GameService;
 import spark.Request;
 import spark.Response;
@@ -31,8 +32,10 @@ public class CreateGameHandler implements Route {
 
         if (createGameResponse.message() == null){
             response.status(200);
-        } else{
+        } else if (createGameResponse.message().equals(ErrorMessages.UNAUTHORIZED)){
             response.status(401);
+        } else if (createGameResponse.message().equals(ErrorMessages.SQLERROR)) {
+            response.status(500);
         }
 
         return Translator.fromObjectToJson(createGameResponse);

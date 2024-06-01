@@ -7,6 +7,7 @@ import dataaccess.interfaces.GameDAO;
 import dataaccess.interfaces.UserDAO;
 import model.GameData;
 import response.JoinGameResponse;
+import translation.Translator;
 
 import java.util.Collection;
 import java.util.List;
@@ -14,14 +15,36 @@ import java.util.List;
 import static dataaccess.DatabaseManager.executeUpdate;
 
 public class SQLGameDAO implements GameDAO {
+    private int initialGameID;
+
+    public SQLGameDAO(){
+        initialGameID = 1;
+    }
+
     @Override
     public void clearApplication(AuthDAO authData, UserDAO userData) {
+        clearGames();
+        authData.clearAuths();
+        userData.clearUsers();
+    }
 
+    @Override
+    public int createGameID(){
+        return initialGameID++;
     }
 
     @Override
     public int createGame(String gameName) {
-        return 0;
+        var statement = "INSERT INTO game (gameID,gameName, game) VALUES (?, ?)";
+        int gameID = createGameID();
+        String gameJson = (String) Translator.fromObjectToJson(new GameData(gameID, null, null, gameName, new ChessGame()));
+        try {
+            executeUpdate(statement, gameID, gameName, gameJson);
+            return gameID;
+        } catch (DataAccessException e) {
+            System.out.println("Error creating a game: " + e.getMessage());
+            return 0;
+        }
     }
 
     @Override

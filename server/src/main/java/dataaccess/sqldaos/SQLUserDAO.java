@@ -53,7 +53,7 @@ public class SQLUserDAO implements UserDAO {
 
     @Override
     public void clearUsers() {
-        var statement = "TRUNCATE user";
+        var statement = "DELETE FROM user";
         try {
             executeUpdate(statement);
         } catch (DataAccessException e) {

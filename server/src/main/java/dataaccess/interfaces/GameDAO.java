@@ -13,4 +13,5 @@ public interface GameDAO {
      Collection<GameData> listGames();
      JoinGameResponse updateUserInGame(int gameID, String username, ChessGame.TeamColor teamColor);
      void clearGames();
+     int createGameID();
 }

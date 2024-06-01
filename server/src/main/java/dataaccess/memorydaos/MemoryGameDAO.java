@@ -30,7 +30,7 @@ public class MemoryGameDAO implements GameDAO {
         this.clearGames();
     }
 
-    private int createGameID(){
+    public int createGameID(){
         return initialGameID++;
     }
 
