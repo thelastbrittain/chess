@@ -18,6 +18,7 @@ public class SQLUserDAO implements UserDAO {
 
     @Override
     public UserData createUser(UserData newUser) {
+        if (newUser.password() == null){return new UserData(null, null, null);}
         var statement = "INSERT INTO user (username, password, email) VALUES (?, ?, ?)";
         String hashedPassword = BCrypt.hashpw(newUser.password(), BCrypt.gensalt());
         try {
@@ -30,7 +31,7 @@ public class SQLUserDAO implements UserDAO {
     }
 
     @Override
-    public boolean getUser(String username) {
+    public boolean userExists(String username) {
         String query = "SELECT COUNT(*) FROM user WHERE username = ?";
 
         try (var conn = DatabaseManager.getConnection();

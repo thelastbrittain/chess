@@ -21,7 +21,7 @@ public class UserService {
     public RegisterResponse register(RegisterRequest registerRequest){
         if (registerRequest.username() == null || registerRequest.password() == null || registerRequest.email() == null){
             return new RegisterResponse(null, null, ErrorMessages.BADREQUEST); }
-        if (userDAO.getUser(registerRequest.username())){return new RegisterResponse(null, null, ErrorMessages.ALREADYTAKEN);}
+        if (userDAO.userExists(registerRequest.username())){return new RegisterResponse(null, null, ErrorMessages.ALREADYTAKEN);}
         UserData testUser = userDAO.createUser(new UserData(registerRequest.username(), registerRequest.password(), registerRequest.email()));
         if (testUser.username() == null){return new RegisterResponse(null, null, ErrorMessages.SQLERROR);}
         String authToken = authDAO.createAuth(registerRequest.username());

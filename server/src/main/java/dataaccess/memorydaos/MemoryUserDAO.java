@@ -18,7 +18,7 @@ public class MemoryUserDAO  implements UserDAO {
         return newUser;
     }
 
-    public boolean getUser(String username) {
+    public boolean userExists(String username) {
         for (UserData currentUser : userDataList) {
             if (currentUser.username().equals(username)) {
                 return true;
