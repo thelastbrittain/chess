@@ -104,15 +104,21 @@ public class DatabaseManager {
                     preparedStatement.executeUpdate();
                 }
             }
-            System.out.println("finished user table");
+            System.out.println("Finished User table");
             for (var statement : createAuthTable) {
                 try (var preparedStatement = conn.prepareStatement(statement)) {
                     preparedStatement.executeUpdate();
                 }
             }
             System.out.println("Finished Auth table");
+            for (var statement : createGameTable) {
+                try (var preparedStatement = conn.prepareStatement(statement)) {
+                    preparedStatement.executeUpdate();
+                }
+            }
+            System.out.println("Finished Game table");
         } catch (SQLException ex) {
-            throw new DataAccessException("User or Auth table not working" + ex.getMessage());
+            throw new DataAccessException("User/Auth/Game table not working" + ex.getMessage());
         }
     }
 
@@ -136,6 +142,20 @@ public class DatabaseManager {
       `authToken` varchar(256),
       PRIMARY KEY (`id`),
       INDEX (`username`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+    """
+    };
+
+    private static final String[] createGameTable = {
+            """
+    CREATE TABLE Game (
+        game_id INT AUTO_INCREMENT PRIMARY KEY,
+        game_name VARCHAR(255) NOT NULL,
+        white_username varchar(256),
+        black_username varchar(256),
+        game_info LONGTEXT,
+        FOREIGN KEY (white_username) REFERENCES User(username),
+        FOREIGN KEY (black_username) REFERENCES User(username)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
     """
     };
