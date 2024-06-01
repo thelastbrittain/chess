@@ -93,14 +93,78 @@ public class SQLDAOTests {
      */
 
     //Create Auth
+    @Test
+    @DisplayName("Create Auth Success")
+    public void createAuthSuccess(){
+        String authToken = authDAO.createAuth(testUsername);
+        Assertions.assertNotNull(authToken);
+    }
+
+    @Test
+    @DisplayName("Create Auth Failure")
+    public void createAuthFailure(){
+        String authToken = authDAO.createAuth(null);
+        Assertions.assertNull(authToken);
+    }
 
     //Is verified Auth
+    @Test
+    @DisplayName("Is Verified Auth Success")
+    public void isVerifiedAuthSuccess(){
+        String authToken = authDAO.createAuth(testUsername);
+        Assertions.assertTrue(authDAO.isVerifiedAuth(authToken));
+    }
 
-    //Delete auth
-
-    //Clear auths
+    @Test
+    @DisplayName("Is Verified Auth Failure")
+    public void isVerifiedAuthFailure(){
+        Assertions.assertFalse(authDAO.isVerifiedAuth("Not a valid auth"));
+    }
 
     //Get Username from Auth
+    @Test
+    @DisplayName("Get Username From Auth Success")
+    public void getUsernameFromAuthSuccess(){
+        String authToken = authDAO.createAuth(testUsername);
+        String username = authDAO.getUsernameFromAuth(authToken);
+        Assertions.assertEquals(testUsername, username);
+    }
+
+    @Test
+    @DisplayName("Get Username From Auth Failure")
+    public void getUsernameFromAuthFailure(){
+        String authToken = authDAO.createAuth(testUsername);
+        String username = authDAO.getUsernameFromAuth("Faulty Token");
+        Assertions.assertNotEquals(testUsername, username);
+    }
+
+    //Delete auth
+    @Test
+    @DisplayName("Delete Auth Success")
+    public void deleteAuthSuccess(){
+        String authToken = authDAO.createAuth(testUsername);
+        authDAO.deleteAuth(authToken);
+        Assertions.assertFalse(authDAO.isVerifiedAuth(authToken));
+    }
+
+    @Test
+    @DisplayName("Delete Auth Failure")
+    public void deleteAuthFailure(){
+        String authToken = authDAO.createAuth(testUsername);
+        authDAO.deleteAuth("Faulty Auth");
+        Assertions.assertTrue(authDAO.isVerifiedAuth(authToken));
+    }
+
+    //Clear auths
+    @Test
+    @DisplayName("Clear Auths Success")
+    public void clearAuthSuccess(){
+        String authToken = authDAO.createAuth(testUsername);
+        authDAO.clearAuths();
+        Assertions.assertFalse(authDAO.isVerifiedAuth(authToken));
+    }
+
+
 
 
 
