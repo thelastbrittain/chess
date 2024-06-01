@@ -8,12 +8,15 @@ public class Translator {
 
 
     public static <T> T fromJsonToObject(Request request, Class<T> classOfT) {
-        System.out.println("Made it inside new class");
         return gson.fromJson(request.body(), classOfT);
     }
 
     public static Object fromObjectToJson(Object result){
         return gson.toJson(result);
+    }
+
+    public static <T> T fromJsontoObjectNotRequest(String string, Class<T> classOfT){
+        return gson.fromJson(string, classOfT);
     }
 
 }

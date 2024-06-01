@@ -2,6 +2,7 @@ package server;
 
 import dataaccess.DataAccessException;
 import dataaccess.memorydaos.MemoryGameDAO;
+import dataaccess.sqldaos.SQLGameDAO;
 import dataaccess.sqldaos.SQLUserDAO;
 import dataaccess.sqldaos.SQLAuthDAO;
 import handler.*;
@@ -25,7 +26,7 @@ public class Server {
 
         SQLUserDAO userDAO = new SQLUserDAO();
         SQLAuthDAO authDAO = new SQLAuthDAO();
-        MemoryGameDAO gameDAO = new MemoryGameDAO();
+        SQLGameDAO gameDAO = new SQLGameDAO();
 
         // Register your endpoints and handle exceptions here.
         Spark.delete("/db", new ClearHandler(userDAO, authDAO, gameDAO));

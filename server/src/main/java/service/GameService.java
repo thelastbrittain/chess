@@ -19,7 +19,6 @@ public class GameService {
     }
 
     public CreateGameResponse createGame(CreateGameRequest createGameRequest){
-        System.out.println("The auth Token in the service is " + createGameRequest.authToken());
         if (!authDAO.isVerifiedAuth(createGameRequest.authToken())){return new CreateGameResponse(null, ErrorMessages.UNAUTHORIZED);} //return some error code
         int gameID = gameDAO.createGame(createGameRequest.gameName());
         if (gameID == 0){return new CreateGameResponse(null, ErrorMessages.SQLERROR);}
@@ -38,6 +37,7 @@ public class GameService {
 
     public ListGamesResponse listGames(String authToken){
         if (!authDAO.isVerifiedAuth(authToken)) {return new ListGamesResponse(null, ErrorMessages.UNAUTHORIZED);}
+
         return new ListGamesResponse(gameDAO.listGames(), null);
     }
 
