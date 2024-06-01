@@ -53,6 +53,24 @@ public class SQLGameDAO implements GameDAO {
 
     @Override
     public boolean isVerifiedGame(int gameID) {
+        String statement = "SELECT COUNT(*) FROM game WHERE game_id = ?";
+
+        try (var conn = DatabaseManager.getConnection();
+             var ps = conn.prepareStatement(statement)) {
+            ps.setString(1, String.valueOf(gameID));
+
+            try (var rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int count = rs.getInt(1);
+                    return count > 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Access Denied: " + e.getMessage());
+            return false;
+        } catch (DataAccessException e) {
+            System.out.println(e.getMessage());
+        }
         return false;
     }
 
