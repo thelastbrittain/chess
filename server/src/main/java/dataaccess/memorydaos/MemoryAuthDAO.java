@@ -25,7 +25,6 @@ public class MemoryAuthDAO implements AuthDAO {
     @Override
     public boolean isVerifiedAuth(String authToken) {
         for (AuthData auth: authDataList){
-            System.out.println("Entered Auth Token: " + authToken + "\n Current Auth Token: " + auth.authToken());
             if (auth.authToken().equals(authToken)){
                 return true;
             }

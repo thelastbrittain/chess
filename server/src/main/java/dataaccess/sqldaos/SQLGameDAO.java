@@ -103,9 +103,10 @@ public class SQLGameDAO implements GameDAO {
 
     @Override
     public JoinGameResponse updateUserInGame(int gameID, String username, ChessGame.TeamColor teamColor) {
-        if (!isEmpty(gameID, teamColor)){return new JoinGameResponse(ErrorMessages.SQLERROR);}
-        System.out.println("The username is: " + username);
-        System.out.println("The gameID is: " + gameID);
+        if (!(teamColor == ChessGame.TeamColor.WHITE || teamColor == ChessGame.TeamColor.BLACK)){
+            return new JoinGameResponse(ErrorMessages.BADREQUEST);
+        }
+        if (!isEmpty(gameID, teamColor)){return new JoinGameResponse(ErrorMessages.ALREADYTAKEN);}
         String statement;
         if (teamColor.equals(ChessGame.TeamColor.WHITE)){
             statement = "UPDATE game SET white_username = ? WHERE game_id = ?";
