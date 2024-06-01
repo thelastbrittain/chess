@@ -39,7 +39,7 @@ public class SQLGameDAO implements GameDAO {
 
     @Override
     public int createGame(String gameName) {
-        var statement = "INSERT INTO game (gameID,gameName, game) VALUES (?, ?)";
+        var statement = "INSERT INTO game (game_id, game_name, game_info) VALUES (?, ?, ?)";
         int gameID = createGameID();
         String gameJson = (String) Translator.fromObjectToJson(new GameData(gameID, null, null, gameName, new ChessGame()));
         try {
