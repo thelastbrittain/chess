@@ -18,13 +18,13 @@ public class MemoryUserDAO  implements UserDAO {
         return newUser;
     }
 
-    public UserData getUser(String username) {
+    public boolean getUser(String username) {
         for (UserData currentUser : userDataList) {
             if (currentUser.username().equals(username)) {
-                return currentUser;
+                return true;
             }
         };
-        return null;
+        return false;
     }
 
     @Override

@@ -28,9 +28,28 @@ public class SQLUserDAO implements UserDAO {
     }
 
     @Override
-    public UserData getUser(String username) {
-        return null;
+    public boolean getUser(String username) {
+        String query = "SELECT COUNT(*) FROM user WHERE username = ?";
+
+        try (var conn = DatabaseManager.getConnection();
+             var ps = conn.prepareStatement(query)) {
+            ps.setString(1, username);
+
+            try (var rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int count = rs.getInt(1);
+                    return count > 0;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error checking user credentials: " + e.getMessage());
+            return false;
+        } catch (DataAccessException e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
     }
+
 
     @Override
     public void clearUsers() {
@@ -60,9 +79,5 @@ public class SQLUserDAO implements UserDAO {
         }
         return false;
     }
-
-
-
-
 }
 
