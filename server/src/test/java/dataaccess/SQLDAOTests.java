@@ -1,13 +1,19 @@
 package dataaccess;
 
+import chess.ChessGame;
 import dataaccess.sqldaos.SQLAuthDAO;
 import dataaccess.sqldaos.SQLGameDAO;
 import dataaccess.sqldaos.SQLUserDAO;
+import model.GameData;
 import model.UserData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import response.JoinGameResponse;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class SQLDAOTests {
     SQLGameDAO gameDAO = new SQLGameDAO();
@@ -173,16 +179,101 @@ public class SQLDAOTests {
      */
 
     //Create Game
+    @Test
+    @DisplayName("Create Game Success")
+    public void createGameSuccess(){
+        int gameID = gameDAO.createGame("Game 1");
+        int gameID2 = gameDAO.createGame("Game 2");
+        Assertions.assertEquals(1, gameID);
+        Assertions.assertEquals(2, gameID2);
+
+    }
+
+    @Test
+    @DisplayName("Create Game Failure")
+    public void createGameFailure() {
+        int gameID = gameDAO.createGame(null);
+        Assertions.assertEquals(0, gameID);
+    }
 
     //Is verified Game
+    @Test
+    @DisplayName("Is Verified Game Successs")
+    public void isVerifiedGameSuccess(){
+        int gameID = gameDAO.createGame(testGame);
+        Assertions.assertTrue(gameDAO.isVerifiedGame(gameID));
+    }
+
+    @Test
+    @DisplayName("Is Verified Game Failure")
+    public void isVerifiedGameFailure(){
+        int gameID = gameDAO.createGame(testGame);
+        Assertions.assertFalse(gameDAO.isVerifiedGame(5));
+    }
 
     //List games
+    @Test
+    @DisplayName("List Games Success")
+    public void listGamesSuccess(){
+        gameDAO.createGame(testGame);
+        Collection<GameData> gameData = gameDAO.listGames();
+        Assertions.assertFalse(gameData.isEmpty());
+    }
+
+    @Test
+    @DisplayName("List Games Failure")
+    public void listGamesFailure(){
+        Collection<GameData> gameData = gameDAO.listGames();
+        Assertions.assertTrue(gameData.isEmpty());
+    }
 
     //Update user in game
+    @Test
+    @DisplayName("Update User in Game Success")
+    public void updateUserInGameSuccess(){
+        int gameID = gameDAO.createGame(testGame);
+        createTestUser();
+        JoinGameResponse response = gameDAO.updateUserInGame(gameID, testUsername, ChessGame.TeamColor.WHITE);
+        Assertions.assertNull(response.message());
+    }
+
+    @Test
+    @DisplayName("Update User in Game Failure")
+    public void updateUserInGameFailure(){
+        int gameID = gameDAO.createGame(testGame);
+        createTestUser();
+        gameDAO.updateUserInGame(gameID, testUsername, ChessGame.TeamColor.WHITE);
+        JoinGameResponse response = gameDAO.updateUserInGame(gameID, testUsername, ChessGame.TeamColor.WHITE);
+        Assertions.assertNotNull(response.message());
+    }
 
     //Clear games
+    @Test
+    @DisplayName("Clear Games Successs")
+    public void clearGamesSuccess(){
+        gameDAO.createGame(testGame);
+        gameDAO.clearGames();
+        Collection<GameData> gameData = gameDAO.listGames();
+        Assertions.assertTrue(gameData.isEmpty());
+    }
 
     //Clear all data
+    @Test
+    @DisplayName("Clear All Data Success")
+    public void clearAllDataSuccess(){
+        createTestUser();
+        String authToken = authDAO.createAuth(testUsername);
+        gameDAO.createGame(testGame);
+
+        gameDAO.clearApplication(authDAO, userDAO);
+
+        Assertions.assertFalse(userDAO.userExists(testUsername));
+        Assertions.assertFalse(authDAO.isVerifiedAuth(authToken));
+
+        Collection<GameData> gameData = gameDAO.listGames();
+        Assertions.assertTrue(gameData.isEmpty());
+
+    }
 
     /**
      * Helper functions
