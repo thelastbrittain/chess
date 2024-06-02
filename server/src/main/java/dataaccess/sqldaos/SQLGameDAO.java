@@ -96,7 +96,7 @@ public class SQLGameDAO implements GameDAO {
             }
         } catch (SQLException | DataAccessException e) {
             System.out.println("Error Listing the games: " + e.getMessage());
-            return null;
+            return gameDataList;
         }
         return gameDataList;
     }
