@@ -156,8 +156,8 @@ public class DatabaseManager {
     `white_username` VARCHAR(256),
     `black_username` VARCHAR(256),
     `game_info` LONGTEXT NOT NULL,
-    FOREIGN KEY (`white_username`) REFERENCES `User`(`username`),
-    FOREIGN KEY (`black_username`) REFERENCES `User`(`username`)
+    FOREIGN KEY (`white_username`) REFERENCES `user`(`username`),
+    FOREIGN KEY (`black_username`) REFERENCES `user`(`username`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
     """
     };
