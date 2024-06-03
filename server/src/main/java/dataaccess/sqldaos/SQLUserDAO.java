@@ -1,10 +1,12 @@
 package dataaccess.sqldaos;
 
+import dataaccess.DAOException;
 import dataaccess.DataAccessException;
 import dataaccess.DatabaseManager;
 import dataaccess.interfaces.UserDAO;
 import model.UserData;
 import org.mindrot.jbcrypt.BCrypt;
+import service.ErrorMessages;
 
 import java.sql.SQLException;
 
@@ -31,7 +33,7 @@ public class SQLUserDAO implements UserDAO {
     }
 
     @Override
-    public boolean userExists(String username) {
+    public void userExists(String username) throws DAOException {
         String query = "SELECT COUNT(*) FROM user WHERE username = ?";
 
         try (var conn = DatabaseManager.getConnection();
@@ -41,18 +43,14 @@ public class SQLUserDAO implements UserDAO {
             try (var rs = ps.executeQuery()) {
                 if (rs.next()) {
                     int count = rs.getInt(1);
-                    return count > 0;
+                    if (count > 0){return;}
+                    else {throw new DAOException(403, ErrorMessages.ALREADYTAKEN);}
+                    }
                 }
             }
-        } catch (SQLException e) {
-            System.out.println("Error checking user credentials: " + e.getMessage());
-            e.printStackTrace();
-            return false;
-        } catch (DataAccessException e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
+         catch (SQLException e) {
+            throw new DAOException(500, ErrorMessages.SQLERROR);
         }
-        return false;
     }
 
     @Override

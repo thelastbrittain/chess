@@ -1,5 +1,6 @@
 package server;
 
+import dataaccess.DAOException;
 import dataaccess.DataAccessException;
 import dataaccess.memorydaos.MemoryGameDAO;
 import dataaccess.sqldaos.SQLGameDAO;
@@ -16,7 +17,6 @@ public class Server {
         Spark.port(desiredPort);
 
         Spark.staticFiles.location("web");
-//        Spark.init();
 
         try {
             configureDatabase();
@@ -36,10 +36,15 @@ public class Server {
         Spark.post("/game", new CreateGameHandler(authDAO, gameDAO));
         Spark.put("/game", new JoinGameHandler(authDAO, gameDAO));
         Spark.get("game", new ListGamesHandler(authDAO, gameDAO));
+        Spark.exception(DAOException.class, this::exceptionHandler);
 
 
         Spark.awaitInitialization();
         return Spark.port();
+    }
+
+    private void exceptionHandler(DAOException ex, Request req, Response res) {
+        res.status(ex.StatusCode());
     }
 
     public void stop() {
