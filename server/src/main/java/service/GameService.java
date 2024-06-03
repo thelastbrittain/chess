@@ -28,10 +28,10 @@ public class GameService {
     public JoinGameResponse joinGame(JoinGameRequest joinGameRequest) {
         if (!authDAO.isVerifiedAuth(joinGameRequest.authToken())) {
             return new JoinGameResponse(ErrorMessages.UNAUTHORIZED);
-        } //add error message
+        }
         if (!gameDAO.isVerifiedGame(joinGameRequest.gameID())) {
             return new JoinGameResponse(ErrorMessages.BADREQUEST);
-        }   //add error message
+        }
         return gameDAO.updateUserInGame(joinGameRequest.gameID(), authDAO.getUsernameFromAuth(joinGameRequest.authToken()), joinGameRequest.playerColor());
     }
 

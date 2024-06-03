@@ -40,13 +40,25 @@ public class SQLGameDAO implements GameDAO {
     public int createGame(String gameName) {
         var statement = "INSERT INTO game (game_id, game_name, game_info) VALUES (?, ?, ?)";
         int gameID = createGameID();
-        String gameJson = (String) Translator.fromObjectToJson(new GameData(gameID, null, null, gameName, new ChessGame()));
+        String gameJson = (String) Translator.fromObjectToJson(new ChessGame());
         try {
             executeUpdate(statement, gameID, gameName, gameJson);
             return gameID;
         } catch (DataAccessException e) {
             System.out.println("Error creating a game: " + e.getMessage());
             return 0;
+        }
+    }
+
+    private boolean updateGame(int gameID, ChessGame game){
+        String statement = "UPDATE game SET game_info = ? WHERE game_id = ?";
+        String gameJson = (String) Translator.fromObjectToJson(game);
+        try {
+            executeUpdate(statement, gameID, gameJson);
+            return true;
+        } catch (DataAccessException e) {
+            System.out.println("Error creating a game: " + e.getMessage());
+            return false;
         }
     }
 
