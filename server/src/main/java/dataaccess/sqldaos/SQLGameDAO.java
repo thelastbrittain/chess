@@ -64,12 +64,10 @@ public class SQLGameDAO implements GameDAO {
                     return count > 0;
                 }
             }
-        } catch (SQLException e) {
+        } catch (SQLException | DataAccessException e) {
             System.out.println("Access Denied: " + e.getMessage());
             e.printStackTrace();
             return false;
-        } catch (DataAccessException e) {
-            System.out.println(e.getMessage());
         }
         return false;
     }
@@ -88,7 +86,6 @@ public class SQLGameDAO implements GameDAO {
                 String blackUsername = rs.getString("black_username");
                 String gameName = rs.getString("game_name");
                 String gameInfo = rs.getString("game_info");
-
 
                 ChessGame game = Translator.fromJsontoObjectNotRequest(gameInfo, ChessGame.class);
 
