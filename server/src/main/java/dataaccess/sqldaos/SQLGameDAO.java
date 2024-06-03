@@ -144,8 +144,6 @@ public class SQLGameDAO implements GameDAO {
             try (var rs = ps.executeQuery()) {
                 if (rs.next()) {
                     String username = rs.getString(usernameType);
-
-
                     return (username == null || username.isEmpty());
                 } else {
                     System.out.println("Game does not exist.");

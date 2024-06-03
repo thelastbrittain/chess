@@ -101,19 +101,19 @@ public class DatabaseManager {
         DatabaseManager.createDatabase();
         System.out.println("Created the Database");
         try (var conn = DatabaseManager.getConnection()) {
-            for (var statement : createUserTable) {
+            for (var statement : CreateUserTable) {
                 try (var preparedStatement = conn.prepareStatement(statement)) {
                     preparedStatement.executeUpdate();
                 }
             }
             System.out.println("Finished User table");
-            for (var statement : createAuthTable) {
+            for (var statement : CreateAuthTable) {
                 try (var preparedStatement = conn.prepareStatement(statement)) {
                     preparedStatement.executeUpdate();
                 }
             }
             System.out.println("Finished Auth table");
-            for (var statement : createGameTable) {
+            for (var statement : CreateGameTable) {
                 try (var preparedStatement = conn.prepareStatement(statement)) {
                     preparedStatement.executeUpdate();
                 }
@@ -125,7 +125,7 @@ public class DatabaseManager {
     }
 
 
-    private static final String[] createUserTable = {
+    private static final String[] CreateUserTable = {
             """
     CREATE TABLE IF NOT EXISTS `user` (
       `username` varchar(256) NOT NULL,
@@ -136,7 +136,7 @@ public class DatabaseManager {
     """
     };
 
-    private static final String[] createAuthTable = {
+    private static final String[] CreateAuthTable = {
             """
     CREATE TABLE IF NOT EXISTS `auth` (
       `id` int AUTO_INCREMENT,
@@ -148,7 +148,7 @@ public class DatabaseManager {
     """
     };
 
-    private static final String[] createGameTable = {
+    private static final String[] CreateGameTable = {
             """
     CREATE TABLE IF NOT EXISTS `game` (
     `game_id` INT NOT NULL PRIMARY KEY,
