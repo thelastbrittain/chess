@@ -45,6 +45,7 @@ public class SQLAuthDAO implements AuthDAO {
             }
         } catch (SQLException e) {
             System.out.println("Access Denied: " + e.getMessage());
+            e.printStackTrace();
             return false;
         } catch (DataAccessException e) {
             System.out.println(e.getMessage());
@@ -67,6 +68,7 @@ public class SQLAuthDAO implements AuthDAO {
             }
         } catch (SQLException | DataAccessException e) {
             System.out.println("Unable to retrieve the username given the auth: " + e.getMessage());
+            e.printStackTrace();
             return null;
         }
     }

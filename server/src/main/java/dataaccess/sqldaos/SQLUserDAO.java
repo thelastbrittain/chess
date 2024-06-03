@@ -46,9 +46,11 @@ public class SQLUserDAO implements UserDAO {
             }
         } catch (SQLException e) {
             System.out.println("Error checking user credentials: " + e.getMessage());
+            e.printStackTrace();
             return false;
         } catch (DataAccessException e) {
             System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return false;
     }
@@ -73,6 +75,7 @@ public class SQLUserDAO implements UserDAO {
             }
         } catch (SQLException | DataAccessException e) {
             System.out.println("SQL Error retreving password: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }

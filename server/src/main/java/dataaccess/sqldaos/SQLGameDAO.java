@@ -66,6 +66,7 @@ public class SQLGameDAO implements GameDAO {
             }
         } catch (SQLException e) {
             System.out.println("Access Denied: " + e.getMessage());
+            e.printStackTrace();
             return false;
         } catch (DataAccessException e) {
             System.out.println(e.getMessage());
@@ -96,6 +97,7 @@ public class SQLGameDAO implements GameDAO {
             }
         } catch (SQLException | DataAccessException e) {
             System.out.println("Error Listing the games: " + e.getMessage());
+            e.printStackTrace();
             return gameDataList;
         }
         return gameDataList;
@@ -152,6 +154,7 @@ public class SQLGameDAO implements GameDAO {
             }
         } catch (SQLException | DataAccessException e) {
             System.out.println("SQL Error in checking if game user is empty: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
