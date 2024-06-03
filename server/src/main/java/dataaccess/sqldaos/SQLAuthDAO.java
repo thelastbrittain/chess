@@ -24,6 +24,7 @@ public class SQLAuthDAO implements AuthDAO {
             executeUpdate(statement, username, newAuthToken);
         } catch (DataAccessException e) {
             System.out.println("Error in createAuth: " + e.getMessage());
+            e.printStackTrace();
             return null;
         }
         return newAuthToken;

@@ -67,6 +67,7 @@ public class DatabaseManager {
             conn.setCatalog(DATABASE_NAME);
             return conn;
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new DataAccessException(e.getMessage());
         }
     }
@@ -78,7 +79,6 @@ public class DatabaseManager {
                     var param = params[i];
                     if (param instanceof String p) ps.setString(i + 1, p);
                     else if (param instanceof Integer p) ps.setInt(i + 1, p);
-//                    else if (param instanceof PetType p) ps.setString(i + 1, p.toString());
                     else if (param == null) ps.setNull(i + 1, NULL);
                 }
                 ps.executeUpdate();
@@ -91,7 +91,9 @@ public class DatabaseManager {
                 return 0;
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new DataAccessException("Problem in Database Manger executing an update: " + e.getMessage() + e);
+
         }
     }
 
