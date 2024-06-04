@@ -57,13 +57,22 @@ public class BoardCreator {
         out.print(EMPTY.repeat(3));
     }
 
+
+
     private void createRows(PrintStream out,  ChessGame.TeamColor orientation, ChessBoard board) {
-        for (int row = 8; row > 0; row--) {
-            createRow(out, row, board);
+        if (orientation == ChessGame.TeamColor.WHITE){
+            for (int row = 8; row > 0; row--) {
+                createRow(out, row, board, orientation);
+            }
+        } else{
+            for (int row = 1; row < 9; row++) {
+                createRow(out, row, board, orientation);
+            }
         }
+
     }
 
-    private void createRow(PrintStream out, int row, ChessBoard board){
+    private void createRow(PrintStream out, int row, ChessBoard board, ChessGame.TeamColor orientation){
         assert row > 0 && row < 9;
 
         printRowNumber(out, row);
