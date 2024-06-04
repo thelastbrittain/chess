@@ -114,7 +114,7 @@ public class BoardCreator {
     //dark color -- Dark Brown
 
     private static void setLight(PrintStream out) {
-        out.print(SET_TEXT_COLOR_DARK_TAN);
+        out.print(SET_BG_COLOR_DARK_TAN);
         out.print(SET_TEXT_COLOR_DARK_TAN);
     }
 
