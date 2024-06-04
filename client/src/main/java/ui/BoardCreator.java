@@ -1,5 +1,7 @@
 package ui;
 
+import chess.ChessGame;
+
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -9,32 +11,57 @@ import static ui.EscapeSequences.*;
 import static ui.EscapeSequences.SET_TEXT_COLOR_BLACK;
 
 public class BoardCreator {
-    private static final List<String> HEADERLETTERS = Arrays.asList("A", "B", "C", "D", "E", "F", "G", "H");
 
-    public void createBoard(String orientation){
+    public void createBoard(ChessGame.TeamColor orientation){
         var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
         createHeaders(out, orientation);
         createRows(orientation);
-        createHeaders(orientation);
+        createHeaders(out, reverseOrientationColor(orientation));
     }
 
-    private void createHeaders(PrintStream out, String orientation) {
+    private ChessGame.TeamColor reverseOrientationColor(ChessGame.TeamColor color){
+        assert color == ChessGame.TeamColor.WHITE || color == ChessGame.TeamColor.BLACK;
+        if (color == ChessGame.TeamColor.WHITE){
+            return  ChessGame.TeamColor.BLACK;
+        } else {
+            return ChessGame.TeamColor.WHITE;
+        }
+    }
 
-        setBlack(out);
+    private void createHeaders(PrintStream out, ChessGame.TeamColor orientation) {
+        assert orientation == ChessGame.TeamColor.WHITE || orientation == ChessGame.TeamColor.BLACK;
 
-        String[] headers = { "TIC", "TAC", "TOE" };
-        for (int boardCol = 0; boardCol < BOARD_SIZE_IN_SQUARES; ++boardCol) {
-            drawHeader(out, headers[boardCol]);
+        setBoardBackground(out);
+        drawBlankSquare(out);
 
-            if (boardCol < BOARD_SIZE_IN_SQUARES - 1) {
-                out.print(EMPTY.repeat(LINE_WIDTH_IN_CHARS));
+        String[] headers = {"A", "B", "C", "D", "E", "F", "G", "H"};
+        if (orientation == ChessGame.TeamColor.WHITE) {
+            for (int boardCol = 0; boardCol < 8; ++boardCol) {
+                drawHeader(out, headers[boardCol]);
+            }
+        } else {
+            for (int boardCol = 7; boardCol >= 0; --boardCol) {
+                drawHeader(out, headers[boardCol]);
             }
         }
 
+        drawBlankSquare(out);
+        setBackground(out);
         out.println();
     }
 
-    private void createRows(String orientation){
+    private void drawHeader(PrintStream out, String header) {
+        out.print(EMPTY);
+        out.print(header);
+        out.print(EMPTY);
+    }
+
+    private void drawBlankSquare(PrintStream out){
+        setBoardBackground(out);
+        out.print(EMPTY.repeat(3));
+    }
+
+    private void createRows(ChessGame.TeamColor orientation){
 
     }
 
@@ -56,8 +83,8 @@ public class BoardCreator {
     }
 
     private static void setBoardBackground(PrintStream out) {
-        out.print(SET_BG_COLOR_DARK_GREY);
-        out.print(SET_TEXT_COLOR_BLACK);
+        out.print(SET_BG_COLOR_LIGHT_GREY);
+        out.print(SET_TEXT_COLOR_BLUE);
     }
 
     private static void setBackground(PrintStream out) {
