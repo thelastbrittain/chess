@@ -15,7 +15,7 @@ public class BoardCreator {
 
 
     public void createBoard(ChessGame.TeamColor orientation, ChessBoard board){
-        System.out.print(board);
+//        System.out.print(board);
         var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
         createHeaders(out, orientation);
         createRows(out, orientation, board);
@@ -67,7 +67,7 @@ public class BoardCreator {
         assert row > 0 && row < 9;
 
         printRowNumber(out, row);
-        for (int col = 1; col < 9; col++){
+        for (int col = 8; col > 0; col--){
             printSquare(out, row, col, board);
         }
 
@@ -96,7 +96,7 @@ public class BoardCreator {
     }
 
     private void printPiece(PrintStream out, int row, int col, ChessBoard board) {
-        ChessPosition position = new ChessPosition(row - 1, col -1);
+        ChessPosition position = new ChessPosition(row, col);
         String pieceType = pieceTypeIntoLetter(board.getPiece(position).getPieceType());
         ChessGame.TeamColor color = board.getPiece(position).getTeamColor();
         if (color == ChessGame.TeamColor.WHITE){
@@ -104,7 +104,9 @@ public class BoardCreator {
         } else {
             setBlackText(out);
         }
+        out.print(EMPTY);
         out.print(pieceType);
+        out.print(EMPTY);
     }
 
     private String pieceTypeIntoLetter(ChessPiece.PieceType pieceType) {
@@ -119,7 +121,7 @@ public class BoardCreator {
     }
 
     private boolean isPiece(int row, int col, ChessBoard board){
-        if (board.getPiece(new ChessPosition(row - 1, col -1)) == null){
+        if (board.getPiece(new ChessPosition(row, col)) == null){
             return false;
         } else {
             return true;
