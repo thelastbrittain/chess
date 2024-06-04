@@ -4,8 +4,6 @@ import chess.ChessGame;
 
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.List;
 
 import static ui.EscapeSequences.*;
 import static ui.EscapeSequences.SET_TEXT_COLOR_BLACK;
@@ -15,18 +13,11 @@ public class BoardCreator {
     public void createBoard(ChessGame.TeamColor orientation){
         var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
         createHeaders(out, orientation);
-        createRows(orientation);
-        createHeaders(out, reverseOrientationColor(orientation));
+        createRows(out, orientation);
+        createHeaders(out, orientation);
     }
 
-    private ChessGame.TeamColor reverseOrientationColor(ChessGame.TeamColor color){
-        assert color == ChessGame.TeamColor.WHITE || color == ChessGame.TeamColor.BLACK;
-        if (color == ChessGame.TeamColor.WHITE){
-            return  ChessGame.TeamColor.BLACK;
-        } else {
-            return ChessGame.TeamColor.WHITE;
-        }
-    }
+
 
     private void createHeaders(PrintStream out, ChessGame.TeamColor orientation) {
         assert orientation == ChessGame.TeamColor.WHITE || orientation == ChessGame.TeamColor.BLACK;
@@ -61,8 +52,58 @@ public class BoardCreator {
         out.print(EMPTY.repeat(3));
     }
 
-    private void createRows(ChessGame.TeamColor orientation){
+    private void createRows(PrintStream out,  ChessGame.TeamColor orientation) {
+        for (int i = 1; i < 9; i++) {
+            createRow(out, i);
+        }
+    }
 
+    private void createRow(PrintStream out, int row){
+        assert row > 0 && row < 9;
+
+        printRowNumber(out, row);
+        for (int col = 1; col < 9; col++){
+            printSquare(out, row, col);
+        }
+
+        printRowNumber(out, row);
+        setBackground(out);
+        out.println();
+    }
+
+    private void printSquare(PrintStream out, int row, int col) {
+        assert row > 0 && row < 9;
+        if (isLight(row, col)){
+            setLight(out);
+            out.print(EMPTY.repeat(3));
+        } else {
+            setDark(out);
+            out.print(EMPTY.repeat(3));
+        }
+    }
+
+    private boolean isLight(int row, int col){
+        if (row % 2 != 0 && col % 2 != 0){
+            return true;
+        } else if (row % 2 == 0 && col % 2 == 0){
+            return true;
+        } else {return false;}
+    }
+
+    private void printRowNumber(PrintStream out, int row){
+        setBoardBackground(out);
+        out.print(EMPTY);
+        out.print(row);
+        out.print(EMPTY);
+    }
+
+    private ChessGame.TeamColor reverseOrientationColor(ChessGame.TeamColor color){
+        assert color == ChessGame.TeamColor.WHITE || color == ChessGame.TeamColor.BLACK;
+        if (color == ChessGame.TeamColor.WHITE){
+            return  ChessGame.TeamColor.BLACK;
+        } else {
+            return ChessGame.TeamColor.WHITE;
+        }
     }
 
 
