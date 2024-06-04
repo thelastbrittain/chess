@@ -1,7 +1,7 @@
 import chess.*;
 import server.Server;
 
-public class Main {
+public class ServerMain {
     public static void main(String[] args) {
         Server myServer = new Server();
         myServer.run(8080);
