@@ -58,8 +58,8 @@ public class BoardCreator {
     }
 
     private void createRows(PrintStream out,  ChessGame.TeamColor orientation, ChessBoard board) {
-        for (int i = 1; i < 9; i++) {
-            createRow(out, i, board);
+        for (int row = 8; row > 0; row--) {
+            createRow(out, row, board);
         }
     }
 
@@ -67,7 +67,7 @@ public class BoardCreator {
         assert row > 0 && row < 9;
 
         printRowNumber(out, row);
-        for (int col = 8; col > 0; col--){
+        for (int col = 1; col < 9; col++){
             printSquare(out, row, col, board);
         }
 
@@ -88,7 +88,7 @@ public class BoardCreator {
 
         //putting the text (null or a piece)
         if (isPiece(row, col, board)){
-            printPiece(out, row,col, board);
+            printPiece(out, row, col, board);
         } else {
             out.print(EMPTY.repeat(3));
         }
@@ -129,9 +129,9 @@ public class BoardCreator {
     }
 
     private boolean isLight(int row, int col){
-        if (row % 2 != 0 && col % 2 != 0){
+        if (row % 2 == 0 && col % 2 != 0){
             return true;
-        } else if (row % 2 == 0 && col % 2 == 0){
+        } else if (row % 2 != 0 && col % 2 == 0){
             return true;
         } else {return false;}
     }
