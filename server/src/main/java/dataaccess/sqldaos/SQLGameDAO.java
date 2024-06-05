@@ -38,12 +38,11 @@ public class SQLGameDAO implements GameDAO {
 
     @Override
     public int createGame(String gameName) {
-        var statement = "INSERT INTO game (game_id, game_name, game_info) VALUES (?, ?, ?)";
-        int gameID = createGameID();
+        var statement = "INSERT INTO game (game_name, game_info) VALUES (?, ?)";
+//        int gameID = createGameID();
         String gameJson = (String) Translator.fromObjectToJson(new ChessGame());
         try {
-            executeUpdate(statement, gameID, gameName, gameJson);
-            return gameID;
+            return executeUpdate(statement, gameName, gameJson);
         } catch (DataAccessException e) {
             System.out.println("Error creating a game: " + e.getMessage());
             return 0;
