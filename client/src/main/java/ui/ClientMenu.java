@@ -73,7 +73,7 @@ public class ClientMenu {
         System.out.println("Enter your email: ");
         String email = scanner.nextLine();
 
-        RegisterResponse regResponse = facade.register(new RegisterRequest(username,email,password));
+        RegisterResponse regResponse = facade.register(new RegisterRequest(username,password, email));
         if (regResponse.authToken() != null){
             postLoginUI(regResponse.authToken());
             return "Leaving register method.";
@@ -110,12 +110,11 @@ public class ClientMenu {
         String loggedIn = "Logged In";
         while (!loggedIn.equals("Logged out")){
             Scanner scanner = new Scanner(System.in);
-            var result = "";
 
             String line = scanner.nextLine();
             try {
-                result = evalPostLogin(line, authToken);
-                System.out.print(result);
+                loggedIn = evalPostLogin(line, authToken);
+                System.out.print(loggedIn);
             } catch (Throwable e) {
                 var msg = e.toString();
                 System.out.print(msg);

@@ -20,6 +20,7 @@ public class SQLUserDAO implements UserDAO {
     public UserData createUser(UserData newUser) {
         if (newUser.password() == null){return new UserData(null, null, null);}
         var statement = "INSERT INTO user (username, password, email) VALUES (?, ?, ?)";
+        System.out.println("Inserted Password: " + newUser.password() + " g");
         String hashedPassword = BCrypt.hashpw(newUser.password(), BCrypt.gensalt());
         try {
             var id = executeUpdate(statement, newUser.username(), hashedPassword, newUser.email());
@@ -57,6 +58,7 @@ public class SQLUserDAO implements UserDAO {
 
     @Override
     public boolean isVerifiedUser(String username, String password) {
+        System.out.println("Inside isVerifiedUser");
         String query = "SELECT password FROM user WHERE username = ?";
 
         try (var conn = DatabaseManager.getConnection();
@@ -66,7 +68,13 @@ public class SQLUserDAO implements UserDAO {
 
             try (var rs = ps.executeQuery()) {
                 if (rs.next()) {
+                    System.out.println("Checking Passwords to see if they match");
                     String hashedPassword =  rs.getString("password");
+                    System.out.println("Regular password: " + password + " g");
+//                    System.out.println("Input Password: " + BCrypt.hashpw(password, BCrypt.gensalt()));
+//                    System.out.println("Hashed password from database: " + hashedPassword);
+                    boolean veracity = BCrypt.checkpw(password, hashedPassword);
+                    System.out.println("True or not: " + veracity);
                     return BCrypt.checkpw(password, hashedPassword);
                 } else {
                     // No password found for the given username
