@@ -22,15 +22,12 @@ public class ServerFacade {
         String jsonRequest = (String) Translator.fromObjectToJson(request);
         //Perform correct HTTP request
         try {
-            clientCommunicator.doPost(url + "/user", jsonRequest, null);
+            String stringResponse = clientCommunicator.doPost(url + "/user", jsonRequest, null);
+            return Translator.fromJsontoObjectNotRequest(stringResponse, RegisterResponse.class);
         } catch (IOException e) {
             System.out.println("Registering user failed: " + e.getMessage());
         }
         //Return result
-        return null;
-    }
-
-    public RegisterResponse register(String player1, String password, String mail) {
         return null;
     }
 

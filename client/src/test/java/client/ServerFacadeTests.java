@@ -28,7 +28,7 @@ public class ServerFacadeTests {
 
     @Test
     void register() throws Exception {
-        RegisterResponse regResponse= facade.register("player1", "password", "p1@email.com");
+        RegisterResponse regResponse= facade.register(new RegisterRequest("player1", "password", "p1@email.com"));
         Assertions.assertTrue(regResponse.authToken().length() > 10);
     }
 

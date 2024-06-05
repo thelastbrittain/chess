@@ -22,8 +22,9 @@ public class CreateGameHandler implements Route {
 
     @Override
     public Object handle(Request request, Response response) throws Exception {
-
+        System.out.println("Made it to the handler");
         String authToken = request.headers("Authorization");
+        System.out.println("Auth token entered into createGame success: " + authToken);
         CreateGameRequest gameName = (CreateGameRequest) Translator.fromJsonToObject(request, CreateGameRequest.class);
         CreateGameRequest createGameRequest = new CreateGameRequest(gameName.gameName(), authToken);
         GameService gameService = new GameService(authDAO, gameDAO);
