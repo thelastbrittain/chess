@@ -1,8 +1,10 @@
 package serverhandling;
 
 import request.CreateGameRequest;
+import request.LoginRequest;
 import request.RegisterRequest;
 import response.CreateGameResponse;
+import response.LoginResponse;
 import response.RegisterResponse;
 import translation.Translator;
 
@@ -49,5 +51,19 @@ public class ServerFacade {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public LoginResponse login(LoginRequest request) {
+        //translate to json
+        String jsonRequest = (String) Translator.fromObjectToJson(request);
+        //Perform correct HTTP request
+        try {
+            String stringResponse = clientCommunicator.doPost(url + "/session", jsonRequest, null);
+            return Translator.fromJsontoObjectNotRequest(stringResponse, LoginResponse.class);
+        } catch (IOException e) {
+            System.out.println("Registering user failed: " + e.getMessage());
+        }
+        //Return result
+        return null;
     }
 }

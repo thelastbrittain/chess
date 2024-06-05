@@ -1,6 +1,7 @@
 package ui;
 
 import request.CreateGameRequest;
+import request.LoginRequest;
 import request.RegisterRequest;
 import response.RegisterResponse;
 import serverhandling.ServerFacade;
@@ -15,12 +16,13 @@ public class ClientMenu {
     }
 
     public void run(){
-        System.out.println("Welcome to Chess! Select an option below: ");
-        printPreLoginOptions();
+
 
         Scanner scanner = new Scanner(System.in);
         var result = "";
         while (!result.equals("quit")) {
+            System.out.println("Welcome to Chess! Select an option below: ");
+            printPreLoginOptions();
             String line = scanner.nextLine();
 
             try {
@@ -89,6 +91,7 @@ public class ClientMenu {
         System.out.println("Enter your password: ");
         String password = scanner.nextLine();
 
+        facade.login(new LoginRequest(username, password));
         return null;
 
     }
