@@ -11,21 +11,10 @@ public class ClientCommunicator {
     public String doPost(String urlString, String body, String authToken) throws IOException, IOException {
         HttpURLConnection connection = getHttpURLConnection(urlString, authToken, "POST");
 
-        try (OutputStream requestBody = connection.getOutputStream();) {
-            byte[] input = body.getBytes("utf-8");
-            requestBody.write(input, 0, input.length);
-            System.out.println("Body sent to server");
-        }
+        sendRequest(connection, body);
 
-        // SERVER RETURNED AN HTTP ERROR
         if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
             System.out.println("Connection success 200");
-            // Get HTTP response headers, if necessary
-            // Map<String, List<String>> headers = connection.getHeaderFields();
-
-            // OR
-
-            //connection.getHeaderField("Content-Length");
 
             try (InputStream responseBody = connection.getInputStream();
                  BufferedReader reader = new BufferedReader(new InputStreamReader(responseBody, "utf-8"))) {
@@ -48,6 +37,16 @@ public class ClientCommunicator {
             // Process the error response
             System.err.println("Error Response: " + response.toString());
             return "Post Method Failed";
+        }
+    }
+
+    private void sendRequest(HttpURLConnection connection, String body){
+        try (OutputStream requestBody = connection.getOutputStream();) {
+            byte[] input = body.getBytes("utf-8");
+            requestBody.write(input, 0, input.length);
+            System.out.println("Body sent to server");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
