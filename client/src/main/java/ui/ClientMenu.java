@@ -137,11 +137,11 @@ public class ClientMenu {
             var tokens = input.toLowerCase().split(" ");
             var cmd = (tokens.length > 0) ? tokens[0] : "help";
             return switch (cmd) {
-                case "2" -> "Logged Out";
+                case "2" -> logout(authToken);
                 case "3" -> createGame(authToken);
-                case "4" -> ListGames();
-                case "5" -> PlayGame();
-                case "6" -> ObserveGame();
+                case "4" -> listGames();
+                case "5" -> playGame();
+                case "6" -> observeGame();
                 default -> preLoginHelp();
             };
         } catch (Exception ex) {
@@ -149,15 +149,21 @@ public class ClientMenu {
         }
     }
 
-    private String ObserveGame() {
+    private String logout(String authToken) {
+        facade.logout(authToken);
+
+        return "Logged out";
+    }
+
+    private String observeGame() {
         return null;
     }
 
-    private String PlayGame() {
+    private String playGame() {
         return null;
     }
 
-    private String ListGames() {
+    private String listGames() {
         return null;
     }
 

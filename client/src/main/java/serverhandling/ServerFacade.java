@@ -34,12 +34,16 @@ public class ServerFacade {
     public CreateGameResponse createGame(CreateGameRequest request, String authToken) {
         String jsonRequest = (String) Translator.fromObjectToJson(request);
         try {
-            clientCommunicator.doPost(url + "/game", jsonRequest, authToken);
-            System.out.println("Game created Successfully. ");
+            String response = clientCommunicator.doPost(url + "/game", jsonRequest, authToken);
+            return Translator.fromJsontoObjectNotRequest(response, CreateGameResponse.class);
         } catch (IOException e) {
             System.out.println("Creating Game failed: " + e.getMessage());
         }
         //Return result
         return null;
+    }
+
+    public void logout(String authToken) {
+
     }
 }
