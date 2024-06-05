@@ -21,7 +21,9 @@ public class LogoutHandler implements Route {
 
     @Override
     public Object handle(Request request, Response response) throws Exception {
+        System.out.println("In logout handler");
         String authToken = request.headers("Authorization");
+        System.out.println("received auth: " + authToken);
         UserService logoutService = new UserService(userDAO, authDAO);
         LogoutResponse logoutResponse = logoutService.logout(authToken);
 
