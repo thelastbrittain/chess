@@ -4,15 +4,16 @@ import ui.ClientMenu;
 
 public class ClientMain {
     public static void main(String[] args) {
-        var serverUrl = "http://localhost:8080";
+        int port = 8080;
         if (args.length == 1) {
-            serverUrl = args[0];
+            port = Integer.parseInt(args[0]);
         }
 
-//        new ClientMenu(serverUrl).run();
+        new ClientMenu(8080).run();
     }
 }
 
+//"http://localhost:8080";
 
 
 //BoardCreator boardCreator = new BoardCreator();

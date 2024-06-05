@@ -1,6 +1,5 @@
 package handler;
 
-import com.google.gson.Gson;
 import dataaccess.interfaces.AuthDAO;
 import dataaccess.interfaces.UserDAO;
 import request.RegisterRequest;

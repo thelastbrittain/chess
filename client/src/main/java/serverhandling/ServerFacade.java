@@ -2,17 +2,22 @@ package serverhandling;
 
 import request.RegisterRequest;
 import response.RegisterResponse;
+import translation.Translator;
 
 public class ServerFacade {
-    int port;
+    private String url;
+    private final ClientCommunicator clientCommunicator = new ClientCommunicator();
+
 
     public ServerFacade(int port){
-        this.port = port;
+        url = "http://localhost:" + port;
     }
 
-    private RegisterResponse register(RegisterRequest request){
+    public RegisterResponse register(RegisterRequest request){
         //translate to json
+        String jsonRequest = (String) Translator.fromObjectToJson(request);
         //Perform correct HTTP request
+
         //Return result
         return null;
     }

@@ -1,11 +1,7 @@
 package handler;
 
-import chess.ChessGame;
-import com.google.gson.Gson;
 import dataaccess.interfaces.AuthDAO;
 import dataaccess.interfaces.GameDAO;
-import request.JoinGameRequest;
-import response.JoinGameResponse;
 import response.ListGamesResponse;
 import service.ErrorMessages;
 import service.GameService;
