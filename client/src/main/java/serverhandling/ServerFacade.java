@@ -1,6 +1,8 @@
 package serverhandling;
 
+import request.CreateGameRequest;
 import request.RegisterRequest;
+import response.CreateGameResponse;
 import response.RegisterResponse;
 import translation.Translator;
 
@@ -30,5 +32,10 @@ public class ServerFacade {
 
     public RegisterResponse register(String player1, String password, String mail) {
         return null;
+    }
+
+    public CreateGameResponse createGame(CreateGameRequest createGameRequest) {
+
+        return new CreateGameResponse(null, null);
     }
 }

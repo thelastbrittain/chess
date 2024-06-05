@@ -1,6 +1,8 @@
 package ui;
 
+import request.CreateGameRequest;
 import request.RegisterRequest;
+import response.RegisterResponse;
 import serverhandling.ServerFacade;
 
 import java.util.Scanner;
@@ -69,9 +71,13 @@ public class ClientMenu {
         System.out.println("Enter your email: ");
         String email = scanner.nextLine();
 
-        facade.register(new RegisterRequest(username,email,password));
-        return null;
-
+        RegisterResponse regResponse = facade.register(new RegisterRequest(username,email,password));
+        if (regResponse.authToken() != null){
+            postLoginUI(regResponse.authToken());
+            return "Leaving register method.";
+        } else {
+            return regResponse.message();
+        }
     }
 
     private String login(){
@@ -94,7 +100,7 @@ public class ClientMenu {
                 "Enter 4 to Register" + "\n";
     }
 
-    public void postLoginUI(){
+    public void postLoginUI(String authToken){
         System.out.println("Log in success. Select an option below: ");
         printPostLoginOptions();
 
@@ -105,7 +111,7 @@ public class ClientMenu {
 
             String line = scanner.nextLine();
             try {
-                result = evalPostLogin(line);
+                result = evalPostLogin(line, authToken);
                 System.out.print(result);
             } catch (Throwable e) {
                 var msg = e.toString();
@@ -126,13 +132,13 @@ public class ClientMenu {
         System.out.println();
     }
 
-    public String evalPostLogin(String input) {
+    public String evalPostLogin(String input, String authToken) {
         try {
             var tokens = input.toLowerCase().split(" ");
             var cmd = (tokens.length > 0) ? tokens[0] : "help";
             return switch (cmd) {
                 case "2" -> "Logged Out";
-                case "3" -> createGame();
+                case "3" -> createGame(authToken);
                 case "4" -> ListGames();
                 case "5" -> PlayGame();
                 case "6" -> ObserveGame();
@@ -155,7 +161,14 @@ public class ClientMenu {
         return null;
     }
 
-    private String createGame() {
+    private String createGame(String authToken) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter new game name: ");
+        String gameName = scanner.nextLine();
+
+        facade.createGame(new CreateGameRequest(gameName, authToken));
+
         return null;
     }
 
