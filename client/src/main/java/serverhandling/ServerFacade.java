@@ -4,6 +4,8 @@ import request.RegisterRequest;
 import response.RegisterResponse;
 import translation.Translator;
 
+import java.io.IOException;
+
 public class ServerFacade {
     private String url;
     private final ClientCommunicator clientCommunicator = new ClientCommunicator();
@@ -17,7 +19,11 @@ public class ServerFacade {
         //translate to json
         String jsonRequest = (String) Translator.fromObjectToJson(request);
         //Perform correct HTTP request
-
+        try {
+            clientCommunicator.doPost(url + "/user", jsonRequest);
+        } catch (IOException e) {
+            System.out.println("Registering user failed: " + e.getMessage());
+        }
         //Return result
         return null;
     }

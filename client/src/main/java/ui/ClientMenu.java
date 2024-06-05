@@ -3,7 +3,6 @@ package ui;
 import request.RegisterRequest;
 import serverhandling.ServerFacade;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class ClientMenu {
@@ -15,7 +14,7 @@ public class ClientMenu {
 
     public void run(){
         System.out.println("Welcome to Chess! Select an option below: ");
-        printOptions();
+        printPreLoginOptions();
 
         Scanner scanner = new Scanner(System.in);
         var result = "";
@@ -23,7 +22,7 @@ public class ClientMenu {
             String line = scanner.nextLine();
 
             try {
-                result = eval(line);
+                result = evalPreLogin(line);
                 System.out.print(result);
             } catch (Throwable e) {
                 var msg = e.toString();
@@ -35,7 +34,7 @@ public class ClientMenu {
 
 
 
-    private void printOptions(){
+    private void printPreLoginOptions(){
         System.out.println("1: Help");
         System.out.println("2: Quit");
         System.out.println("3: Login");
@@ -43,7 +42,7 @@ public class ClientMenu {
         System.out.println();
     }
 
-    public String eval(String input) {
+    public String evalPreLogin(String input) {
         try {
             var tokens = input.toLowerCase().split(" ");
             var cmd = (tokens.length > 0) ? tokens[0] : "help";
@@ -51,7 +50,7 @@ public class ClientMenu {
                 case "2" -> "quit";
                 case "3" -> login();
                 case "4" -> register();
-                default -> help();
+                default -> preLoginHelp();
             };
         } catch (Exception ex) {
             return ex.getMessage();
@@ -88,11 +87,76 @@ public class ClientMenu {
 
     }
 
-    private String help(){
+    private String preLoginHelp(){
         return "Enter 1 to see help options" + "\n" +
                 "Enter 2 to Quit" + "\n" +
                 "Enter 3 to Login" + "\n" +
                 "Enter 4 to Register" + "\n";
+    }
+
+    public void postLoginUI(){
+        System.out.println("Log in success. Select an option below: ");
+        printPostLoginOptions();
+
+        String loggedIn = "Logged In";
+        while (!loggedIn.equals("Logged out")){
+            Scanner scanner = new Scanner(System.in);
+            var result = "";
+
+            String line = scanner.nextLine();
+            try {
+                result = evalPostLogin(line);
+                System.out.print(result);
+            } catch (Throwable e) {
+                var msg = e.toString();
+                System.out.print(msg);
+            }
+        }
+        System.out.println();
+    }
+
+
+    private void printPostLoginOptions() {
+        System.out.println("1: Help");
+        System.out.println("2: Logout");
+        System.out.println("3: Create Game");
+        System.out.println("4: List Games");
+        System.out.println("5: Play Game");
+        System.out.println("6: Observer Game");
+        System.out.println();
+    }
+
+    public String evalPostLogin(String input) {
+        try {
+            var tokens = input.toLowerCase().split(" ");
+            var cmd = (tokens.length > 0) ? tokens[0] : "help";
+            return switch (cmd) {
+                case "2" -> "Logged Out";
+                case "3" -> createGame();
+                case "4" -> ListGames();
+                case "5" -> PlayGame();
+                case "6" -> ObserveGame();
+                default -> preLoginHelp();
+            };
+        } catch (Exception ex) {
+            return ex.getMessage();
+        }
+    }
+
+    private String ObserveGame() {
+        return null;
+    }
+
+    private String PlayGame() {
+        return null;
+    }
+
+    private String ListGames() {
+        return null;
+    }
+
+    private String createGame() {
+        return null;
     }
 
 
