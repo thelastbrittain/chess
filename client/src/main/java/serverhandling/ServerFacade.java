@@ -44,6 +44,10 @@ public class ServerFacade {
     }
 
     public void logout(String authToken) {
-
+        try {
+            clientCommunicator.doDelete(url, authToken);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

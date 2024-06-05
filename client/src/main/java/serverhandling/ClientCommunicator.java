@@ -11,11 +11,7 @@ public class ClientCommunicator {
     public String doPost(String urlString, String body, String authToken) throws IOException, IOException {
         HttpURLConnection connection = getHttpURLConnection(urlString, authToken, "POST");
 
-        try (OutputStream requestBody = connection.getOutputStream();) {
-            byte[] input = body.getBytes("utf-8");
-            requestBody.write(input, 0, input.length);
-            System.out.println("Body sent to server");
-        }
+        sendRequest(connection, body);
 
         if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
             System.out.println("Connection success 200");
@@ -44,8 +40,14 @@ public class ClientCommunicator {
         }
     }
 
-    private void sendRequest(HttpURLConnection connect, String body){
-
+    private void sendRequest(HttpURLConnection connection, String body){
+        try (OutputStream requestBody = connection.getOutputStream();) {
+            byte[] input = body.getBytes("utf-8");
+            requestBody.write(input, 0, input.length);
+            System.out.println("Body sent to server");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void doDelete(String urlString, String authToken) throws IOException {
