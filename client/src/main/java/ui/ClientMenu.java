@@ -3,6 +3,8 @@ package ui;
 import request.CreateGameRequest;
 import request.LoginRequest;
 import request.RegisterRequest;
+import response.LoginResponse;
+import response.LogoutResponse;
 import response.RegisterResponse;
 import serverhandling.ServerFacade;
 
@@ -43,7 +45,6 @@ public class ClientMenu {
         System.out.println("2: Quit");
         System.out.println("3: Login");
         System.out.println("4: Register");
-        System.out.println();
     }
 
     public String evalPreLogin(String input) {
@@ -64,19 +65,19 @@ public class ClientMenu {
     private String register(){
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Enter your username: ");
+        System.out.print("Enter your username: ");
         String username = scanner.nextLine();
 
-        System.out.println("Enter your password: ");
+        System.out.print("Enter your password: ");
         String password = scanner.nextLine();
 
-        System.out.println("Enter your email: ");
+        System.out.print("Enter your email: ");
         String email = scanner.nextLine();
 
         RegisterResponse regResponse = facade.register(new RegisterRequest(username,password, email));
         if (regResponse.authToken() != null){
             postLoginUI(regResponse.authToken());
-            return "Leaving register method.";
+            return "";
         } else {
             return regResponse.message();
         }
@@ -85,15 +86,19 @@ public class ClientMenu {
     private String login(){
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Enter your username: ");
+        System.out.print("Enter your username: ");
         String username = scanner.nextLine();
 
-        System.out.println("Enter your password: ");
+        System.out.print("Enter your password: ");
         String password = scanner.nextLine();
 
-        facade.login(new LoginRequest(username, password));
-        return null;
-
+        LoginResponse response =  facade.login(new LoginRequest(username, password));
+        if (response.authToken() != null){
+            postLoginUI(response.authToken());
+            return "";
+        } else {
+            return response.message();
+        }
     }
 
     private String preLoginHelp(){
@@ -105,10 +110,10 @@ public class ClientMenu {
 
     public void postLoginUI(String authToken){
         System.out.println("Log in success. Select an option below: ");
-        printPostLoginOptions();
 
         String loggedIn = "Logged In";
         while (!loggedIn.equals("Logged out")){
+            printPostLoginOptions();
             Scanner scanner = new Scanner(System.in);
 
             String line = scanner.nextLine();
@@ -131,7 +136,6 @@ public class ClientMenu {
         System.out.println("4: List Games");
         System.out.println("5: Play Game");
         System.out.println("6: Observer Game");
-        System.out.println();
     }
 
     public String evalPostLogin(String input, String authToken) {
@@ -177,7 +181,7 @@ public class ClientMenu {
 
         facade.createGame(new CreateGameRequest(gameName, null), authToken);
 
-        return null;
+        return "";
     }
 
 
