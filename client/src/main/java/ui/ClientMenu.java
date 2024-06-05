@@ -167,7 +167,7 @@ public class ClientMenu {
         System.out.println("Enter new game name: ");
         String gameName = scanner.nextLine();
 
-        facade.createGame(new CreateGameRequest(gameName, authToken));
+        facade.createGame(new CreateGameRequest(gameName, null), authToken);
 
         return null;
     }

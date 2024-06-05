@@ -22,7 +22,7 @@ public class ServerFacade {
         String jsonRequest = (String) Translator.fromObjectToJson(request);
         //Perform correct HTTP request
         try {
-            clientCommunicator.doPost(url + "/user", jsonRequest);
+            clientCommunicator.doPost(url + "/user", jsonRequest, null);
         } catch (IOException e) {
             System.out.println("Registering user failed: " + e.getMessage());
         }
@@ -34,8 +34,15 @@ public class ServerFacade {
         return null;
     }
 
-    public CreateGameResponse createGame(CreateGameRequest createGameRequest) {
-
-        return new CreateGameResponse(null, null);
+    public CreateGameResponse createGame(CreateGameRequest request, String authToken) {
+        String jsonRequest = (String) Translator.fromObjectToJson(request);
+        try {
+            clientCommunicator.doPost(url + "/game", jsonRequest, authToken);
+            System.out.println("Game created Successfully. ");
+        } catch (IOException e) {
+            System.out.println("Creating Game failed: " + e.getMessage());
+        }
+        //Return result
+        return null;
     }
 }

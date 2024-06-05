@@ -8,7 +8,7 @@ import java.net.URL;
 
 public class ClientCommunicator {
 
-    public void doPost(String urlString, String body) throws IOException, IOException {
+    public void doPost(String urlString, String body, String authToken) throws IOException, IOException {
         URL url = new URL(urlString);
 
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -19,6 +19,9 @@ public class ClientCommunicator {
 
         // Set HTTP request headers, if necessary
         // connection.addRequestProperty("Accept", "text/html");
+        if (authToken != null){
+            connection.addRequestProperty("Authorization", authToken);
+        }
 
         connection.connect();
 
