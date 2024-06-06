@@ -1,12 +1,13 @@
 package ui;
 
+import chess.ChessGame;
 import model.GameData;
 import request.CreateGameRequest;
+import request.JoinGameRequest;
 import request.LoginRequest;
 import request.RegisterRequest;
 import response.ListGamesResponse;
 import response.LoginResponse;
-import response.LogoutResponse;
 import response.RegisterResponse;
 import serverhandling.ServerFacade;
 
@@ -140,7 +141,7 @@ public class ClientMenu {
         System.out.println("3: Create Game");
         System.out.println("4: List Games");
         System.out.println("5: Play Game");
-        System.out.print("6: Observer Game");
+        System.out.println("6: Observer Game");
     }
 
     public String evalPostLogin(String input, String authToken) {
@@ -151,7 +152,7 @@ public class ClientMenu {
                 case "2" -> logout(authToken);
                 case "3" -> createGame(authToken);
                 case "4" -> listGames(authToken);
-                case "5" -> playGame();
+                case "5" -> playGame(authToken);
                 case "6" -> observeGame();
                 default -> preLoginHelp();
             };
@@ -170,8 +171,25 @@ public class ClientMenu {
         return null;
     }
 
-    private String playGame() {
-        return null;
+    private String playGame(String authToken) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the game number you'd like to join: ");
+        int gameNumber = Integer.parseInt(scanner.nextLine());
+
+        System.out.print("Enter the color you'd like to join as, select w for white or b for black. If you don't select either, white will be selected: ");
+        String color = scanner.nextLine();
+        ChessGame.TeamColor teamColor = null;
+        if (color.equals("b")){
+            teamColor = ChessGame.TeamColor.BLACK;
+        } else
+        {
+            teamColor = ChessGame.TeamColor.WHITE;
+        }
+
+        facade.joinGame(new JoinGameRequest(teamColor, gameIDMap.get(gameNumber), authToken));
+
+        return "";
     }
 
     private String listGames(String authToken) {

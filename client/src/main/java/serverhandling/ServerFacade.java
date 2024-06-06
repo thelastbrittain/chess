@@ -2,6 +2,7 @@ package serverhandling;
 
 import model.GameData;
 import request.CreateGameRequest;
+import request.JoinGameRequest;
 import request.LoginRequest;
 import request.RegisterRequest;
 import response.CreateGameResponse;
@@ -78,5 +79,19 @@ public class ServerFacade {
             System.out.println("Registering user failed: " + e.getMessage());
             return new ListGamesResponse(null, null);
         }
+    }
+
+    public void joinGame(JoinGameRequest request) {
+        //translate to json
+        String jsonRequest = (String) Translator.fromObjectToJson(request);
+        //Perform correct HTTP request
+        try {
+            String stringResponse = clientCommunicator.doPut(url + "/game", jsonRequest, request.authToken());
+            Translator.fromJsontoObjectNotRequest(stringResponse, LoginResponse.class);
+        } catch (IOException e) {
+            System.out.println("Registering user failed: " + e.getMessage());
+        }
+        //Return result
+
     }
 }

@@ -16,6 +16,12 @@ public class ClientCommunicator {
         return getResponseBody(connection);
     }
 
+    public String doPut(String urlString, String body, String authToken) throws IOException, IOException {
+        HttpURLConnection connection = getHttpURLConnection(urlString, authToken, "PUT", true);
+        sendRequest(connection, body);
+        return getResponseBody(connection);
+    }
+
     public String doDelete(String urlString, String authToken) throws IOException {
         HttpURLConnection connection = getHttpURLConnection(urlString, authToken, "DELETE", true);
         return getResponseBody(connection);
