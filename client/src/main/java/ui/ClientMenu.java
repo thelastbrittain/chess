@@ -179,6 +179,7 @@ public class ClientMenu {
     }
 
     private String playGame(String authToken) {
+        listGames(authToken);
         Scanner scanner = new Scanner(System.in);
 
         System.out.print("Enter the game number you'd like to join: ");
@@ -219,10 +220,8 @@ public class ClientMenu {
             if (gameIDMap.get(gameID) == game.getGameID()){
                 System.out.println("White Orientation");
                 board.createBoard(ChessGame.TeamColor.WHITE, game.getGame().getBoard());
-                System.out.println("\u001B[0m");
                 System.out.println("Black Orientation");
                 board.createBoard(ChessGame.TeamColor.BLACK, game.getGame().getBoard());
-                System.out.println("\u001B[0m");
             }
         }
     }

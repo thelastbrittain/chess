@@ -42,7 +42,9 @@ public class BoardCreator {
         }
 
         drawBlankSquare(out);
-        setBackground(out);
+        out.print(RESET_TEXT_COLOR);
+        out.print(RESET_BG_COLOR);
+//        setBackground(out);
         out.println();
     }
 
@@ -53,7 +55,6 @@ public class BoardCreator {
     }
 
     private void drawBlankSquare(PrintStream out){
-        setBoardBackground(out);
         out.print(EMPTY.repeat(3));
     }
 
@@ -81,7 +82,8 @@ public class BoardCreator {
         }
 
         printRowNumber(out, row);
-        setBackground(out);
+        out.print(RESET_TEXT_COLOR);
+        out.print(RESET_BG_COLOR);
         out.println();
     }
 
