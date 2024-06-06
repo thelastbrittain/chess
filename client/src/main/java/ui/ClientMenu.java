@@ -153,7 +153,7 @@ public class ClientMenu {
                 case "3" -> createGame(authToken);
                 case "4" -> listGames(authToken);
                 case "5" -> playGame(authToken);
-                case "6" -> observeGame();
+                case "6" -> observeGame(authToken);
                 default -> preLoginHelp();
             };
         } catch (Exception ex) {
@@ -167,8 +167,14 @@ public class ClientMenu {
         return "Logged out";
     }
 
-    private String observeGame() {
-        return null;
+    private String observeGame(String authToken) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the game number you'd like to observe: ");
+        int gameNumber = Integer.parseInt(scanner.nextLine());
+        showGame(gameNumber,authToken);
+
+        return "";
     }
 
     private String playGame(String authToken) {
@@ -212,10 +218,10 @@ public class ClientMenu {
             if (gameIDMap.get(gameID) == game.getGameID()){
                 System.out.println("White Orientation");
                 board.createBoard(ChessGame.TeamColor.WHITE, game.getGame().getBoard());
-                System.out.println("\\u001B[0m");
+                System.out.println("\u001B[0m");
                 System.out.println("Black Orientation");
                 board.createBoard(ChessGame.TeamColor.BLACK, game.getGame().getBoard());
-                System.out.println("\\u001B[0m");
+                System.out.println("\u001B[0m");
             }
         }
     }
