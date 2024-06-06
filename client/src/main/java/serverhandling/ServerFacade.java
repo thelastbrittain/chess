@@ -19,10 +19,6 @@ public class ServerFacade {
     }
 
     public RegisterResponse register(RegisterRequest request){
-//        if (request.username() == null || request.password() == null || request.email() == null ){
-//            return new RegisterResponse(null,null, "Bad Request");
-//        }
-
         //translate to json
         String jsonRequest = (String) Translator.fromObjectToJson(request);
         //Perform correct HTTP request
