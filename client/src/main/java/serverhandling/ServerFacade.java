@@ -1,6 +1,5 @@
 package serverhandling;
 
-import model.GameData;
 import request.CreateGameRequest;
 import request.JoinGameRequest;
 import request.LoginRequest;
