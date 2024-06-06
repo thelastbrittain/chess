@@ -87,7 +87,13 @@ public class ServerFacade {
             System.out.println("Registering user failed: " + e.getMessage());
             return new JoinGameResponse("Join Game Failure");
         }
-        //Return result
+    }
 
+    public void clearGame(){
+        try {
+            clientCommunicator.doDelete(url + "/db", null);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

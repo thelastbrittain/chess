@@ -1,12 +1,12 @@
 package client;
 
 import chess.ChessGame;
-import dataaccess.interfaces.AuthDAO;
-import dataaccess.interfaces.GameDAO;
-import dataaccess.interfaces.UserDAO;
-import dataaccess.sqldaos.SQLAuthDAO;
-import dataaccess.sqldaos.SQLGameDAO;
-import dataaccess.sqldaos.SQLUserDAO;
+//import dataaccess.interfaces.AuthDAO;
+//import dataaccess.interfaces.GameDAO;
+//import dataaccess.interfaces.UserDAO;
+//import dataaccess.sqldaos.SQLAuthDAO;
+//import dataaccess.sqldaos.SQLGameDAO;
+//import dataaccess.sqldaos.SQLUserDAO;
 import org.junit.jupiter.api.*;
 import request.CreateGameRequest;
 import request.JoinGameRequest;
@@ -21,11 +21,12 @@ import serverhandling.ServerFacade;
 public class ServerFacadeTests {
     private static Server server;
     private static ServerFacade facade;
-    private static GameDAO gameDAO = new SQLGameDAO();
-    private static UserDAO userDAO = new SQLUserDAO();
-    private static AuthDAO authDAO = new SQLAuthDAO();
+//    private static GameDAO gameDAO = new SQLGameDAO();
+//    private static UserDAO userDAO = new SQLUserDAO();
+//    private static AuthDAO authDAO = new SQLAuthDAO();
     private static final String TESTUSERNAME = "testUsername";
     private static final String TESTPASSWORD = "testPassword";
+    private static final String TESTEMAIL = "testEmail";
 
 
     @BeforeAll
@@ -38,7 +39,7 @@ public class ServerFacadeTests {
 
     @BeforeEach
     public void clearServer(){
-        gameDAO.clearApplication(authDAO, userDAO);
+        facade.clearGame();
     }
 
     @AfterAll
@@ -48,29 +49,40 @@ public class ServerFacadeTests {
 
 
     @Test
+    public void clearGameSuccess(){
+        String authToken = registerUser().authToken();
+        CreateGameResponse createGameResponse = facade.createGame(new CreateGameRequest("TestGame", authToken), authToken);
+        facade.clearGame();
+        ListGamesResponse response = facade.listGames(authToken);
+        Assertions.assertNull(response.message());
+
+
+    }
+
+    @Test
     @DisplayName("Register Success")
-    void registerSuccess() throws Exception {
+    public void registerSuccess() throws Exception {
         RegisterResponse regResponse= facade.register(new RegisterRequest("player1", "password", "p1@email.com"));
         Assertions.assertTrue(regResponse.authToken().length() > 10);
     }
 
     @Test
     @DisplayName("Register Failure")
-    void registerFailure() throws Exception {
+    public void registerFailure() throws Exception {
         RegisterResponse regResponse= facade.register(new RegisterRequest(null, "password", "p1@email.com"));
         Assertions.assertTrue(regResponse.message()!= null);
     }
 
     //logout
     @Test
-    void logoutSuccess(){
+    public void logoutSuccess(){
         String authToken = registerUser().authToken();
         LogoutResponse response = facade.logout(authToken);
         Assertions.assertTrue(response.message().length() < 10);
     }
 
     @Test
-    void logoutFailure(){
+    public void logoutFailure(){
         String authToken = "Blob";
         LogoutResponse response = facade.logout(authToken);
         Assertions.assertNotNull(response.message());
@@ -146,7 +158,7 @@ public class ServerFacadeTests {
     }
 
     private RegisterResponse registerUser(){
-        return facade.register(new RegisterRequest(TESTUSERNAME, TESTPASSWORD, "testEmail"));
+        return facade.register(new RegisterRequest(TESTUSERNAME, TESTPASSWORD, TESTEMAIL));
     }
 
 }
