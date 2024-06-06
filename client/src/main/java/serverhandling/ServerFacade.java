@@ -47,9 +47,9 @@ public class ServerFacade {
         return null;
     }
 
-    public void logout(String authToken) {
+    public LogoutResponse logout(String authToken) {
         try {
-            clientCommunicator.doDelete(url + "/session", authToken);
+            return new LogoutResponse(clientCommunicator.doDelete(url + "/session", authToken)) ;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

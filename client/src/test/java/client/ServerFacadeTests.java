@@ -24,9 +24,8 @@ public class ServerFacadeTests {
     private static GameDAO gameDAO = new SQLGameDAO();
     private static UserDAO userDAO = new SQLUserDAO();
     private static AuthDAO authDAO = new SQLAuthDAO();
-    private static final String testUsername = "testUsername";
-    private static final String testPassword = "testPassword";
-    private static final String testEmail = "testEmail";
+    private static final String TESTUSERNAME = "testUsername";
+    private static final String TESTPASSWORD = "testPassword";
 
 
     @BeforeAll
@@ -63,8 +62,18 @@ public class ServerFacadeTests {
     }
 
     //logout
+    @Test
     void logoutSuccess(){
+        String authToken = registerUser().authToken();
+        LogoutResponse response = facade.logout(authToken);
+        Assertions.assertNull(response.message());
+    }
 
+    @Test
+    void logoutFailure(){
+        String authToken = "Blob";
+        LogoutResponse response = facade.logout(authToken);
+        Assertions.assertNotNull(response.message());
     }
 
     //login
@@ -72,7 +81,7 @@ public class ServerFacadeTests {
     @DisplayName("Login Success")
     public void loginSuccess(){
         registerUser();
-        LoginResponse loginResponse = facade.login(new LoginRequest(testUsername, testPassword));
+        LoginResponse loginResponse = facade.login(new LoginRequest(TESTUSERNAME, TESTPASSWORD));
         Assertions.assertNull(loginResponse.message());
     }
 
@@ -81,7 +90,7 @@ public class ServerFacadeTests {
     @DisplayName("Login Failure")
     public void loginFailure(){
 //        registerUser();
-        LoginResponse loginResponse = facade.login(new LoginRequest(testUsername, testPassword));
+        LoginResponse loginResponse = facade.login(new LoginRequest(TESTUSERNAME, TESTPASSWORD));
         Assertions.assertNotNull(loginResponse.message());
     }
 
@@ -137,7 +146,7 @@ public class ServerFacadeTests {
     }
 
     private RegisterResponse registerUser(){
-        return facade.register(new RegisterRequest("testUsername", "testPassword", "testEmail"));
+        return facade.register(new RegisterRequest(TESTUSERNAME, TESTPASSWORD, "testEmail"));
     }
 
 }
