@@ -1,9 +1,11 @@
 package serverhandling;
 
+import model.GameData;
 import request.CreateGameRequest;
 import request.LoginRequest;
 import request.RegisterRequest;
 import response.CreateGameResponse;
+import response.ListGamesResponse;
 import response.LoginResponse;
 import response.RegisterResponse;
 import translation.Translator;
@@ -65,5 +67,16 @@ public class ServerFacade {
         }
         //Return result
         return null;
+    }
+
+    public ListGamesResponse listGames(String authToken) {
+        try {
+            String stringResponse = clientCommunicator.doGet(url + "/game", authToken);
+            return Translator.fromJsontoObjectNotRequest(stringResponse, ListGamesResponse.class);
+
+        } catch (IOException e) {
+            System.out.println("Registering user failed: " + e.getMessage());
+            return new ListGamesResponse(null, null);
+        }
     }
 }

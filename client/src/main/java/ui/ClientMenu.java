@@ -1,20 +1,25 @@
 package ui;
 
+import model.GameData;
 import request.CreateGameRequest;
 import request.LoginRequest;
 import request.RegisterRequest;
+import response.ListGamesResponse;
 import response.LoginResponse;
 import response.LogoutResponse;
 import response.RegisterResponse;
 import serverhandling.ServerFacade;
 
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class ClientMenu {
     private final ServerFacade facade;
+    HashMap<Integer, Integer> gameIDMap;
 
     public ClientMenu(int port) {
         facade = new ServerFacade(port);
+        gameIDMap = new HashMap<>();  //key is temporary game int, value is primary key of table
     }
 
     public void run(){
@@ -135,7 +140,7 @@ public class ClientMenu {
         System.out.println("3: Create Game");
         System.out.println("4: List Games");
         System.out.println("5: Play Game");
-        System.out.println("6: Observer Game");
+        System.out.print("6: Observer Game");
     }
 
     public String evalPostLogin(String input, String authToken) {
@@ -145,7 +150,7 @@ public class ClientMenu {
             return switch (cmd) {
                 case "2" -> logout(authToken);
                 case "3" -> createGame(authToken);
-                case "4" -> listGames();
+                case "4" -> listGames(authToken);
                 case "5" -> playGame();
                 case "6" -> observeGame();
                 default -> preLoginHelp();
@@ -169,8 +174,16 @@ public class ClientMenu {
         return null;
     }
 
-    private String listGames() {
-        return null;
+    private String listGames(String authToken) {
+        ListGamesResponse listGamesResponse =  facade.listGames(authToken);
+
+        int gameNumber = 1;
+        for (GameData game : listGamesResponse.games()){
+            System.out.println("Game Number: " + gameNumber + ", Game Name: " + game.getGameName() + ", White Username: " + game.getWhiteUsername() + ", Black Username: " + game.getBlackUsername());
+            gameIDMap.put(gameNumber, game.getGameID());
+            gameNumber ++;
+        }
+        return "";
     }
 
     private String createGame(String authToken) {
@@ -180,6 +193,7 @@ public class ClientMenu {
         String gameName = scanner.nextLine();
 
         facade.createGame(new CreateGameRequest(gameName, null), authToken);
+
 
         return "";
     }
