@@ -7,7 +7,9 @@ import dataaccess.sqldaos.SQLAuthDAO;
 import dataaccess.sqldaos.SQLGameDAO;
 import dataaccess.sqldaos.SQLUserDAO;
 import org.junit.jupiter.api.*;
+import request.LoginRequest;
 import request.RegisterRequest;
+import response.LoginResponse;
 import response.RegisterResponse;
 import server.Server;
 
@@ -20,6 +22,9 @@ public class ServerFacadeTests {
     private static GameDAO gameDAO = new SQLGameDAO();
     private static UserDAO userDAO = new SQLUserDAO();
     private static AuthDAO authDAO = new SQLAuthDAO();
+    private static final String testUsername = "testUsername";
+    private static final String testPassword = "testPassword";
+    private static final String testEmail = "testEmail";
 
 
     @BeforeAll
@@ -56,13 +61,37 @@ public class ServerFacadeTests {
     }
 
     //logout
+    void logoutSuccess(){
+
+    }
 
     //login
+    @Test
+    @DisplayName("Login Success")
+    public void loginSuccess(){
+        registerUser();
+        LoginResponse loginResponse = facade.login(new LoginRequest(testUsername, testPassword));
+        Assertions.assertNull(loginResponse.message());
+    }
+
+    //login
+    @Test
+    @DisplayName("Login Failure")
+    public void loginFailure(){
+//        registerUser();
+        LoginResponse loginResponse = facade.login(new LoginRequest(testUsername, testPassword));
+        Assertions.assertNotNull(loginResponse.message());
+    }
 
     //create game
+
 
     //list games
 
     //join game
+
+    private RegisterResponse registerUser(){
+        return facade.register(new RegisterRequest("testUsername", "testPassword", "testEmail"));
+    }
 
 }

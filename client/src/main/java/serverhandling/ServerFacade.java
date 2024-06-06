@@ -23,9 +23,9 @@ public class ServerFacade {
     }
 
     public RegisterResponse register(RegisterRequest request){
-        if (request.username() == null || request.password() == null || request.email() == null ){
-            return new RegisterResponse(null,null, "Bad Request");
-        }
+//        if (request.username() == null || request.password() == null || request.email() == null ){
+//            return new RegisterResponse(null,null, "Bad Request");
+//        }
 
         //translate to json
         String jsonRequest = (String) Translator.fromObjectToJson(request);
@@ -65,12 +65,12 @@ public class ServerFacade {
         //Perform correct HTTP request
         try {
             String stringResponse = clientCommunicator.doPost(url + "/session", jsonRequest, null);
-            return Translator.fromJsontoObjectNotRequest(stringResponse, LoginResponse.class);
+            LoginResponse testResponse = Translator.fromJsontoObjectNotRequest(stringResponse, LoginResponse.class);
+            return testResponse;
         } catch (IOException e) {
             System.out.println("Registering user failed: " + e.getMessage());
+            return new LoginResponse(null, null, "Error logging in");
         }
-        //Return result
-        return null;
     }
 
     public ListGamesResponse listGames(String authToken) {

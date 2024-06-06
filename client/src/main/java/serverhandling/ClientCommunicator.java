@@ -56,7 +56,7 @@ public class ClientCommunicator {
             }
             // Process the error response
             System.err.println("Error Response: " + response.toString());
-            return "Method Failed";
+            return response.toString();
         }
     }
 
