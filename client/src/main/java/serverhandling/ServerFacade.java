@@ -14,7 +14,7 @@ import translation.Translator;
 import java.io.IOException;
 
 public class ServerFacade {
-    private String url;
+    private final String url;
     private final ClientCommunicator clientCommunicator = new ClientCommunicator();
 
 
@@ -23,6 +23,10 @@ public class ServerFacade {
     }
 
     public RegisterResponse register(RegisterRequest request){
+        if (request.username() == null || request.password() == null || request.email() == null ){
+            return new RegisterResponse(null,null, "Bad Request");
+        }
+
         //translate to json
         String jsonRequest = (String) Translator.fromObjectToJson(request);
         //Perform correct HTTP request
@@ -31,9 +35,8 @@ public class ServerFacade {
             return Translator.fromJsontoObjectNotRequest(stringResponse, RegisterResponse.class);
         } catch (IOException e) {
             System.out.println("Registering user failed: " + e.getMessage());
+            return new RegisterResponse(null, null, e.getMessage());
         }
-        //Return result
-        return null;
     }
 
     public CreateGameResponse createGame(CreateGameRequest request, String authToken) {

@@ -70,12 +70,6 @@ public class ClientCommunicator {
         }
     }
 
-
-
-
-
-
-
     private static HttpURLConnection getHttpURLConnection(String urlString, String authToken, String requestMethod, boolean doOutput) throws IOException {
         URL url = new URL(urlString);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
