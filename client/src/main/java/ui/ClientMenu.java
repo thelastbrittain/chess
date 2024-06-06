@@ -188,6 +188,7 @@ public class ClientMenu {
         }
 
         facade.joinGame(new JoinGameRequest(teamColor, gameIDMap.get(gameNumber), authToken));
+        showGame(gameNumber,authToken);
 
         return "";
     }
@@ -202,6 +203,21 @@ public class ClientMenu {
             gameNumber ++;
         }
         return "";
+    }
+
+    private void showGame(int gameID, String authToken){
+        BoardCreator board = new BoardCreator();
+        ListGamesResponse listGamesResponse = facade.listGames(authToken);
+        for (GameData game : listGamesResponse.games()){
+            if (gameIDMap.get(gameID) == game.getGameID()){
+                System.out.println("White Orientation");
+                board.createBoard(ChessGame.TeamColor.WHITE, game.getGame().getBoard());
+                System.out.println("\\u001B[0m");
+                System.out.println("Black Orientation");
+                board.createBoard(ChessGame.TeamColor.BLACK, game.getGame().getBoard());
+                System.out.println("\\u001B[0m");
+            }
+        }
     }
 
     private String createGame(String authToken) {
