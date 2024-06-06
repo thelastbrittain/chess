@@ -168,6 +168,7 @@ public class ClientMenu {
     }
 
     private String observeGame(String authToken) {
+        listGames(authToken);
         Scanner scanner = new Scanner(System.in);
 
         System.out.print("Enter the game number you'd like to observe: ");
