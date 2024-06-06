@@ -5,10 +5,7 @@ import request.CreateGameRequest;
 import request.JoinGameRequest;
 import request.LoginRequest;
 import request.RegisterRequest;
-import response.CreateGameResponse;
-import response.ListGamesResponse;
-import response.LoginResponse;
-import response.RegisterResponse;
+import response.*;
 import translation.Translator;
 
 import java.io.IOException;
@@ -84,15 +81,16 @@ public class ServerFacade {
         }
     }
 
-    public void joinGame(JoinGameRequest request) {
+    public JoinGameResponse joinGame(JoinGameRequest request) {
         //translate to json
         String jsonRequest = (String) Translator.fromObjectToJson(request);
         //Perform correct HTTP request
         try {
             String stringResponse = clientCommunicator.doPut(url + "/game", jsonRequest, request.authToken());
-            Translator.fromJsontoObjectNotRequest(stringResponse, LoginResponse.class);
+            return Translator.fromJsontoObjectNotRequest(stringResponse, JoinGameResponse.class);
         } catch (IOException e) {
             System.out.println("Registering user failed: " + e.getMessage());
+            return new JoinGameResponse("Join Game Failure");
         }
         //Return result
 
