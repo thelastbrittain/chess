@@ -1,12 +1,6 @@
 package client;
 
 import chess.ChessGame;
-//import dataaccess.interfaces.AuthDAO;
-//import dataaccess.interfaces.GameDAO;
-//import dataaccess.interfaces.UserDAO;
-//import dataaccess.sqldaos.SQLAuthDAO;
-//import dataaccess.sqldaos.SQLGameDAO;
-//import dataaccess.sqldaos.SQLUserDAO;
 import org.junit.jupiter.api.*;
 import request.CreateGameRequest;
 import request.JoinGameRequest;
@@ -21,9 +15,6 @@ import serverhandling.ServerFacade;
 public class ServerFacadeTests {
     private static Server server;
     private static ServerFacade facade;
-//    private static GameDAO gameDAO = new SQLGameDAO();
-//    private static UserDAO userDAO = new SQLUserDAO();
-//    private static AuthDAO authDAO = new SQLAuthDAO();
     private static final String TESTUSERNAME = "testUsername";
     private static final String TESTPASSWORD = "testPassword";
     private static final String TESTEMAIL = "testEmail";
@@ -54,7 +45,7 @@ public class ServerFacadeTests {
         CreateGameResponse createGameResponse = facade.createGame(new CreateGameRequest("TestGame", authToken), authToken);
         facade.clearGame();
         ListGamesResponse response = facade.listGames(authToken);
-        Assertions.assertNull(response.message());
+        Assertions.assertNotNull(response.message());
 
 
     }

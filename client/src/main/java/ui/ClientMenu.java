@@ -154,11 +154,20 @@ public class ClientMenu {
                 case "4" -> listGames(authToken);
                 case "5" -> playGame(authToken);
                 case "6" -> observeGame(authToken);
-                default -> preLoginHelp();
+                default -> postLoginHelp();
             };
         } catch (Exception ex) {
             return ex.getMessage();
         }
+    }
+
+    private String postLoginHelp(){
+        return "Enter 1 to see help options" + "\n" +
+                "Enter 2 to Logout" + "\n" +
+                "Enter 3 to Create a Game" + "\n" +
+                "Enter 4 to List the Games" + "\n" +
+                "Enter 5 to Play a Game" + "\n" +
+                "Enter 6 to Observe a Game" + "\n";
     }
 
     private String logout(String authToken) {

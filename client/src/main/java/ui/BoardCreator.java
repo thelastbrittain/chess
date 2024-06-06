@@ -77,8 +77,14 @@ public class BoardCreator {
         assert row > 0 && row < 9;
 
         printRowNumber(out, row);
-        for (int col = 1; col < 9; col++){
-            printSquare(out, row, col, board);
+        if (orientation == ChessGame.TeamColor.WHITE){
+            for (int col = 1; col < 9; col++){
+                printSquare(out, row, col, board);
+            }
+        } else{
+            for (int col = 8; col > 0; col--){
+                printSquare(out, row, col, board);
+            }
         }
 
         printRowNumber(out, row);

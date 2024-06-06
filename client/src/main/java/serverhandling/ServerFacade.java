@@ -5,7 +5,7 @@ import request.JoinGameRequest;
 import request.LoginRequest;
 import request.RegisterRequest;
 import response.*;
-import translation.Translator;
+import translationForClient.TranslatorForClient;
 
 import java.io.IOException;
 
@@ -20,11 +20,11 @@ public class ServerFacade {
 
     public RegisterResponse register(RegisterRequest request){
         //translate to json
-        String jsonRequest = (String) Translator.fromObjectToJson(request);
+        String jsonRequest = (String) TranslatorForClient.fromObjectToJson(request);
         //Perform correct HTTP request
         try {
             String stringResponse = clientCommunicator.doPost(url + "/user", jsonRequest, null);
-            return Translator.fromJsontoObjectNotRequest(stringResponse, RegisterResponse.class);
+            return TranslatorForClient.fromJsontoObjectNotRequest(stringResponse, RegisterResponse.class);
         } catch (IOException e) {
             System.out.println("Registering user failed: " + e.getMessage());
             return new RegisterResponse(null, null, e.getMessage());
@@ -32,10 +32,10 @@ public class ServerFacade {
     }
 
     public CreateGameResponse createGame(CreateGameRequest request, String authToken) {
-        String jsonRequest = (String) Translator.fromObjectToJson(request);
+        String jsonRequest = (String) TranslatorForClient.fromObjectToJson(request);
         try {
             String response = clientCommunicator.doPost(url + "/game", jsonRequest, authToken);
-            return Translator.fromJsontoObjectNotRequest(response, CreateGameResponse.class);
+            return TranslatorForClient.fromJsontoObjectNotRequest(response, CreateGameResponse.class);
         } catch (IOException e) {
             System.out.println("Creating Game failed: " + e.getMessage());
         }
@@ -53,11 +53,11 @@ public class ServerFacade {
 
     public LoginResponse login(LoginRequest request) {
         //translate to json
-        String jsonRequest = (String) Translator.fromObjectToJson(request);
+        String jsonRequest = (String) TranslatorForClient.fromObjectToJson(request);
         //Perform correct HTTP request
         try {
             String stringResponse = clientCommunicator.doPost(url + "/session", jsonRequest, null);
-            LoginResponse testResponse = Translator.fromJsontoObjectNotRequest(stringResponse, LoginResponse.class);
+            LoginResponse testResponse = TranslatorForClient.fromJsontoObjectNotRequest(stringResponse, LoginResponse.class);
             return testResponse;
         } catch (IOException e) {
             System.out.println("Registering user failed: " + e.getMessage());
@@ -68,7 +68,7 @@ public class ServerFacade {
     public ListGamesResponse listGames(String authToken) {
         try {
             String stringResponse = clientCommunicator.doGet(url + "/game", authToken);
-            return Translator.fromJsontoObjectNotRequest(stringResponse, ListGamesResponse.class);
+            return TranslatorForClient.fromJsontoObjectNotRequest(stringResponse, ListGamesResponse.class);
 
         } catch (IOException e) {
             System.out.println("Registering user failed: " + e.getMessage());
@@ -78,11 +78,11 @@ public class ServerFacade {
 
     public JoinGameResponse joinGame(JoinGameRequest request) {
         //translate to json
-        String jsonRequest = (String) Translator.fromObjectToJson(request);
+        String jsonRequest = (String) TranslatorForClient.fromObjectToJson(request);
         //Perform correct HTTP request
         try {
             String stringResponse = clientCommunicator.doPut(url + "/game", jsonRequest, request.authToken());
-            return Translator.fromJsontoObjectNotRequest(stringResponse, JoinGameResponse.class);
+            return TranslatorForClient.fromJsontoObjectNotRequest(stringResponse, JoinGameResponse.class);
         } catch (IOException e) {
             System.out.println("Registering user failed: " + e.getMessage());
             return new JoinGameResponse("Join Game Failure");
