@@ -154,22 +154,6 @@ public class BoardCreator {
         out.print(EMPTY);
     }
 
-    private ChessGame.TeamColor reverseOrientationColor(ChessGame.TeamColor color){
-        assert color == ChessGame.TeamColor.WHITE || color == ChessGame.TeamColor.BLACK;
-        if (color == ChessGame.TeamColor.WHITE){
-            return  ChessGame.TeamColor.BLACK;
-        } else {
-            return ChessGame.TeamColor.WHITE;
-        }
-    }
-
-
-
-    //what colors do I want?
-    //background color - Light/Dark Grey
-    //light color  -- Dark Tan (could change to light tan
-    //dark color -- Dark Brown
-
     private static void setLight(PrintStream out) {
         out.print(SET_BG_COLOR_DARK_TAN);
     }
@@ -181,11 +165,6 @@ public class BoardCreator {
     private static void setBoardBackground(PrintStream out) {
         out.print(SET_BG_COLOR_LIGHT_GREY);
         out.print(SET_TEXT_COLOR_BLUE);
-    }
-
-    private static void setBackground(PrintStream out) {
-        out.print(SET_BG_COLOR_BLACK);
-        out.print(SET_TEXT_COLOR_BLACK);
     }
 
     private static void setWhiteText(PrintStream out) {

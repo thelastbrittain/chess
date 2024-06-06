@@ -11,6 +11,7 @@ import spark.Response;
 import spark.Route;
 import translation.Translator;
 
+
 public class RegisterHandler implements Route {
     UserDAO userDAO;
     AuthDAO authDAO;
