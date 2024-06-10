@@ -1,6 +1,9 @@
 import chess.*;
+import org.junit.platform.commons.logging.LoggerFactory;
 import ui.BoardCreator;
 import ui.ClientMenu;
+
+import java.util.logging.Logger;
 
 public class ClientMain {
     public static void main(String[] args) {

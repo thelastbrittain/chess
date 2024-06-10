@@ -2,6 +2,7 @@ package client;
 
 import chess.ChessGame;
 import org.junit.jupiter.api.*;
+import org.junit.platform.commons.logging.LoggerFactory;
 import request.CreateGameRequest;
 import request.JoinGameRequest;
 import request.LoginRequest;
@@ -10,6 +11,8 @@ import response.*;
 import server.Server;
 
 import serverhandling.ServerFacade;
+
+import java.util.logging.Logger;
 
 
 public class ServerFacadeTests {

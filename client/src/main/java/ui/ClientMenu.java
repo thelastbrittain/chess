@@ -23,6 +23,12 @@ public class ClientMenu {
         gameIDMap = new HashMap<>();  //key is temporary game int, value is primary key of table
     }
 
+
+    /**
+     * Pre Login UI
+     */
+
+
     public void run(){
 
 
@@ -68,6 +74,17 @@ public class ClientMenu {
         }
     }
 
+    /**
+     * Pre login methods
+     */
+
+    private String preLoginHelp(){
+        return "Enter 1 to see help options" + "\n" +
+                "Enter 2 to Quit" + "\n" +
+                "Enter 3 to Login" + "\n" +
+                "Enter 4 to Register" + "\n";
+    }
+
     private String register(){
         Scanner scanner = new Scanner(System.in);
 
@@ -107,12 +124,10 @@ public class ClientMenu {
         }
     }
 
-    private String preLoginHelp(){
-        return "Enter 1 to see help options" + "\n" +
-                "Enter 2 to Quit" + "\n" +
-                "Enter 3 to Login" + "\n" +
-                "Enter 4 to Register" + "\n";
-    }
+
+    /**
+     * Post login UI
+     */
 
     public void postLoginUI(String authToken){
         System.out.println("Log in success. Select an option below: ");
@@ -135,14 +150,7 @@ public class ClientMenu {
     }
 
 
-    private void printPostLoginOptions() {
-        System.out.println("1: Help");
-        System.out.println("2: Logout");
-        System.out.println("3: Create Game");
-        System.out.println("4: List Games");
-        System.out.println("5: Play Game");
-        System.out.println("6: Observer Game");
-    }
+
 
     public String evalPostLogin(String input, String authToken) {
         try {
@@ -159,6 +167,19 @@ public class ClientMenu {
         } catch (Exception ex) {
             return ex.getMessage();
         }
+    }
+
+    /**
+     * Post login methods
+     */
+
+    private void printPostLoginOptions() {
+        System.out.println("1: Help");
+        System.out.println("2: Logout");
+        System.out.println("3: Create Game");
+        System.out.println("4: List Games");
+        System.out.println("5: Play Game");
+        System.out.println("6: Observer Game");
     }
 
     private String postLoginHelp(){
@@ -222,19 +243,6 @@ public class ClientMenu {
         return "";
     }
 
-    private void showGame(int gameID, String authToken){
-        BoardCreator board = new BoardCreator();
-        ListGamesResponse listGamesResponse = facade.listGames(authToken);
-        for (GameData game : listGamesResponse.games()){
-            if (gameIDMap.get(gameID) == game.getGameID()){
-                System.out.println("White Orientation");
-                board.createBoard(ChessGame.TeamColor.WHITE, game.getGame().getBoard());
-                System.out.println("Black Orientation");
-                board.createBoard(ChessGame.TeamColor.BLACK, game.getGame().getBoard());
-            }
-        }
-    }
-
     private String createGame(String authToken) {
         Scanner scanner = new Scanner(System.in);
 
@@ -247,5 +255,22 @@ public class ClientMenu {
         return "";
     }
 
+
+    /**
+     * Helper functions
+     */
+
+    private void showGame(int gameID, String authToken){
+        BoardCreator board = new BoardCreator();
+        ListGamesResponse listGamesResponse = facade.listGames(authToken);
+        for (GameData game : listGamesResponse.games()){
+            if (gameIDMap.get(gameID) == game.getGameID()){
+                System.out.println("White Orientation");
+                board.createBoard(ChessGame.TeamColor.WHITE, game.getGame().getBoard());
+                System.out.println("Black Orientation");
+                board.createBoard(ChessGame.TeamColor.BLACK, game.getGame().getBoard());
+            }
+        }
+    }
 
 }
