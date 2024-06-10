@@ -12,6 +12,6 @@ public class ClientMain {
             port = Integer.parseInt(args[0]);
         }
 
-        new ClientMenu(8080).run();
+        new ClientMenu(port).run();
     }
 }

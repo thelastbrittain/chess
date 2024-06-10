@@ -257,6 +257,70 @@ public class ClientMenu {
 
 
     /**
+     * Gameplay UI
+     */
+
+    public void gameplayUI(String authToken){
+        System.out.println("Game started: ");
+
+        boolean inProgress = true;
+        while (inProgress == true){
+            printGameplayOptions();
+            Scanner scanner = new Scanner(System.in);
+
+            String line = scanner.nextLine();
+            try {
+                inProgress = evalGameplay(line, authToken);
+//                System.out.print(loggedIn);
+            } catch (Throwable e) {
+                var msg = e.toString();
+                System.out.print(msg);
+            }
+        }
+        System.out.println();
+    }
+
+
+    public boolean evalGameplay(String input, String authToken) {
+        try {
+            var tokens = input.toLowerCase().split(" ");
+            var cmd = (tokens.length > 0) ? tokens[0] : "help";
+//            return switch (cmd) {
+//                case "2" -> logout(authToken);
+//                case "3" -> createGame(authToken);
+//                case "4" -> listGames(authToken);
+//                case "5" -> playGame(authToken);
+//                case "6" -> observeGame(authToken);
+//                default -> postLoginHelp();
+//            };
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+        return true;   //remove this later
+    }
+
+
+    private void printGameplayOptions() {
+        System.out.println("1: Help ");
+        System.out.println("2: Redraw Chess Board ");
+        System.out.println("3: Leave ");
+        System.out.println("4: Make Move ");
+        System.out.println("5: Resign");
+        System.out.println("6: Highlight legal Moves");
+    }
+
+    private String gameplayHelp(){
+        return "Enter 1 to see help options" + "\n" +
+                "Enter 2 to Redraw the Chess Board" + "\n" +
+                "Enter 3 to Leave the Game" + "\n" +
+                "Enter 4 to List the Games" + "\n" +
+                "Enter 5 to Play a Game" + "\n" +
+                "Enter 6 to Observe a Game" + "\n";
+    }
+
+
+
+    /**
      * Helper functions
      */
 
