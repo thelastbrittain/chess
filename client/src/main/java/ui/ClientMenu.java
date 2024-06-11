@@ -321,6 +321,7 @@ public class ClientMenu {
         //makes sure that there is a piece there and that it is for the right team potentially
         int row = translateRow(location);
         int col = translateCol(location);
+        System.out.println("Row = " + row + ". Col = " + col);
         if (row >= 9 || col >= 9){
             System.out.println("Invalid input");
             return highlightLegalMoves(authToken, gameID);
@@ -328,13 +329,15 @@ public class ClientMenu {
         //get the list of potential moves for that piece
         Collection<ChessMove> chessMoves;
         ChessGame game = getGame(gameID,authToken);
+        assert game != null;
         if (game.getBoard().getPiece(new ChessPosition(row, col))!= null){
             chessMoves = game.validMoves(new ChessPosition(row, col));
+        } else {
+            System.out.println("There are no valid moves");
+            return true;
         }
-        //Could I just pass in the chess moves?
-        //If they are in game format, then I could just add a check when drawing the board to check that list as well
-        //if it's in that list, then just draw it the proper color
-        //give that list of lists to the gameboard drawer to redraw the board
+
+        showBoard(gameID, authToken, chessMoves);
 
         return true;
     }
@@ -388,6 +391,7 @@ public class ClientMenu {
         if (location.length() == 2 && Character.isLetter(location.charAt(0)) && Character.isDigit(location.charAt(1))) {
             // Get the second character and convert it to an integer
             char numberChar = location.charAt(1);
+            System.out.println("Row number = " + numberChar);
             return Character.getNumericValue(numberChar);
         } else {
             return 10; // out of range
@@ -398,26 +402,36 @@ public class ClientMenu {
         if (location.length() == 2 && Character.isLetter(location.charAt(0)) && Character.isDigit(location.charAt(1))) {
             // Get the second character and convert it to an integer
             char columnLetter = location.charAt(0);
+            System.out.println("Column letter = " + columnLetter);
             int col;
             switch (columnLetter){
                 case 'a':
                     col = 1;
+                    break;
                 case 'b':
                     col = 2;
+                    break;
                 case 'c':
                     col = 3;
+                    break;
                 case 'd':
                     col = 4;
+                    break;
                 case 'e':
                     col = 5;
+                    break;
                 case 'f':
                     col = 6;
+                    break;
                 case 'g':
                     col = 7;
+                    break;
                 case 'h':
                     col = 8;
+                    break;
                 default:
                     col = 10;
+                    break;
             }
             return col;
         } else {

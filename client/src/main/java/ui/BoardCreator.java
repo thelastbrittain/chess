@@ -223,15 +223,18 @@ public class BoardCreator {
     }
 
     private static void setStartPosition(PrintStream out){
-        out.print(SET_BG_COLOR_GREEN);
+        out.print(SET_BG_COLOR_BLUE);
+//        out.print(SET_BG_COLOR_GREEN);
     }
 
     private static void setDarkEndPosition(PrintStream out){
-        out.print(SET_BG_COLOR_RED);
+        out.print(SET_BG_COLOR_DARK_GREY);
+//        out.print(SET_BG_COLOR_RED);
     }
 
     private static void setLightEndPosition(PrintStream out){
-        out.print(SET_BG_COLOR_BLUE);
+        out.print(SET_BG_COLOR_LIGHT_GREY);
+//        out.print(SET_BG_COLOR_BLUE);
     }
 
 
