@@ -24,9 +24,11 @@ public class ClientMenu implements ServerMessageObserver {
     private final ServerFacade facade;
     HashMap<Integer, Integer> gameIDMap;
 
+
     public ClientMenu(int port) {
-        facade = new ServerFacade(port);
-        gameIDMap = new HashMap<>();  //key is temporary game int, value is primary key of table
+        facade = new ServerFacade(port, this);
+        gameIDMap = new HashMap<>(); //key is temporary game int, value is primary key of table
+
     }
 
 

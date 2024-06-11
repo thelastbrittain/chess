@@ -11,6 +11,7 @@ import response.*;
 import server.Server;
 
 import serverhandling.ServerFacade;
+import ui.ClientMenu;
 
 import java.util.logging.Logger;
 
@@ -28,7 +29,7 @@ public class ServerFacadeTests {
         server = new Server();
         var port = server.run(0);
         System.out.println("Started test HTTP server on " + port);
-        facade = new ServerFacade(port);
+        facade = new ServerFacade(port, new ClientMenu(port));
     }
 
     @BeforeEach

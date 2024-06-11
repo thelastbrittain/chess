@@ -6,16 +6,19 @@ import request.LoginRequest;
 import request.RegisterRequest;
 import response.*;
 import translationForClient.TranslatorForClient;
+import ui.ClientMenu;
 
 import java.io.IOException;
 
 public class ServerFacade {
     private final String url;
     private final ClientCommunicator clientCommunicator = new ClientCommunicator();
+    private ClientMenu client;
 
 
-    public ServerFacade(int port){
+    public ServerFacade(int port, ClientMenu client){
         url = "http://localhost:" + port;
+        this.client = client;
     }
 
     public RegisterResponse register(RegisterRequest request){
@@ -96,4 +99,6 @@ public class ServerFacade {
             throw new RuntimeException(e);
         }
     }
+
+
 }
