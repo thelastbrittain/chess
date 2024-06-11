@@ -1,5 +1,6 @@
 package ui;
 
+import chess.ChessBoard;
 import chess.ChessGame;
 import model.GameData;
 import request.CreateGameRequest;
@@ -311,6 +312,20 @@ public class ClientMenu {
     }
 
     private boolean highlightLegalMoves(String authToken) {
+        //takes in the position of the piece to check for
+        System.out.println("Enter the location of the piece you would like to check (Example: a4): ");
+        Scanner scanner = new Scanner(System.in);
+        String location = scanner.nextLine();
+        //makes sure that there is a piece there and that it is for the right team potentially
+        int row = translateRow(location);
+        int col = translateCol(location);
+        if (row < 9 && col < 9){
+
+        }
+        //get the list of potential moves for that piece
+        //put that into a list of lists
+        //give that list of lists to the gamebaord drawer to redraw the board
+
         return true;
     }
 
@@ -324,9 +339,6 @@ public class ClientMenu {
         System.out.println("6: Highlight Legal Moves");
     }
 
-
-
-
     private boolean gameplayHelp(){
         System.out.println("Enter 1 to see help options" + "\n" +
                 "Enter 2 to Redraw the Chess Board" + "\n" +
@@ -338,21 +350,67 @@ public class ClientMenu {
     }
 
 
-
     /**
      * Helper functions
      */
 
     private void showGame(int gameID, String authToken){
-        BoardCreator board = new BoardCreator();
+        BoardCreator boardCreator = new BoardCreator();
+        ChessBoard board = getBoard(gameID, authToken);
+        System.out.println("White Orientation");
+        boardCreator.createBoard(ChessGame.TeamColor.WHITE, board);
+        System.out.println("Black Orientation");
+        boardCreator.createBoard(ChessGame.TeamColor.BLACK, board);
+    }
+
+    private ChessBoard getBoard(int gameID, String authToken) {
         ListGamesResponse listGamesResponse = facade.listGames(authToken);
-        for (GameData game : listGamesResponse.games()){
-            if (gameIDMap.get(gameID) == game.getGameID()){
-                System.out.println("White Orientation");
-                board.createBoard(ChessGame.TeamColor.WHITE, game.getGame().getBoard());
-                System.out.println("Black Orientation");
-                board.createBoard(ChessGame.TeamColor.BLACK, game.getGame().getBoard());
+        for (GameData game : listGamesResponse.games()) {
+            if (gameIDMap.get(gameID) == game.getGameID()) {
+                return game.getGame().getBoard();
             }
+        }
+        return null;
+    }
+
+    private int translateRow(String location){
+        if (location.length() == 2 && Character.isLetter(location.charAt(0)) && Character.isDigit(location.charAt(1))) {
+            // Get the second character and convert it to an integer
+            char numberChar = location.charAt(1);
+            return Character.getNumericValue(numberChar);
+        } else {
+            return 10; // out of range
+        }
+    }
+
+    private int translateCol(String location){
+        if (location.length() == 2 && Character.isLetter(location.charAt(0)) && Character.isDigit(location.charAt(1))) {
+            // Get the second character and convert it to an integer
+            char columnLetter = location.charAt(0);
+            int col;
+            switch (columnLetter){
+                case 'a':
+                    col = 1;
+                case 'b':
+                    col = 2;
+                case 'c':
+                    col = 3;
+                case 'd':
+                    col = 4;
+                case 'e':
+                    col = 5;
+                case 'f':
+                    col = 6;
+                case 'g':
+                    col = 7;
+                case 'h':
+                    col = 8;
+                default:
+                    col = 10;
+            }
+            return col;
+        } else {
+            return 10; // out of range
         }
     }
 
