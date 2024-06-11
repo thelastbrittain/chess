@@ -11,6 +11,8 @@ import response.LoginResponse;
 import response.RegisterResponse;
 import serverhandling.ServerFacade;
 import serverhandling.ServerMessageObserver;
+import websocket.messages.ErrorMessage;
+import websocket.messages.LoadGameMessage;
 import websocket.messages.NotificationMessage;
 import websocket.messages.ServerMessage;
 
@@ -462,7 +464,8 @@ public class ClientMenu implements ServerMessageObserver {
         System.out.println(message);
     }
 
-    private void loadGame(String message){
-        System.out.println(message);
+    private void loadGame(ChessGame game){
+        BoardCreator boardCreator = new BoardCreator();
+        boardCreator.createBoard(ChessGame.TeamColor.WHITE, game.getBoard(), null);
     }
 }
