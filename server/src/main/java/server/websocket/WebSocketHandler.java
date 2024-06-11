@@ -1,5 +1,7 @@
 package server.websocket;
 
+import dataaccess.interfaces.AuthDAO;
+import dataaccess.sqldaos.SQLAuthDAO;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
@@ -8,15 +10,15 @@ import websocket.commands.UserGameCommand;
 
 @WebSocket
 public class WebSocketHandler {
+    private final ConnectionManager connections = new ConnectionManager();
 
     @OnWebSocketMessage
     public void onMessage(Session session, String message) throws Exception {
         try {
             UserGameCommand command = Translator.fromJsontoObjectNotRequest(message, UserGameCommand.class);
+            String username = new SQLAuthDAO().getUsernameFromAuth(command.getAuthString()); //use handler/service/dao to get username
+            connections.add(command.getGameID(), username, session);
 
-//            String username = getUsername(command.getAuthString()); //use handler/service/dao to get username
-//
-//            saveSession(command.getGameID(), session);              //make class that holds all required info
 //
 //            switch (command.getCommandType()) {
 //                case CONNECT -> connect(session, username, (ConnectCommand) command);
