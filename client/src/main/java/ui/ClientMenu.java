@@ -10,12 +10,15 @@ import response.ListGamesResponse;
 import response.LoginResponse;
 import response.RegisterResponse;
 import serverhandling.ServerFacade;
+import serverhandling.ServerMessageObserver;
+import websocket.messages.NotificationMessage;
+import websocket.messages.ServerMessage;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class ClientMenu {
+public class ClientMenu implements ServerMessageObserver {
     private final ServerFacade facade;
     HashMap<Integer, Integer> gameIDMap;
 
@@ -439,4 +442,27 @@ public class ClientMenu {
         }
     }
 
+    /**
+     * Client Messaging
+     */
+    @Override
+    public void notify(ServerMessage message) {
+        switch (message.getServerMessageType()) {
+            case NOTIFICATION -> displayNotification(((NotificationMessage) message).getMessage());
+            case ERROR -> displayError(((ErrorMessage) message).getErrorMessage());
+            case LOAD_GAME -> loadGame(((LoadGameMessage) message).getGame());
+        }
+    }
+
+    private void displayNotification(String message){
+        System.out.println(message);
+    }
+
+    private void displayError(String message){
+        System.out.println(message);
+    }
+
+    private void loadGame(String message){
+        System.out.println(message);
+    }
 }

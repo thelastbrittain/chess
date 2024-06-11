@@ -236,6 +236,4 @@ public class BoardCreator {
         out.print(SET_BG_COLOR_LIGHT_GREY);
 //        out.print(SET_BG_COLOR_BLUE);
     }
-
-
 }
