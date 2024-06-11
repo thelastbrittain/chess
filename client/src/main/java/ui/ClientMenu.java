@@ -261,8 +261,6 @@ public class ClientMenu {
      */
 
     public void gameplayUI(String authToken){
-        System.out.println("Game started: ");
-
         boolean inProgress = true;
         while (inProgress == true){
             printGameplayOptions();
@@ -285,18 +283,35 @@ public class ClientMenu {
         try {
             var tokens = input.toLowerCase().split(" ");
             var cmd = (tokens.length > 0) ? tokens[0] : "help";
-//            return switch (cmd) {
-//                case "2" -> logout(authToken);
-//                case "3" -> createGame(authToken);
-//                case "4" -> listGames(authToken);
-//                case "5" -> playGame(authToken);
-//                case "6" -> observeGame(authToken);
-//                default -> postLoginHelp();
-//            };
+            return switch (cmd) {
+                case "2" -> redrawBoard(authToken);
+                case "3" -> leaveGame(authToken);
+                case "4" -> makeMove(authToken);
+                case "5" -> resign(authToken);
+                case "6" -> highlightLegalMoves(authToken);
+                default -> gameplayHelp();
+            };
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
         return true;   //remove this later
+    }
+
+    private boolean redrawBoard(String authToken) {
+        return true;
+    }
+    private boolean leaveGame(String authToken) {
+        return false;
+    }
+    private boolean makeMove(String authToken) {
+        return true;
+    }
+    private boolean resign(String authToken) {
+        return false;
+    }
+
+    private boolean highlightLegalMoves(String authToken) {
+        return true;
     }
 
 
@@ -306,16 +321,20 @@ public class ClientMenu {
         System.out.println("3: Leave ");
         System.out.println("4: Make Move ");
         System.out.println("5: Resign");
-        System.out.println("6: Highlight legal Moves");
+        System.out.println("6: Highlight Legal Moves");
     }
 
-    private String gameplayHelp(){
-        return "Enter 1 to see help options" + "\n" +
+
+
+
+    private boolean gameplayHelp(){
+        System.out.println("Enter 1 to see help options" + "\n" +
                 "Enter 2 to Redraw the Chess Board" + "\n" +
                 "Enter 3 to Leave the Game" + "\n" +
-                "Enter 4 to List the Games" + "\n" +
-                "Enter 5 to Play a Game" + "\n" +
-                "Enter 6 to Observe a Game" + "\n";
+                "Enter 4 to Make a Move" + "\n" +
+                "Enter 5 to Resign" + "\n" +
+                "Enter 6 to Highlight Legal Moves" + "\n");
+        return true;
     }
 
 
