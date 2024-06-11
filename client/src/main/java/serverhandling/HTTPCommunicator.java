@@ -1,14 +1,10 @@
 package serverhandling;
 
-import response.ListGamesResponse;
-
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 
-public class ClientCommunicator {
+public class HTTPCommunicator {
 
     public String doPost(String urlString, String body, String authToken) throws IOException, IOException {
         HttpURLConnection connection = getHttpURLConnection(urlString, authToken, "POST", true);

@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class ServerFacade {
     private final String url;
-    private final ClientCommunicator clientCommunicator = new ClientCommunicator();
+    private final HTTPCommunicator clientCommunicator = new HTTPCommunicator();
     private ClientMenu client;
 
 
