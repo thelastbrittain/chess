@@ -7,13 +7,8 @@ import typeadapter.CommandTypeAdapter;
 import websocket.commands.UserGameCommand;
 
 public class Translator {
-    private static Gson gson;
+    private static Gson gson = prepareGson();
 
-    public Translator(){
-        GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(UserGameCommand.class, new CommandTypeAdapter());
-        gson = builder.create();
-    }
 
     public static <T> T fromJsonToObject(Request request, Class<T> classOfT) {
         return gson.fromJson(request.body(), classOfT);
@@ -25,6 +20,12 @@ public class Translator {
 
     public static <T> T fromJsontoObjectNotRequest(String string, Class<T> classOfT){
         return gson.fromJson(string, classOfT);
+    }
+
+    private static Gson prepareGson(){
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(UserGameCommand.class, new CommandTypeAdapter());
+        return builder.create();
     }
 
 }

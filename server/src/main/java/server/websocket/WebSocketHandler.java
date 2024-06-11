@@ -3,6 +3,7 @@ package server.websocket;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import translation.Translator;
 import websocket.commands.UserGameCommand;
 
 @WebSocket
@@ -11,7 +12,7 @@ public class WebSocketHandler {
     @OnWebSocketMessage
     public void onMessage(Session session, String message) throws Exception {
         try {
-            UserGameCommand command = Serializer.fromJson(message, UserGameCommand.class);
+            UserGameCommand command = Translator.fromJsontoObjectNotRequest(message, UserGameCommand.class);
 
 //            String username = getUsername(command.getAuthString()); //use handler/service/dao to get username
 //
@@ -29,7 +30,8 @@ public class WebSocketHandler {
 //            ex.printStackTrace();
 //            sendMessage(session.getRemote(), new ErrorMessage("Error: " + ex.getMessage()));
 //        }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
-
-
 }
