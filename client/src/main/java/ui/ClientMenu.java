@@ -1,7 +1,6 @@
 package ui;
 
-import chess.ChessBoard;
-import chess.ChessGame;
+import chess.*;
 import model.GameData;
 import request.CreateGameRequest;
 import request.JoinGameRequest;
@@ -12,6 +11,7 @@ import response.LoginResponse;
 import response.RegisterResponse;
 import serverhandling.ServerFacade;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -204,7 +204,7 @@ public class ClientMenu {
 
         System.out.print("Enter the game number you'd like to observe: ");
         int gameNumber = Integer.parseInt(scanner.nextLine());
-        showGame(gameNumber,authToken);
+        showBoard(gameNumber,authToken, null);
 
         return "";
     }
@@ -227,7 +227,9 @@ public class ClientMenu {
         }
 
         facade.joinGame(new JoinGameRequest(teamColor, gameIDMap.get(gameNumber), authToken));
-        showGame(gameNumber,authToken);
+        showBoard(gameNumber,authToken, null);
+
+        gameplayUI(authToken, gameNumber);
 
         return "";
     }
@@ -261,7 +263,7 @@ public class ClientMenu {
      * Gameplay UI
      */
 
-    public void gameplayUI(String authToken){
+    public void gameplayUI(String authToken, int gameID){
         boolean inProgress = true;
         while (inProgress == true){
             printGameplayOptions();
@@ -269,7 +271,7 @@ public class ClientMenu {
 
             String line = scanner.nextLine();
             try {
-                inProgress = evalGameplay(line, authToken);
+                inProgress = evalGameplay(line, authToken, gameID);
 //                System.out.print(loggedIn);
             } catch (Throwable e) {
                 var msg = e.toString();
@@ -280,7 +282,7 @@ public class ClientMenu {
     }
 
 
-    public boolean evalGameplay(String input, String authToken) {
+    public boolean evalGameplay(String input, String authToken, int gameID) {
         try {
             var tokens = input.toLowerCase().split(" ");
             var cmd = (tokens.length > 0) ? tokens[0] : "help";
@@ -289,7 +291,7 @@ public class ClientMenu {
                 case "3" -> leaveGame(authToken);
                 case "4" -> makeMove(authToken);
                 case "5" -> resign(authToken);
-                case "6" -> highlightLegalMoves(authToken);
+                case "6" -> highlightLegalMoves(authToken, gameID);
                 default -> gameplayHelp();
             };
         } catch (Exception ex) {
@@ -311,7 +313,7 @@ public class ClientMenu {
         return false;
     }
 
-    private boolean highlightLegalMoves(String authToken) {
+    private boolean highlightLegalMoves(String authToken, int gameID) {
         //takes in the position of the piece to check for
         System.out.println("Enter the location of the piece you would like to check (Example: a4): ");
         Scanner scanner = new Scanner(System.in);
@@ -319,12 +321,20 @@ public class ClientMenu {
         //makes sure that there is a piece there and that it is for the right team potentially
         int row = translateRow(location);
         int col = translateCol(location);
-        if (row < 9 && col < 9){
-
+        if (row >= 9 || col >= 9){
+            System.out.println("Invalid input");
+            return highlightLegalMoves(authToken, gameID);
         }
         //get the list of potential moves for that piece
-        //put that into a list of lists
-        //give that list of lists to the gamebaord drawer to redraw the board
+        Collection<ChessMove> chessMoves;
+        ChessGame game = getGame(gameID,authToken);
+        if (game.getBoard().getPiece(new ChessPosition(row, col))!= null){
+            chessMoves = game.validMoves(new ChessPosition(row, col));
+        }
+        //Could I just pass in the chess moves?
+        //If they are in game format, then I could just add a check when drawing the board to check that list as well
+        //if it's in that list, then just draw it the proper color
+        //give that list of lists to the gameboard drawer to redraw the board
 
         return true;
     }
@@ -354,20 +364,21 @@ public class ClientMenu {
      * Helper functions
      */
 
-    private void showGame(int gameID, String authToken){
+    private void showBoard(int gameID, String authToken, Collection<ChessMove> validMoves){
         BoardCreator boardCreator = new BoardCreator();
-        ChessBoard board = getBoard(gameID, authToken);
+        ChessGame game = getGame(gameID, authToken);
         System.out.println("White Orientation");
-        boardCreator.createBoard(ChessGame.TeamColor.WHITE, board);
+        assert game != null;
+        boardCreator.createBoard(ChessGame.TeamColor.WHITE, game.getBoard(), validMoves);
         System.out.println("Black Orientation");
-        boardCreator.createBoard(ChessGame.TeamColor.BLACK, board);
+        boardCreator.createBoard(ChessGame.TeamColor.BLACK, game.getBoard(), validMoves);
     }
 
-    private ChessBoard getBoard(int gameID, String authToken) {
+    private ChessGame getGame(int gameID, String authToken) {
         ListGamesResponse listGamesResponse = facade.listGames(authToken);
         for (GameData game : listGamesResponse.games()) {
             if (gameIDMap.get(gameID) == game.getGameID()) {
-                return game.getGame().getBoard();
+                return game.getGame();
             }
         }
         return null;

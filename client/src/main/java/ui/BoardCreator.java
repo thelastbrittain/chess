@@ -1,12 +1,10 @@
 package ui;
 
-import chess.ChessBoard;
-import chess.ChessGame;
-import chess.ChessPiece;
-import chess.ChessPosition;
+import chess.*;
 
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 
 import static ui.EscapeSequences.*;
 import static ui.EscapeSequences.SET_TEXT_COLOR_BLACK;
@@ -14,11 +12,11 @@ import static ui.EscapeSequences.SET_TEXT_COLOR_BLACK;
 public class BoardCreator {
 
 
-    public void createBoard(ChessGame.TeamColor orientation, ChessBoard board){
+    public void createBoard(ChessGame.TeamColor orientation, ChessBoard board, Collection<ChessMove> validMoves){
 //        System.out.print(board);
         var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
         createHeaders(out, orientation);
-        createRows(out, orientation, board);
+        createRows(out, orientation, board, validMoves);
         createHeaders(out, orientation);
     }
 
@@ -60,30 +58,30 @@ public class BoardCreator {
 
 
 
-    private void createRows(PrintStream out,  ChessGame.TeamColor orientation, ChessBoard board) {
+    private void createRows(PrintStream out,  ChessGame.TeamColor orientation, ChessBoard board, Collection<ChessMove> validMoves) {
         if (orientation == ChessGame.TeamColor.WHITE){
             for (int row = 8; row > 0; row--) {
-                createRow(out, row, board, orientation);
+                createRow(out, row, board, orientation, validMoves);
             }
         } else{
             for (int row = 1; row < 9; row++) {
-                createRow(out, row, board, orientation);
+                createRow(out, row, board, orientation, validMoves);
             }
         }
 
     }
 
-    private void createRow(PrintStream out, int row, ChessBoard board, ChessGame.TeamColor orientation){
+    private void createRow(PrintStream out, int row, ChessBoard board, ChessGame.TeamColor orientation, Collection<ChessMove> validMoves){
         assert row > 0 && row < 9;
 
         printRowNumber(out, row);
         if (orientation == ChessGame.TeamColor.WHITE){
             for (int col = 1; col < 9; col++){
-                printSquare(out, row, col, board);
+                printSquare(out, row, col, board, validMoves);
             }
         } else{
             for (int col = 8; col > 0; col--){
-                printSquare(out, row, col, board);
+                printSquare(out, row, col, board, validMoves);
             }
         }
 
@@ -93,14 +91,21 @@ public class BoardCreator {
         out.println();
     }
 
-    private void printSquare(PrintStream out, int row, int col, ChessBoard board) {
+    private void printSquare(PrintStream out, int row, int col, ChessBoard board, Collection<ChessMove> validMoves) {
         assert row > 0 && row < 9;
 
         //putting the background color
-        if (isLight(row, col)){
-            setLight(out);
+        if (validMoves != null){
+            if (isStartMove(row, col, validMoves)){
+                setStartPosition(out);
+            }
+            else if (isPossibleMove(row, col, validMoves)){
+                checkAndSetEndPositionLightOrDark(row, col, out);
+            } else {
+                checkAndSetLightOrDark(row, col, out);
+            }
         } else {
-            setDark(out);
+            checkAndSetLightOrDark(row, col, out);
         }
 
         //putting the text (null or a piece)
@@ -145,12 +150,48 @@ public class BoardCreator {
         }
     }
 
+    private boolean isPossibleMove(int row, int col, Collection<ChessMove> validMoves){
+        ChessPosition endPosition = new ChessPosition(row, col);
+        for (ChessMove move : validMoves){
+            if (move.getEndPosition().equals(endPosition)){  //may run into problems with equals, but probably not
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isStartMove(int row, int col, Collection<ChessMove> validMoves){
+        ChessPosition startPosition = new ChessPosition(row, col);
+        for (ChessMove move : validMoves){
+            if (move.getStartPosition().equals(startPosition)){  //may run into problems with equals, but probably not
+                return true;
+            }
+        }
+        return false;
+    }
+
     private boolean isLight(int row, int col){
         if (row % 2 == 0 && col % 2 != 0){
             return true;
         } else if (row % 2 != 0 && col % 2 == 0){
             return true;
         } else {return false;}
+    }
+
+    private void checkAndSetLightOrDark(int row, int col, PrintStream out){
+        if (isLight(row, col)){
+            setLight(out);
+        } else {
+            setDark(out);
+        }
+    }
+
+    private void checkAndSetEndPositionLightOrDark(int row, int col, PrintStream out){
+        if (isLight(row, col)){
+            setLightEndPosition(out);
+        } else {
+            setDarkEndPosition(out);
+        }
     }
 
     private void printRowNumber(PrintStream out, int row){
@@ -181,7 +222,17 @@ public class BoardCreator {
         out.print(SET_TEXT_COLOR_BLACK);
     }
 
+    private static void setStartPosition(PrintStream out){
+        out.print(SET_BG_COLOR_GREEN);
+    }
 
+    private static void setDarkEndPosition(PrintStream out){
+        out.print(SET_BG_COLOR_RED);
+    }
+
+    private static void setLightEndPosition(PrintStream out){
+        out.print(SET_BG_COLOR_BLUE);
+    }
 
 
 }
