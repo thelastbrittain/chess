@@ -1,11 +1,19 @@
 package translation;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import spark.Request;
+import typeadapter.CommandTypeAdapter;
+import websocket.commands.UserGameCommand;
 
 public class Translator {
-    private static Gson gson = new Gson();
+    private static Gson gson;
 
+    public Translator(){
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(UserGameCommand.class, new CommandTypeAdapter());
+        gson = builder.create();
+    }
 
     public static <T> T fromJsonToObject(Request request, Class<T> classOfT) {
         return gson.fromJson(request.body(), classOfT);
