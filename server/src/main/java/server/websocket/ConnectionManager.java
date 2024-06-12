@@ -27,12 +27,12 @@ public class ConnectionManager {
 //        connections.remove(visitorName);
 //    }
 
-    public void broadcast(int gameID, String excludeUserame, ServerMessage message) throws IOException {
+    public void sendMessageToAllButOne(int gameID, String excludeUsername, ServerMessage message) throws IOException {
         var removeList = new ArrayList<Connection>();
         Collection<Connection> gameConnections = connections.get(gameID);
         for (var c : gameConnections) {
             if (c.session.isOpen()) {
-                if (!c.username.equals(excludeUserame)) {
+                if (!c.username.equals(excludeUsername)) {
                     c.send(message.toString());
                 }
             } else {
@@ -45,4 +45,39 @@ public class ConnectionManager {
             gameConnections.remove(c);
         }
     }
+
+    public void sendMessageToAll(int gameID, ServerMessage message) throws IOException {
+        var removeList = new ArrayList<Connection>();
+        Collection<Connection> gameConnections = connections.get(gameID);
+        for (var c : gameConnections) {
+            if (c.session.isOpen()) {
+                c.send(message.toString());
+            } else {
+                removeList.add(c);
+            }
+        }
+        // Clean up any connections that were left open.
+        for (var c : removeList) {
+            gameConnections.remove(c);
+        }
+    }
+
+    public void sendMessageToUser(int gameID, String username, ServerMessage message) throws IOException {
+        var removeList = new ArrayList<Connection>();
+        Collection<Connection> gameConnections = connections.get(gameID);
+        for (var c : gameConnections) {
+            if (c.session.isOpen()) {
+                if (c.username.equals(username)) {
+                    c.send(message.toString());
+                }
+            } else {
+                removeList.add(c);
+            }
+        }
+        // Clean up any connections that were left open.
+        for (var c : removeList) {
+            gameConnections.remove(c);
+        }
+    }
+
 }

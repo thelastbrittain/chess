@@ -6,7 +6,8 @@ import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import translation.Translator;
-import websocket.commands.UserGameCommand;
+import websocket.commands.*;
+import websocket.messages.ErrorMessage;
 
 @WebSocket
 public class WebSocketHandler {
@@ -19,21 +20,33 @@ public class WebSocketHandler {
             String username = new SQLAuthDAO().getUsernameFromAuth(command.getAuthString()); //use handler/service/dao to get username
             connections.add(command.getGameID(), username, session);
 
-//
-//            switch (command.getCommandType()) {
-//                case CONNECT -> connect(session, username, (ConnectCommand) command);
-//                case MAKE_MOVE -> makeMove(session, username, (MakeMoveCommand) command);
-//                case LEAVE -> leaveGame(session, username, (LeaveGameCommand) command);
-//                case RESIGN -> resign(session, username, (ResignCommand) command);
-//            }
-//        } catch (UnauthorizedException ex) {
-//            sendMessage(session.getRemote(), new ErrorMessage("Error: unauthorized"));
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//            sendMessage(session.getRemote(), new ErrorMessage("Error: " + ex.getMessage()));
-//        }
+
+            switch (command.getCommandType()) {
+                case CONNECT -> connect(session, username, (ConnectCommand) command);
+                case MAKE_MOVE -> makeMove(session, username, (MakeMoveCommand) command);
+                case LEAVE -> leaveGame(session, username, (LeaveGameCommand) command);
+                case RESIGN -> resign(session, username, (ResignCommand) command);
+            }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
+
+    private void connect(Session session, String username, ConnectCommand command){
+
+    }
+
+    private void makeMove(Session session, String username, MakeMoveCommand command){
+
+    }
+
+    private void leaveGame(Session session, String username, LeaveGameCommand command){
+
+    }
+
+    private void resign(Session session, String username, ResignCommand command){
+
+    }
+
+
 }
