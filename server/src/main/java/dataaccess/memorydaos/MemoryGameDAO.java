@@ -87,6 +87,11 @@ public class MemoryGameDAO implements GameDAO {
         return new JoinGameResponse(ErrorMessages.UNAUTHORIZED);
     }
 
+    @Override
+    public ChessGame getGame(int i) {
+        return null;
+    }
+
     public void clearGames(){
         gameDataList.clear();
     }

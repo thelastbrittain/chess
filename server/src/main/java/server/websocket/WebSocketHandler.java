@@ -1,10 +1,17 @@
 package server.websocket;
 
 import chess.ChessGame;
+import dataaccess.interfaces.AuthDAO;
+import dataaccess.interfaces.GameDAO;
+import dataaccess.interfaces.UserDAO;
 import dataaccess.sqldaos.SQLAuthDAO;
+import dataaccess.sqldaos.SQLGameDAO;
+import dataaccess.sqldaos.SQLUserDAO;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import request.GetGameRequest;
+import service.GameService;
 import translation.Translator;
 import websocket.commands.*;
 import websocket.messages.LoadGameMessage;
@@ -15,6 +22,15 @@ import java.io.IOException;
 @WebSocket
 public class WebSocketHandler {
     private final ConnectionManager connections = new ConnectionManager();
+    SQLUserDAO userDAO;
+    SQLAuthDAO authDAO;
+    SQLGameDAO gameDAO;
+
+    public WebSocketHandler(SQLUserDAO userDAO, SQLAuthDAO authDAO, SQLGameDAO gameDAO) {
+        this.userDAO = userDAO;
+        this.authDAO = authDAO;
+        this.gameDAO = gameDAO;
+    }
 
     @OnWebSocketMessage
     public void onMessage(Session session, String message) throws Exception {
@@ -39,7 +55,10 @@ public class WebSocketHandler {
         String messageToOthers = String.format("%s has joined the game", username);
         String messageToUser = "Loading game...";
         NotificationMessage notificationToOthers = new NotificationMessage(messageToOthers);
-        LoadGameMessage loadGameMessage = new LoadGameMessage(new ChessGame()); // need to pull the chess game from the database // for now will just be new game
+        GameService gameService = new GameService(authDAO, gameDAO);
+        ChessGame gameToReturn = gameService.returnGame(new GetGameRequest(command.getAuthString(), command.getGameID())).game();
+
+        LoadGameMessage loadGameMessage = new LoadGameMessage(gameToReturn); // need to pull the chess game from the database // for now will just be new game
         try {
             connections.sendMessageToUser(command.getGameID(), username, loadGameMessage);
         } catch (IOException e) {

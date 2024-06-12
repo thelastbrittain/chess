@@ -24,11 +24,13 @@ public class ClientMenu implements ServerMessageObserver {
     private final ServerFacade facade;
     HashMap<Integer, Integer> gameIDMap;
     ChessGame.TeamColor teamColor;
+    ChessBoard mostRecentBoard;
 
 
     public ClientMenu(int port) {
         facade = new ServerFacade(port, this);
         gameIDMap = new HashMap<>(); //key is temporary game int, value is primary key of table
+
 
     }
 
@@ -214,7 +216,6 @@ public class ClientMenu implements ServerMessageObserver {
         int gameID = gameIDMap.get(gameNumber);
         teamColor = ChessGame.TeamColor.WHITE;
         facade.observeGame(authToken, gameID);
-        showBoard(gameNumber,authToken, null);
 
         return "";
     }
@@ -310,8 +311,10 @@ public class ClientMenu implements ServerMessageObserver {
     }
 
     private boolean redrawBoard(String authToken) {
+        displayBoard(mostRecentBoard, null);
         return true;
     }
+
     private boolean leaveGame(String authToken) {
         teamColor = null;
         return false;
@@ -376,6 +379,11 @@ public class ClientMenu implements ServerMessageObserver {
     /**
      * Helper functions
      */
+
+    private void displayBoard(ChessBoard board, Collection<ChessMove> validMoves){
+        BoardCreator boardCreator = new BoardCreator();
+        boardCreator.createBoard(teamColor, board, validMoves);
+    }
 
     private void showBoard(int gameID, String authToken, Collection<ChessMove> validMoves){
         BoardCreator boardCreator = new BoardCreator();
@@ -471,7 +479,7 @@ public class ClientMenu implements ServerMessageObserver {
     }
 
     private void loadGame(ChessGame game){
-        BoardCreator boardCreator = new BoardCreator();
-        boardCreator.createBoard(teamColor, game.getBoard(), null);
+        displayBoard(game.getBoard(), null);
+        mostRecentBoard = game.getBoard();
     }
 }
