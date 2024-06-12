@@ -6,6 +6,7 @@ import dataaccess.sqldaos.SQLGameDAO;
 import dataaccess.sqldaos.SQLUserDAO;
 import dataaccess.sqldaos.SQLAuthDAO;
 import handler.*;
+import server.websocket.WebSocketHandler;
 import spark.*;
 
 import static dataaccess.DatabaseManager.configureDatabase;
@@ -27,8 +28,10 @@ public class Server {
         SQLUserDAO userDAO = new SQLUserDAO();
         SQLAuthDAO authDAO = new SQLAuthDAO();
         SQLGameDAO gameDAO = new SQLGameDAO();
+        WebSocketHandler webSocketHandler = new WebSocketHandler();
 
         // Register your endpoints and handle exceptions here.
+        Spark.webSocket("/ws", webSocketHandler);
         Spark.delete("/db", new ClearHandler(userDAO, authDAO, gameDAO));
         Spark.post("/user", new RegisterHandler(userDAO, authDAO));
         Spark.delete("/session", new LogoutHandler(userDAO, authDAO));

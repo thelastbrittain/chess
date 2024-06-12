@@ -33,7 +33,7 @@ public class WebSocketHandler {
     }
 
     private void connect(Session session, String username, ConnectCommand command){
-
+        //let's just try to send a string.
     }
 
     private void makeMove(Session session, String username, MakeMoveCommand command){
