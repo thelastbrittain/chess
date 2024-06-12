@@ -1,11 +1,9 @@
 package service;
 
+import chess.ChessGame;
 import dataaccess.interfaces.AuthDAO;
 import dataaccess.interfaces.GameDAO;
-import request.CreateGameRequest;
-import request.GetGameRequest;
-import request.JoinGameRequest;
-import request.LeaveGameRequest;
+import request.*;
 import response.*;
 
 public class GameService {
@@ -54,6 +52,21 @@ public class GameService {
         if (!authDAO.isVerifiedAuth(request.authToken())) {return new GetGameResponse(null, ErrorMessages.UNAUTHORIZED);}
 
         return new GetGameResponse(gameDAO.getGame(request.gameID()), null);
+    }
+
+    public LeaveGameResponse resignGame(ResignGameRequest request) {
+        if (!authDAO.isVerifiedAuth(request.authToken())) {
+            return new LeaveGameResponse(ErrorMessages.UNAUTHORIZED);
+        }
+        if (!gameDAO.isVerifiedGame(request.gameID())) {
+            return new LeaveGameResponse(ErrorMessages.BADREQUEST);
+        }
+        ChessGame tempGame = gameDAO.getGame(request.gameID());
+        tempGame.setGameOver(true);
+
+        gameDAO.updateGame(request.gameID(), tempGame);
+
+        return new LeaveGameResponse(null);
     }
 
 }

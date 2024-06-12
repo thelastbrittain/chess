@@ -12,6 +12,7 @@ import java.util.Iterator;
 public class ChessGame {
     private TeamColor teamTurn;
     private ChessBoard board;
+    private boolean gameOver = false;
 
     public ChessGame() {
         teamTurn = TeamColor.WHITE;
@@ -37,6 +38,7 @@ public class ChessGame {
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         Collection<ChessMove> validMoves = board.getPiece(startPosition).pieceMoves(board, startPosition);
         ChessGame.TeamColor teamColor = board.getPiece(startPosition).getTeamColor();
+        if (gameOver){return validMoves;}
 
         Iterator<ChessMove> iterator = validMoves.iterator();
         for (; iterator.hasNext(); ) {
@@ -224,5 +226,13 @@ public class ChessGame {
      */
     public ChessBoard getBoard() {
         return board;
+    }
+
+    public void setGameOver(boolean isGameOver){
+        gameOver = isGameOver;
+    }
+
+    public boolean isGameOver(){
+        return gameOver;
     }
 }

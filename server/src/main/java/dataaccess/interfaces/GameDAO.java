@@ -16,4 +16,6 @@ public interface GameDAO {
      int createGameID();
 
     ChessGame getGame(int i);
+
+     boolean updateGame(int gameID, ChessGame game);
 }

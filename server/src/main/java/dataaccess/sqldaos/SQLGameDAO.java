@@ -101,6 +101,7 @@ public class SQLGameDAO implements GameDAO {
         return gameDataList;
     }
 
+    @Override
     public ChessGame getGame(int gameID){
         String statement = "SELECT game_info FROM game WHERE game_id = ?";
         ChessGame game = null;
@@ -121,6 +122,19 @@ public class SQLGameDAO implements GameDAO {
         }
 
         return game;
+    }
+
+    @Override
+    public boolean updateGame(int gameID, ChessGame game){
+        String statement= "UPDATE game SET game_info = ? WHERE game_id = ?";
+        String gameJson =(String) Translator.fromObjectToJson(game);
+        try{
+            executeUpdate(statement, gameID, gameJson);
+            return true;
+        }catch(DataAccessException e){
+            System.out.println("Error creating a game:" + e.getMessage());
+            return false;
+        }
     }
 
     @Override

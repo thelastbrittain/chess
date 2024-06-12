@@ -66,6 +66,7 @@ public class ServerMessageTypeAdapter extends TypeAdapter<ServerMessage> {
             switch (name) {
                 case "teamTurn" -> game.setTeamTurn(ChessGame.TeamColor.valueOf(jsonReader.nextString()));
                 case "board" -> game.setBoard(readChessBoard(jsonReader));
+                case "gameOver" -> game.setGameOver(jsonReader.nextBoolean());
             }
         }
 

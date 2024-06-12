@@ -88,6 +88,11 @@ public class MemoryGameDAO implements GameDAO {
     }
 
     @Override
+    public boolean updateGame(int gameID, ChessGame game) {
+        return false;
+    }
+
+    @Override
     public ChessGame getGame(int i) {
         return null;
     }
