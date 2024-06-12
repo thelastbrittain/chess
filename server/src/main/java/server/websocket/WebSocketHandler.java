@@ -55,12 +55,12 @@ public class WebSocketHandler {
     }
 
     private void connect(Session session, String username, ConnectCommand command){
-        String messageToOthers = String.format("%s has joined the game", username);
+        String messageToOthers = String.format("%s has joined the game as %s", username, typeOfPlayer(command));
         String messageToUser = "Loading game...";
         NotificationMessage notificationToOthers = new NotificationMessage(messageToOthers);
         ChessGame gameToReturn = gameService.returnGame(new GetGameRequest(command.getAuthString(), command.getGameID())).game();
 
-        LoadGameMessage loadGameMessage = new LoadGameMessage(gameToReturn); // need to pull the chess game from the database // for now will just be new game
+        LoadGameMessage loadGameMessage = new LoadGameMessage(gameToReturn);
         try {
             connections.sendMessageToUser(command.getGameID(), username, loadGameMessage);
         } catch (IOException e) {
@@ -81,12 +81,24 @@ public class WebSocketHandler {
         String messageToOthers = String.format("%s has left the game", username);
         NotificationMessage notificationToOthers = new NotificationMessage(messageToOthers);
         gameService.leaveGame(new LeaveGameRequest(command.getAuthString(), command.getGameID(), command.getTeamColor()));
-
+        try {
+            connections.sendMessageToAllButUser(command.getGameID(), username, notificationToOthers);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void resign(Session session, String username, ResignCommand command){
 
     }
 
-
+    private String typeOfPlayer(UserGameCommand command){
+        if (command.getTeamColor() == null){
+            return "Observer";
+        } else if (command.getTeamColor().equals(ChessGame.TeamColor.WHITE)){
+            return "White Player";
+        } else {
+            return "Black Player";
+        }
+    }
 }
