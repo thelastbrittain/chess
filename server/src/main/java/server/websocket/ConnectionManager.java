@@ -27,7 +27,7 @@ public class ConnectionManager {
 //        connections.remove(visitorName);
 //    }
 
-    public void sendMessageToAllButOne(int gameID, String excludeUsername, ServerMessage message) throws IOException {
+    public void sendMessageToAllButUser(int gameID, String excludeUsername, ServerMessage message) throws IOException {
         var removeList = new ArrayList<Connection>();
         Collection<Connection> gameConnections = connections.get(gameID);
         for (var c : gameConnections) {

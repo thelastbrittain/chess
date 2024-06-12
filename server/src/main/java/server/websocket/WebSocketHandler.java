@@ -1,13 +1,16 @@
 package server.websocket;
 
-import dataaccess.interfaces.AuthDAO;
+import chess.ChessGame;
 import dataaccess.sqldaos.SQLAuthDAO;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import translation.Translator;
 import websocket.commands.*;
-import websocket.messages.ErrorMessage;
+import websocket.messages.LoadGameMessage;
+import websocket.messages.NotificationMessage;
+
+import java.io.IOException;
 
 @WebSocket
 public class WebSocketHandler {
@@ -33,7 +36,20 @@ public class WebSocketHandler {
     }
 
     private void connect(Session session, String username, ConnectCommand command){
-        //let's just try to send a string.
+        String messageToOthers = String.format("%s has joined the game", username);
+        String messageToUser = "Loading game...";
+        NotificationMessage notificationToOthers = new NotificationMessage(messageToOthers);
+        LoadGameMessage loadGameMessage = new LoadGameMessage(new ChessGame()); // need to pull the chess game from the database // for now will just be new game
+        try {
+            connections.sendMessageToUser(command.getGameID(), username, loadGameMessage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
+            connections.sendMessageToAllButUser(command.getGameID(), username, notificationToOthers);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void makeMove(Session session, String username, MakeMoveCommand command){

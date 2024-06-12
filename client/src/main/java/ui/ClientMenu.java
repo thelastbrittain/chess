@@ -234,7 +234,7 @@ public class ClientMenu implements ServerMessageObserver {
         }
 
         facade.joinGame(new JoinGameRequest(teamColor, gameIDMap.get(gameNumber), authToken));
-        showBoard(gameNumber,authToken, null);
+//        showBoard(gameNumber,authToken, null);
 
         gameplayUI(authToken, gameNumber);
 
@@ -451,6 +451,7 @@ public class ClientMenu implements ServerMessageObserver {
      */
     @Override
     public void notify(ServerMessage message) {
+        System.out.println("Entering client notifier. Recieved: " + message);
         switch (message.getServerMessageType()) {
             case NOTIFICATION -> displayNotification(((NotificationMessage) message).getMessage());
             case ERROR -> displayError(((ErrorMessage) message).getErrorMessage());

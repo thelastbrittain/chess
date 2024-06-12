@@ -87,7 +87,7 @@ public class ServerFacade {
         //Perform correct HTTP request
         try {
             String stringResponse = httpCommunicator.doPut(url + "/game", jsonRequest, request.authToken());
-//            wsCommunicator.connect();
+            wsCommunicator.connect(request.authToken(), request.gameID());
             return TranslatorForClient.fromJsontoObjectNotRequest(stringResponse, JoinGameResponse.class);
         } catch (IOException e) {
             System.out.println("Registering user failed: " + e.getMessage());
