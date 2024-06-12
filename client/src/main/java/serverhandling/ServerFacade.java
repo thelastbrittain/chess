@@ -12,13 +12,15 @@ import java.io.IOException;
 
 public class ServerFacade {
     private final String url;
-    private final HTTPCommunicator clientCommunicator = new HTTPCommunicator();
+    private final HTTPCommunicator httpCommunicator = new HTTPCommunicator();
     private ClientMenu client;
+    private final WSCommunicator wsCommunicator;
 
 
     public ServerFacade(int port, ClientMenu client){
         url = "http://localhost:" + port;
         this.client = client;
+        this.wsCommunicator = new WSCommunicator(url, this.client);
     }
 
     public RegisterResponse register(RegisterRequest request){
@@ -26,7 +28,7 @@ public class ServerFacade {
         String jsonRequest = (String) TranslatorForClient.fromObjectToJson(request);
         //Perform correct HTTP request
         try {
-            String stringResponse = clientCommunicator.doPost(url + "/user", jsonRequest, null);
+            String stringResponse = httpCommunicator.doPost(url + "/user", jsonRequest, null);
             return TranslatorForClient.fromJsontoObjectNotRequest(stringResponse, RegisterResponse.class);
         } catch (IOException e) {
             System.out.println("Registering user failed: " + e.getMessage());
@@ -37,7 +39,7 @@ public class ServerFacade {
     public CreateGameResponse createGame(CreateGameRequest request, String authToken) {
         String jsonRequest = (String) TranslatorForClient.fromObjectToJson(request);
         try {
-            String response = clientCommunicator.doPost(url + "/game", jsonRequest, authToken);
+            String response = httpCommunicator.doPost(url + "/game", jsonRequest, authToken);
             return TranslatorForClient.fromJsontoObjectNotRequest(response, CreateGameResponse.class);
         } catch (IOException e) {
             System.out.println("Creating Game failed: " + e.getMessage());
@@ -48,7 +50,7 @@ public class ServerFacade {
 
     public LogoutResponse logout(String authToken) {
         try {
-            return new LogoutResponse(clientCommunicator.doDelete(url + "/session", authToken)) ;
+            return new LogoutResponse(httpCommunicator.doDelete(url + "/session", authToken)) ;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -59,7 +61,7 @@ public class ServerFacade {
         String jsonRequest = (String) TranslatorForClient.fromObjectToJson(request);
         //Perform correct HTTP request
         try {
-            String stringResponse = clientCommunicator.doPost(url + "/session", jsonRequest, null);
+            String stringResponse = httpCommunicator.doPost(url + "/session", jsonRequest, null);
             LoginResponse testResponse = TranslatorForClient.fromJsontoObjectNotRequest(stringResponse, LoginResponse.class);
             return testResponse;
         } catch (IOException e) {
@@ -70,7 +72,7 @@ public class ServerFacade {
 
     public ListGamesResponse listGames(String authToken) {
         try {
-            String stringResponse = clientCommunicator.doGet(url + "/game", authToken);
+            String stringResponse = httpCommunicator.doGet(url + "/game", authToken);
             return TranslatorForClient.fromJsontoObjectNotRequest(stringResponse, ListGamesResponse.class);
 
         } catch (IOException e) {
@@ -84,7 +86,8 @@ public class ServerFacade {
         String jsonRequest = (String) TranslatorForClient.fromObjectToJson(request);
         //Perform correct HTTP request
         try {
-            String stringResponse = clientCommunicator.doPut(url + "/game", jsonRequest, request.authToken());
+            String stringResponse = httpCommunicator.doPut(url + "/game", jsonRequest, request.authToken());
+//            wsCommunicator.connect();
             return TranslatorForClient.fromJsontoObjectNotRequest(stringResponse, JoinGameResponse.class);
         } catch (IOException e) {
             System.out.println("Registering user failed: " + e.getMessage());
@@ -94,7 +97,7 @@ public class ServerFacade {
 
     public void clearGame(){
         try {
-            clientCommunicator.doDelete(url + "/db", null);
+            httpCommunicator.doDelete(url + "/db", null);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

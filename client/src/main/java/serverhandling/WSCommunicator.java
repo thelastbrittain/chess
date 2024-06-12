@@ -1,5 +1,7 @@
 package serverhandling;
 
+import translationForClient.TranslatorForClient;
+import websocket.commands.ConnectCommand;
 import websocket.messages.ServerMessage;
 
 import javax.websocket.*;
@@ -26,7 +28,7 @@ public class WSCommunicator extends Endpoint {
             this.session.addMessageHandler(new MessageHandler.Whole<String>() {
                 @Override
                 public void onMessage(String message) {
-                    ServerMessage notification = new Gson().fromJson(message, ServerMessage.class);  //Make type adapter
+                    ServerMessage notification = TranslatorForClient.fromJsontoObjectNotRequest(message, ServerMessage.class);
                     messager.notify(notification);
                 }
             });
@@ -38,5 +40,14 @@ public class WSCommunicator extends Endpoint {
     //Endpoint requires this method, but you don't have to do anything
     @Override
     public void onOpen(Session session, EndpointConfig endpointConfig) {
+    }
+
+    public void connect(String authToken, int gameID) {
+        try {
+            ConnectCommand command = new ConnectCommand(authToken, gameID);
+            this.session.getBasicRemote().sendText(TranslatorForClient.fromObjectToJson(command).toString());
+        } catch (IOException ex) {
+            System.out.println("Unable to send connection: " + ex.getMessage());
+        }
     }
 }
