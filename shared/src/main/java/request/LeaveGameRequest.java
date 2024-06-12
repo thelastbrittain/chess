@@ -1,4 +1,6 @@
 package request;
 
-public record LeaveGameRequest(String authToken, int gameID) {
+import chess.ChessGame;
+
+public record LeaveGameRequest(String authToken, int gameID, ChessGame.TeamColor teamColor) {
 }

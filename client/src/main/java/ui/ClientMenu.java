@@ -2,15 +2,14 @@ package ui;
 
 import chess.*;
 import model.GameData;
-import request.CreateGameRequest;
-import request.JoinGameRequest;
-import request.LoginRequest;
-import request.RegisterRequest;
+import request.*;
 import response.ListGamesResponse;
 import response.LoginResponse;
 import response.RegisterResponse;
 import serverhandling.ServerFacade;
 import serverhandling.ServerMessageObserver;
+import websocket.commands.ConnectCommand;
+import websocket.commands.LeaveGameCommand;
 import websocket.messages.ErrorMessage;
 import websocket.messages.LoadGameMessage;
 import websocket.messages.NotificationMessage;
@@ -236,7 +235,7 @@ public class ClientMenu implements ServerMessageObserver {
             teamColor = ChessGame.TeamColor.WHITE;
         }
 
-        facade.joinGame(new JoinGameRequest(teamColor, gameIDMap.get(gameNumber), authToken));
+        facade.joinGame(new ConnectCommand(authToken, gameIDMap.get(gameNumber), teamColor));
 //        showBoard(gameNumber,authToken, null);
 
         gameplayUI(authToken, gameNumber);
@@ -298,7 +297,7 @@ public class ClientMenu implements ServerMessageObserver {
             var cmd = (tokens.length > 0) ? tokens[0] : "help";
             return switch (cmd) {
                 case "2" -> redrawBoard(authToken);
-                case "3" -> leaveGame(authToken);
+                case "3" -> leaveGame(authToken, gameID);
                 case "4" -> makeMove(authToken);
                 case "5" -> resign(authToken);
                 case "6" -> highlightLegalMoves(authToken, gameID);
@@ -315,8 +314,9 @@ public class ClientMenu implements ServerMessageObserver {
         return true;
     }
 
-    private boolean leaveGame(String authToken) {
+    private boolean leaveGame(String authToken, int gameID) {
         teamColor = null;
+        facade.leaveGame(new LeaveGameCommand(authToken, gameID, teamColor));
         return false;
     }
     private boolean makeMove(String authToken) {

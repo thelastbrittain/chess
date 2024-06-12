@@ -1,12 +1,11 @@
 package serverhandling;
 
-import request.CreateGameRequest;
-import request.JoinGameRequest;
-import request.LoginRequest;
-import request.RegisterRequest;
+import request.*;
 import response.*;
 import translationForClient.TranslatorForClient;
 import ui.ClientMenu;
+import websocket.commands.ConnectCommand;
+import websocket.commands.LeaveGameCommand;
 
 import java.io.IOException;
 
@@ -81,13 +80,13 @@ public class ServerFacade {
         }
     }
 
-    public JoinGameResponse joinGame(JoinGameRequest request) {
+    public JoinGameResponse joinGame(ConnectCommand command) {
         //translate to json
-        String jsonRequest = (String) TranslatorForClient.fromObjectToJson(request);
+        String jsonRequest = (String) TranslatorForClient.fromObjectToJson(command);
         //Perform correct HTTP request
         try {
-            String stringResponse = httpCommunicator.doPut(url + "/game", jsonRequest, request.authToken());
-            wsCommunicator.connect(request.authToken(), request.gameID());
+            String stringResponse = httpCommunicator.doPut(url + "/game", jsonRequest, command.getAuthString());
+            wsCommunicator.connect(command);
             return TranslatorForClient.fromJsontoObjectNotRequest(stringResponse, JoinGameResponse.class);
         } catch (IOException e) {
             System.out.println("Registering user failed: " + e.getMessage());
@@ -96,7 +95,11 @@ public class ServerFacade {
     }
 
     public void observeGame(String authToken, int gameID){
-        wsCommunicator.connect(authToken, gameID);
+        wsCommunicator.connect(new ConnectCommand(authToken, gameID, null));
+    }
+
+    public void leaveGame(LeaveGameCommand command){
+        wsCommunicator.leave(command);
     }
 
     public void clearGame(){

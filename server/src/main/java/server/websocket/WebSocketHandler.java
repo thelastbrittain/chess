@@ -11,6 +11,7 @@ import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import request.GetGameRequest;
+import request.LeaveGameRequest;
 import service.GameService;
 import translation.Translator;
 import websocket.commands.*;
@@ -79,7 +80,7 @@ public class WebSocketHandler {
     private void leaveGame(Session session, String username, LeaveGameCommand command){
         String messageToOthers = String.format("%s has left the game", username);
         NotificationMessage notificationToOthers = new NotificationMessage(messageToOthers);
-        gameService.leaveGame(command.getAuthString(), command.getGameID());
+        gameService.leaveGame(new LeaveGameRequest(command.getAuthString(), command.getGameID(), command.getTeamColor()));
 
     }
 

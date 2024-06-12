@@ -3,6 +3,7 @@ package serverhandling;
 import chess.ChessGame;
 import translationForClient.TranslatorForClient;
 import websocket.commands.ConnectCommand;
+import websocket.commands.LeaveGameCommand;
 import websocket.messages.ServerMessage;
 
 import javax.websocket.*;
@@ -50,13 +51,20 @@ public class WSCommunicator extends Endpoint {
 //        this.session = session;
     }
 
-    public void connect(String authToken, int gameID, ChessGame.TeamColor teamColor) {
+    public void connect(ConnectCommand command) {
         try {
-            ConnectCommand command = new ConnectCommand(authToken, gameID, teamColor);
             assert this.session != null;
             this.session.getBasicRemote().sendText(TranslatorForClient.fromObjectToJson(command).toString());
         } catch (IOException ex) {
             System.out.println("Unable to send connection: " + ex.getMessage());
+        }
+    }
+
+    public void leave(LeaveGameCommand command){
+        try{
+            this.session.getBasicRemote().sendText(TranslatorForClient.fromObjectToJson(command).toString());
+        } catch (IOException e) {
+            System.out.println("Unable to leave game: " + e.getMessage());
         }
     }
 }

@@ -41,7 +41,7 @@ public class GameService {
         if (!gameDAO.isVerifiedGame(request.gameID())) {
             return new LeaveGameResponse(ErrorMessages.BADREQUEST);
         }
-        return gameDAO.updateUserInGame(request.gameID(), null, request.playerColor());
+        return new LeaveGameResponse(gameDAO.updateUserInGame(request.gameID(), null, request.teamColor()).message());
     }
 
     public ListGamesResponse listGames(String authToken){
