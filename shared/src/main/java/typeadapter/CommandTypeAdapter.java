@@ -1,5 +1,6 @@
 package typeadapter;
 
+import chess.ChessGame;
 import chess.ChessMove;
 import chess.ChessPiece;
 import chess.ChessPosition;
@@ -26,6 +27,7 @@ public class CommandTypeAdapter extends TypeAdapter<UserGameCommand> {
     @Override
     public UserGameCommand read(JsonReader jsonReader) throws IOException {
         String authToken = null;
+        ChessGame.TeamColor teamColor = null;
         int gameID = 0;
         UserGameCommand.CommandType commandType = null;
         ChessMove move = null;
@@ -39,6 +41,7 @@ public class CommandTypeAdapter extends TypeAdapter<UserGameCommand> {
                 case "gameID" -> gameID = jsonReader.nextInt();
                 case "commandType" -> commandType = UserGameCommand.CommandType.valueOf(jsonReader.nextString());
                 case "move" -> move = readChessMove(jsonReader);
+                case "teamColor" -> teamColor = ChessGame.TeamColor.valueOf(jsonReader.nextString());
             }
         }
 
@@ -48,10 +51,10 @@ public class CommandTypeAdapter extends TypeAdapter<UserGameCommand> {
             return null;
         } else {
             return switch (commandType) {
-                case CONNECT -> new ConnectCommand(authToken, gameID);
-                case MAKE_MOVE -> new MakeMoveCommand(authToken, gameID, move);
-                case LEAVE -> new LeaveGameCommand(authToken, gameID);
-                case RESIGN -> new ResignCommand(authToken, gameID);
+                case CONNECT -> new ConnectCommand(authToken, gameID, teamColor);
+                case MAKE_MOVE -> new MakeMoveCommand(authToken, gameID, move, teamColor);
+                case LEAVE -> new LeaveGameCommand(authToken, gameID, teamColor);
+                case RESIGN -> new ResignCommand(authToken, gameID, teamColor);
             };
         }
     }

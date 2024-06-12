@@ -25,11 +25,13 @@ public class WebSocketHandler {
     SQLUserDAO userDAO;
     SQLAuthDAO authDAO;
     SQLGameDAO gameDAO;
+    GameService gameService;
 
     public WebSocketHandler(SQLUserDAO userDAO, SQLAuthDAO authDAO, SQLGameDAO gameDAO) {
         this.userDAO = userDAO;
         this.authDAO = authDAO;
         this.gameDAO = gameDAO;
+        this.gameService = new GameService(authDAO,gameDAO);
     }
 
     @OnWebSocketMessage
@@ -55,7 +57,6 @@ public class WebSocketHandler {
         String messageToOthers = String.format("%s has joined the game", username);
         String messageToUser = "Loading game...";
         NotificationMessage notificationToOthers = new NotificationMessage(messageToOthers);
-        GameService gameService = new GameService(authDAO, gameDAO);
         ChessGame gameToReturn = gameService.returnGame(new GetGameRequest(command.getAuthString(), command.getGameID())).game();
 
         LoadGameMessage loadGameMessage = new LoadGameMessage(gameToReturn); // need to pull the chess game from the database // for now will just be new game
@@ -76,6 +77,9 @@ public class WebSocketHandler {
     }
 
     private void leaveGame(Session session, String username, LeaveGameCommand command){
+        String messageToOthers = String.format("%s has left the game", username);
+        NotificationMessage notificationToOthers = new NotificationMessage(messageToOthers);
+        gameService.leaveGame(command.getAuthString(), command.getGameID());
 
     }
 

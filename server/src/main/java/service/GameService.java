@@ -5,10 +5,8 @@ import dataaccess.interfaces.GameDAO;
 import request.CreateGameRequest;
 import request.GetGameRequest;
 import request.JoinGameRequest;
-import response.CreateGameResponse;
-import response.GetGameResponse;
-import response.JoinGameResponse;
-import response.ListGamesResponse;
+import request.LeaveGameRequest;
+import response.*;
 
 public class GameService {
     AuthDAO authDAO;
@@ -34,6 +32,16 @@ public class GameService {
             return new JoinGameResponse(ErrorMessages.BADREQUEST);
         }
         return gameDAO.updateUserInGame(joinGameRequest.gameID(), authDAO.getUsernameFromAuth(joinGameRequest.authToken()), joinGameRequest.playerColor());
+    }
+
+    public LeaveGameResponse leaveGame(LeaveGameRequest request) {
+        if (!authDAO.isVerifiedAuth(request.authToken())) {
+            return new LeaveGameResponse(ErrorMessages.UNAUTHORIZED);
+        }
+        if (!gameDAO.isVerifiedGame(request.gameID())) {
+            return new LeaveGameResponse(ErrorMessages.BADREQUEST);
+        }
+        return gameDAO.updateUserInGame(request.gameID(), null, request.playerColor());
     }
 
     public ListGamesResponse listGames(String authToken){

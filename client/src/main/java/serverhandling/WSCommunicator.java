@@ -1,5 +1,6 @@
 package serverhandling;
 
+import chess.ChessGame;
 import translationForClient.TranslatorForClient;
 import websocket.commands.ConnectCommand;
 import websocket.messages.ServerMessage;
@@ -49,9 +50,9 @@ public class WSCommunicator extends Endpoint {
 //        this.session = session;
     }
 
-    public void connect(String authToken, int gameID) {
+    public void connect(String authToken, int gameID, ChessGame.TeamColor teamColor) {
         try {
-            ConnectCommand command = new ConnectCommand(authToken, gameID);
+            ConnectCommand command = new ConnectCommand(authToken, gameID, teamColor);
             assert this.session != null;
             this.session.getBasicRemote().sendText(TranslatorForClient.fromObjectToJson(command).toString());
         } catch (IOException ex) {
