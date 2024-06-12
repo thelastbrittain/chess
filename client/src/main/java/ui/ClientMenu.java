@@ -10,6 +10,7 @@ import serverhandling.ServerFacade;
 import serverhandling.ServerMessageObserver;
 import websocket.commands.ConnectCommand;
 import websocket.commands.LeaveGameCommand;
+import websocket.commands.ResignCommand;
 import websocket.messages.ErrorMessage;
 import websocket.messages.LoadGameMessage;
 import websocket.messages.NotificationMessage;
@@ -299,7 +300,7 @@ public class ClientMenu implements ServerMessageObserver {
                 case "2" -> redrawBoard(authToken);
                 case "3" -> leaveGame(authToken, gameID);
                 case "4" -> makeMove(authToken);
-                case "5" -> resign(authToken);
+                case "5" -> resign(authToken, gameID);
                 case "6" -> highlightLegalMoves(authToken, gameID);
                 default -> gameplayHelp();
             };
@@ -322,8 +323,9 @@ public class ClientMenu implements ServerMessageObserver {
     private boolean makeMove(String authToken) {
         return true;
     }
-    private boolean resign(String authToken) {
-        return false;
+    private boolean resign(String authToken, int gameID) {
+        facade.resignGame(new ResignCommand(authToken, gameID, teamColor));
+        return true;
     }
 
     private boolean highlightLegalMoves(String authToken, int gameID) {

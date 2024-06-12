@@ -6,6 +6,7 @@ import translationForClient.TranslatorForClient;
 import ui.ClientMenu;
 import websocket.commands.ConnectCommand;
 import websocket.commands.LeaveGameCommand;
+import websocket.commands.ResignCommand;
 
 import java.io.IOException;
 
@@ -108,6 +109,10 @@ public class ServerFacade {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void resignGame(ResignCommand command){
+        wsCommunicator.resign(command);
     }
 
 

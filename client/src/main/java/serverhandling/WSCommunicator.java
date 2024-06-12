@@ -4,6 +4,7 @@ import chess.ChessGame;
 import translationForClient.TranslatorForClient;
 import websocket.commands.ConnectCommand;
 import websocket.commands.LeaveGameCommand;
+import websocket.commands.ResignCommand;
 import websocket.messages.ServerMessage;
 
 import javax.websocket.*;
@@ -65,6 +66,14 @@ public class WSCommunicator extends Endpoint {
             this.session.getBasicRemote().sendText(TranslatorForClient.fromObjectToJson(command).toString());
         } catch (IOException e) {
             System.out.println("Unable to leave game: " + e.getMessage());
+        }
+    }
+
+    public void resign(ResignCommand command){
+        try{
+            this.session.getBasicRemote().sendText(TranslatorForClient.fromObjectToJson(command).toString());
+        } catch (IOException e) {
+            System.out.println("Unable to resign game: " + e.getMessage());
         }
     }
 }
