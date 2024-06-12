@@ -39,7 +39,7 @@ public class ServerMessageTypeAdapter extends TypeAdapter<ServerMessage> {
             String name = jsonReader.nextName();
             switch (name) {
                 case "message" -> message = jsonReader.nextString();
-                case "type" -> serverMessageType = ServerMessage.ServerMessageType.valueOf(jsonReader.nextString());
+                case "serverMessageType" -> serverMessageType = ServerMessage.ServerMessageType.valueOf(jsonReader.nextString());
                 case "game" -> game = readChessGame(jsonReader);
             }
         }

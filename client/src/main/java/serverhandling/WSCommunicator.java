@@ -12,14 +12,14 @@ import java.net.URISyntaxException;
 public class WSCommunicator extends Endpoint {
     String url;
     Session session;
-    ServerMessageObserver messager;
+    ServerMessageObserver messageObserver;
 
 
     public WSCommunicator(String url, ServerMessageObserver messager) {
         try {
             this.url = url.replace("http", "ws");
             URI socketURI = new URI(this.url + "/ws");
-            this.messager = messager;
+            this.messageObserver = messager;
             System.out.println("Here is the URL: " + socketURI);
 
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
@@ -33,7 +33,8 @@ public class WSCommunicator extends Endpoint {
                     System.out.println("Made it into onMessage: " + message);
                     ServerMessage notification = TranslatorForClient.fromJsontoObjectNotRequest(message, ServerMessage.class);
                     System.out.println("THis is the message: " + notification);
-                    messager.notify(notification);
+                    messageObserver.notify(notification);
+                    System.out.println("Message Observer notification sent.");
                 }
             });
 

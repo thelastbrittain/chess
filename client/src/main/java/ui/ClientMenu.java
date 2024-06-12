@@ -31,7 +31,6 @@ public class ClientMenu implements ServerMessageObserver {
 
     }
 
-
     /**
      * Pre Login UI
      */
