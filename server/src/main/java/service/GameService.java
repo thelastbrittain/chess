@@ -1,11 +1,12 @@
 package service;
 
-import chess.ChessGame;
 import dataaccess.interfaces.AuthDAO;
 import dataaccess.interfaces.GameDAO;
 import request.CreateGameRequest;
+import request.GetGameRequest;
 import request.JoinGameRequest;
 import response.CreateGameResponse;
+import response.GetGameResponse;
 import response.JoinGameResponse;
 import response.ListGamesResponse;
 
@@ -39,6 +40,12 @@ public class GameService {
         if (!authDAO.isVerifiedAuth(authToken)) {return new ListGamesResponse(null, ErrorMessages.UNAUTHORIZED);}
 
         return new ListGamesResponse(gameDAO.listGames(), null);
+    }
+
+    public GetGameResponse returnGame(GetGameRequest request){
+        if (!authDAO.isVerifiedAuth(request.authToken())) {return new GetGameResponse(null, ErrorMessages.UNAUTHORIZED);}
+
+        return new GetGameResponse(gameDAO.getGame(request.gameID()), null);
     }
 
 }

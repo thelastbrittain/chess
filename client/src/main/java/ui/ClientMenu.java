@@ -23,6 +23,7 @@ import java.util.Scanner;
 public class ClientMenu implements ServerMessageObserver {
     private final ServerFacade facade;
     HashMap<Integer, Integer> gameIDMap;
+    ChessGame.TeamColor teamColor;
 
 
     public ClientMenu(int port) {
@@ -210,6 +211,9 @@ public class ClientMenu implements ServerMessageObserver {
 
         System.out.print("Enter the game number you'd like to observe: ");
         int gameNumber = Integer.parseInt(scanner.nextLine());
+        int gameID = gameIDMap.get(gameNumber);
+        teamColor = ChessGame.TeamColor.WHITE;
+        facade.observeGame(authToken, gameID);
         showBoard(gameNumber,authToken, null);
 
         return "";
@@ -224,7 +228,6 @@ public class ClientMenu implements ServerMessageObserver {
 
         System.out.print("Enter the color you'd like to join as, select w for white or b for black. If you don't select either, white will be selected: ");
         String color = scanner.nextLine();
-        ChessGame.TeamColor teamColor = null;
         if (color.equals("b")){
             teamColor = ChessGame.TeamColor.BLACK;
         } else
@@ -310,6 +313,7 @@ public class ClientMenu implements ServerMessageObserver {
         return true;
     }
     private boolean leaveGame(String authToken) {
+        teamColor = null;
         return false;
     }
     private boolean makeMove(String authToken) {
@@ -468,6 +472,6 @@ public class ClientMenu implements ServerMessageObserver {
 
     private void loadGame(ChessGame game){
         BoardCreator boardCreator = new BoardCreator();
-        boardCreator.createBoard(ChessGame.TeamColor.WHITE, game.getBoard(), null);
+        boardCreator.createBoard(teamColor, game.getBoard(), null);
     }
 }

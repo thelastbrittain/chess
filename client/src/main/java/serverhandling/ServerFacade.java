@@ -95,6 +95,10 @@ public class ServerFacade {
         }
     }
 
+    public void observeGame(String authToken, int gameID){
+        wsCommunicator.connect(authToken, gameID);
+    }
+
     public void clearGame(){
         try {
             httpCommunicator.doDelete(url + "/db", null);

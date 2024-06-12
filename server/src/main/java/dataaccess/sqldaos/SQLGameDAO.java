@@ -101,6 +101,28 @@ public class SQLGameDAO implements GameDAO {
         return gameDataList;
     }
 
+    public ChessGame getGame(int gameID){
+        String statement = "SELECT game_info FROM game WHERE game_id = ?";
+        ChessGame game = null;
+
+        try (var conn = DatabaseManager.getConnection();
+             var ps = conn.prepareStatement(statement)) {
+
+            ps.setInt(1, gameID);
+            try (var rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String gameInfo = rs.getString("game_info");
+                    game = Translator.fromJsontoObjectNotRequest(gameInfo, ChessGame.class);
+                }
+            }
+        } catch (SQLException | DataAccessException e) {
+            System.out.println("Error getting the game with ID " + gameID + ": " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return game;
+    }
+
     @Override
     public JoinGameResponse updateUserInGame(int gameID, String username, ChessGame.TeamColor teamColor) {
         if (!(teamColor == ChessGame.TeamColor.WHITE || teamColor == ChessGame.TeamColor.BLACK)){
