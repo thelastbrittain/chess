@@ -12,7 +12,9 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import request.GetGameRequest;
 import request.LeaveGameRequest;
+import request.MakeMoveRequest;
 import request.ResignGameRequest;
+import response.MakeMoveResponse;
 import service.GameService;
 import translation.Translator;
 import websocket.commands.*;
@@ -28,6 +30,9 @@ public class WebSocketHandler {
     SQLAuthDAO authDAO;
     SQLGameDAO gameDAO;
     GameService gameService;
+    private static final String CHECKMESSAGE = "is in Check";
+    private static final String CHECKMATEMESSAGE = "is in Checkmate";
+    private static final String STALEMATEMESSAGE = "Game is in Stalemate";
 
     public WebSocketHandler(SQLUserDAO userDAO, SQLAuthDAO authDAO, SQLGameDAO gameDAO) {
         this.userDAO = userDAO;
@@ -75,7 +80,31 @@ public class WebSocketHandler {
     }
 
     private void makeMove(Session session, String username, MakeMoveCommand command){
-
+        MakeMoveResponse response = gameService.makeMove(new MakeMoveRequest(command.getAuthString(), command.getGameID(), command.getMove(), command.getTeamColor()));
+        String messageToUser = response.message();
+        String gameStatusMessage = null;
+        String moveMessage= null;
+        String enemyColor = typeOfPlayer(command);
+        //get the messages
+        if (response.isInCheckmate() == true){
+            gameStatusMessage = String.format("%s %s", enemyColor, CHECKMATEMESSAGE);
+        } else if (response.isInCheck() == true){
+            gameStatusMessage = String.format("%s %s", enemyColor, CHECKMESSAGE);
+        } else if (response.isInStalemate() == true){
+            gameStatusMessage = STALEMATEMESSAGE;
+        }
+        //remember to return before sending any more messages if the move if a failure
+        ChessGame gameToReturn = gameService.returnGame(new GetGameRequest(command.getAuthString(), command.getGameID())).game();
+        LoadGameMessage loadGameMessage = new LoadGameMessage(gameToReturn);
+        try {
+            //if messageToUser is not null, just send error to him, then return
+            //else load the game for everyone
+            //then send them the move message
+            //if gameStatus message is not empty, send that message
+            connections.sendMessageToUser(command.getGameID(), username, loadGameMessage);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void leaveGame(Session session, String username, LeaveGameCommand command){

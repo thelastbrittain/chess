@@ -72,10 +72,10 @@ public class GameService {
 
     public MakeMoveResponse makeMove(MakeMoveRequest request){
         if (!authDAO.isVerifiedAuth(request.authToken())) {
-            return new MakeMoveResponse(ErrorMessages.UNAUTHORIZED, false, false, false);
+            return new MakeMoveResponse(ErrorMessages.UNAUTHORIZED, false, false, false, null);
         }
         if (!gameDAO.isVerifiedGame(request.gameID())) {
-            return new MakeMoveResponse(ErrorMessages.BADREQUEST,false, false,false);
+            return new MakeMoveResponse(ErrorMessages.BADREQUEST,false, false,false, null);
         }
 
         ChessGame game = returnGame(new GetGameRequest(request.authToken(), request.gameID())).game();
@@ -83,16 +83,16 @@ public class GameService {
             game.makeMove(request.move());
         } catch (InvalidMoveException e) {
             System.out.println(e.toString() + e.getMessage());
-            return new MakeMoveResponse(e.getMessage(), false, false, false);
+            return new MakeMoveResponse(e.getMessage(), false, false, false, null);
         }
         if (isInCheckmate(request.teamColor(), game)){
-            return new MakeMoveResponse(null, false, true, false);
+            return new MakeMoveResponse(null, false, true, false, game);
         } else if (isInCheck(request.teamColor(), game)){
-            return new MakeMoveResponse(null, true, false, false);
+            return new MakeMoveResponse(null, true, false, false, game);
         } else if (isInStalemate(request.teamColor(), game)){
-            return new MakeMoveResponse(null, false, false, true);
+            return new MakeMoveResponse(null, false, false, true, game);
         } else {
-            return new MakeMoveResponse(null,false, false, false);
+            return new MakeMoveResponse(null,false, false, false, game);
         }
 
 
