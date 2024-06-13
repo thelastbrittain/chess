@@ -81,22 +81,22 @@ public class CommandTypeAdapter extends TypeAdapter<UserGameCommand> {
     }
 
     private ChessPosition readChessPosition(JsonReader jsonReader) throws IOException {
-        int x = 0;
-        int y = 0;
+        int row = 0;
+        int column = 0;
 
         jsonReader.beginObject();
 
         while (jsonReader.hasNext()) {
             String name = jsonReader.nextName();
             switch (name) {
-                case "x" -> x = jsonReader.nextInt();
-                case "y" -> y = jsonReader.nextInt();
+                case "row" -> row = jsonReader.nextInt();
+                case "column" -> column = jsonReader.nextInt();
             }
         }
 
         jsonReader.endObject();
 
-        return new ChessPosition(x, y);
+        return new ChessPosition(row, column);
     }
 
 }

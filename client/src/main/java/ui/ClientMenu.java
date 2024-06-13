@@ -531,7 +531,7 @@ public class ClientMenu implements ServerMessageObserver {
         //makes sure that there is a piece there and that it is for the right team potentially
         int row = translateRow(location);
         int col = translateCol(location);
-        System.out.println("Row = " + row + ". Col = " + col);
+        System.out.println("Row = " + row + " Col = " + col);
         if (row >= 9 || col >= 9){
             System.out.println("Invalid input, try again: ");
             return getPositionFromInput();
