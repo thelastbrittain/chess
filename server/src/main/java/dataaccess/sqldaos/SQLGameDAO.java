@@ -127,12 +127,12 @@ public class SQLGameDAO implements GameDAO {
     @Override
     public boolean updateGame(int gameID, ChessGame game){
         String statement= "UPDATE game SET game_info = ? WHERE game_id = ?";
-        String gameJson =(String) Translator.fromObjectToJson(game);
+        String gameJson = (String) Translator.fromObjectToJson(game);
         try{
-            executeUpdate(statement, gameID, gameJson);
+            executeUpdate(statement, gameJson, gameID);
             return true;
         }catch(DataAccessException e){
-            System.out.println("Error creating a game:" + e.getMessage());
+            System.out.println("Error updating a game:" + e.getMessage());
             return false;
         }
     }

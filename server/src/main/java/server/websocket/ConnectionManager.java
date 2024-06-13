@@ -18,7 +18,10 @@ public class ConnectionManager {
             if (existingCollection == null) {
                 existingCollection = new CopyOnWriteArrayList<>();
             }
-            existingCollection.add(connection);
+            boolean exists = existingCollection.stream().anyMatch(conn -> conn.username.equals(username) || conn.session.equals(session));
+            if (!exists) {
+                existingCollection.add(connection);
+            }
             return existingCollection;
         });
     }
