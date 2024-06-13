@@ -1,6 +1,7 @@
 package server.websocket;
 
 import chess.ChessGame;
+import chess.ChessMove;
 import dataaccess.interfaces.AuthDAO;
 import dataaccess.interfaces.GameDAO;
 import dataaccess.interfaces.UserDAO;
@@ -18,6 +19,7 @@ import response.MakeMoveResponse;
 import service.GameService;
 import translation.Translator;
 import websocket.commands.*;
+import websocket.messages.ErrorMessage;
 import websocket.messages.LoadGameMessage;
 import websocket.messages.NotificationMessage;
 
@@ -93,18 +95,38 @@ public class WebSocketHandler {
         } else if (response.isInStalemate() == true){
             gameStatusMessage = STALEMATEMESSAGE;
         }
-        //remember to return before sending any more messages if the move if a failure
-        ChessGame gameToReturn = gameService.returnGame(new GetGameRequest(command.getAuthString(), command.getGameID())).game();
-        LoadGameMessage loadGameMessage = new LoadGameMessage(gameToReturn);
+
+        moveMessage = moveTranslator(command.getMove());
+
         try {
             //if messageToUser is not null, just send error to him, then return
+            if (messageToUser != null){
+                connections.sendMessageToUser(command.getGameID(), username, new ErrorMessage(messageToUser));
+                return;
+            } else {
+                ChessGame gameToReturn = response.game();
+                LoadGameMessage loadGameMessage = new LoadGameMessage(gameToReturn);
+                connections.sendMessageToAll(command.getGameID(), loadGameMessage);
+
+            }
             //else load the game for everyone
             //then send them the move message
             //if gameStatus message is not empty, send that message
-            connections.sendMessageToUser(command.getGameID(), username, loadGameMessage);
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private String moveTranslator(ChessMove move, ChessGame.TeamColor teamColor) {
+        int fromRow = move.getStartPosition().getRow();
+        String fromCol =  translateCol(move.getStartPosition().getColumn());
+        int toRow = move.getEndPosition().getRow();
+        String toCol = translateCol(move.getEndPosition().getColumn());
+        String from = fromCol + fromRow;
+        String to = toCol + toRow;
+
+        return String.format("%s player moved from %s to %s",teamColor, from, to );
     }
 
     private void leaveGame(Session session, String username, LeaveGameCommand command){
@@ -136,6 +158,44 @@ public class WebSocketHandler {
             return "White Player";
         } else {
             return "Black Player";
+        }
+    }
+
+    private String translateCol(int col){
+        String columnLetter = " ";
+        if (col > 0 && col < 9) {
+            // Get the second character and convert it to an integer
+
+            switch (col) {
+                case 1:
+                    columnLetter = "a";
+                    break;
+                case 2:
+                    columnLetter = "b";
+                    break;
+                case 3:
+                    columnLetter = "c";
+                    break;
+                case 4:
+                    columnLetter = "d";
+                    break;
+                case 5:
+                    columnLetter = "e";
+                    break;
+                case 6:
+                    columnLetter = "f";
+                    break;
+                case 7:
+                    columnLetter = "g";
+                    break;
+                case 8:
+                    columnLetter = "h";
+                    break;
+            }
+            return columnLetter;
+        }
+         else {
+            return "Not valid"; // out of range
         }
     }
 }
