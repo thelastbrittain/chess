@@ -1,6 +1,7 @@
 package service;
 
 import chess.ChessGame;
+import chess.InvalidMoveException;
 import dataaccess.interfaces.AuthDAO;
 import dataaccess.interfaces.GameDAO;
 import request.*;
@@ -67,6 +68,70 @@ public class GameService {
         gameDAO.updateGame(request.gameID(), tempGame);
 
         return new LeaveGameResponse(null);
+    }
+
+    public MakeMoveResponse makeMove(MakeMoveRequest request){
+        if (!authDAO.isVerifiedAuth(request.authToken())) {
+            return new MakeMoveResponse(ErrorMessages.UNAUTHORIZED, false, false, false);
+        }
+        if (!gameDAO.isVerifiedGame(request.gameID())) {
+            return new MakeMoveResponse(ErrorMessages.BADREQUEST,false, false,false);
+        }
+
+        ChessGame game = returnGame(new GetGameRequest(request.authToken(), request.gameID())).game();
+        try {
+            game.makeMove(request.move());
+        } catch (InvalidMoveException e) {
+            System.out.println(e.toString() + e.getMessage());
+            return new MakeMoveResponse(e.getMessage(), false, false, false);
+        }
+        if (isInCheckmate(request.teamColor(), game)){
+            return new MakeMoveResponse(null, false, true, false);
+        } else if (isInCheck(request.teamColor(), game)){
+            return new MakeMoveResponse(null, true, false, false);
+        } else if (isInStalemate(request.teamColor(), game)){
+            return new MakeMoveResponse(null, false, false, true);
+        } else {
+            return new MakeMoveResponse(null,false, false, false);
+        }
+
+
+    }
+
+    private boolean isInCheck(ChessGame.TeamColor teamColor, ChessGame game){
+        ChessGame.TeamColor enemyColor = getEnemyColor(teamColor);
+        if (game.isInCheck(enemyColor)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean isInCheckmate(ChessGame.TeamColor teamColor, ChessGame game){
+        ChessGame.TeamColor enemyColor = getEnemyColor(teamColor);
+        if (game.isInCheckmate(enemyColor)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean isInStalemate(ChessGame.TeamColor teamColor, ChessGame game){
+        ChessGame.TeamColor enemyColor = getEnemyColor(teamColor);
+        if (game.isInStalemate(enemyColor)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private ChessGame.TeamColor getEnemyColor(ChessGame.TeamColor teamColor){
+        ChessGame.TeamColor enemyTeamColor;
+        if (teamColor.equals(ChessGame.TeamColor.WHITE)){
+            return  ChessGame.TeamColor.BLACK;
+        } else {
+            return ChessGame.TeamColor.WHITE;
+        }
     }
 
 }

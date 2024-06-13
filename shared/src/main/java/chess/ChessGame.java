@@ -75,13 +75,13 @@ public class ChessGame {
     }
 
     private boolean moveChecks(ChessMove move) throws InvalidMoveException {
-        if (board.getPiece(move.getStartPosition()) == null){throw new InvalidMoveException("No piece there. ");}
+        if (board.getPiece(move.getStartPosition()) == null){throw new InvalidMoveException(InvalidMoves.NOPIECETHERE);}
 
         ChessGame.TeamColor teamColor= board.getPiece(move.getStartPosition()).getTeamColor();
-        if (getTeamTurn() !=  teamColor){throw new InvalidMoveException("It is not your turn. ");}
+        if (getTeamTurn() !=  teamColor){throw new InvalidMoveException(InvalidMoves.NOTYOURTURN);}
 
         Collection<ChessMove> validMoves = validMoves(move.getStartPosition());
-        if (!validMoves.contains(move)) {throw new InvalidMoveException("Move not valid. ");}
+        if (!validMoves.contains(move)) {throw new InvalidMoveException(InvalidMoves.NOTVALID);}
 
         return true;
     }

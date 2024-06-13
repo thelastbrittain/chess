@@ -12,6 +12,7 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import request.GetGameRequest;
 import request.LeaveGameRequest;
+import request.ResignGameRequest;
 import service.GameService;
 import translation.Translator;
 import websocket.commands.*;
@@ -91,7 +92,7 @@ public class WebSocketHandler {
     private void resign(Session session, String username, ResignCommand command){
         String messageToOthers = String.format("%s has resigned the game", username);
         NotificationMessage notificationToOthers = new NotificationMessage(messageToOthers);
-        gameService.leaveGame(new LeaveGameRequest(command.getAuthString(), command.getGameID(), command.getTeamColor()));
+        gameService.resignGame(new ResignGameRequest(command.getAuthString(), command.getGameID()));
         try {
             connections.sendMessageToAllButUser(command.getGameID(), username, notificationToOthers);
         } catch (IOException e) {
