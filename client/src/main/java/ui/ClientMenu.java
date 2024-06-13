@@ -17,6 +17,8 @@ import websocket.messages.LoadGameMessage;
 import websocket.messages.NotificationMessage;
 import websocket.messages.ServerMessage;
 
+import static ui.EscapeSequences.*;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -511,11 +513,15 @@ public class ClientMenu implements ServerMessageObserver {
     }
 
     private void displayNotification(String message){
+        System.out.print(SET_TEXT_COLOR_YELLOW);
         System.out.println(message);
+        System.out.print(RESET_TEXT_COLOR);
     }
 
     private void displayError(String message){
+        System.out.print(SET_TEXT_COLOR_BLUE);
         System.out.println(message);
+        System.out.print(RESET_TEXT_COLOR);
     }
 
     private void loadGame(ChessGame game){

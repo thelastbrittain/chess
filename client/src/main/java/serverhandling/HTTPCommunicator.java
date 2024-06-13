@@ -30,7 +30,7 @@ public class HTTPCommunicator {
 
     private String getResponseBody(HttpURLConnection connection) throws IOException {
         if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-            System.out.println("Connection success 200");
+//            System.out.println("Connection success 200");
 
             try (InputStream responseBody = connection.getInputStream();
                  BufferedReader reader = new BufferedReader(new InputStreamReader(responseBody, "utf-8"))) {
@@ -40,7 +40,7 @@ public class HTTPCommunicator {
                     response.append(line.trim());
                 }
                 // Process the response
-                System.out.println("Response: " + response.toString());
+//                System.out.println("Response: " + response.toString());
                 return response.toString();
             }
         } else try (InputStream responseBody = connection.getErrorStream();
@@ -60,7 +60,7 @@ public class HTTPCommunicator {
         try (OutputStream requestBody = connection.getOutputStream();) {
             byte[] input = body.getBytes("utf-8");
             requestBody.write(input, 0, input.length);
-            System.out.println("Body sent to server");
+//            System.out.println("Body sent to server");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
