@@ -83,11 +83,10 @@ public class WebSocketHandler {
 
     private void makeMove(Session session, String username, MakeMoveCommand command){
         MakeMoveResponse response = gameService.makeMove(new MakeMoveRequest(command.getAuthString(), command.getGameID(), command.getMove(), command.getTeamColor()));
+
         String messageToUser = response.message();
         String gameStatusMessage = null;
-        String moveMessage= null;
         String enemyColor = typeOfPlayer(command);
-        //get the messages
         if (response.isInCheckmate() == true){
             gameStatusMessage = String.format("%s %s", enemyColor, CHECKMATEMESSAGE);
         } else if (response.isInCheck() == true){
@@ -96,23 +95,23 @@ public class WebSocketHandler {
             gameStatusMessage = STALEMATEMESSAGE;
         }
 
-        moveMessage = moveTranslator(command.getMove());
-
         try {
             //if messageToUser is not null, just send error to him, then return
             if (messageToUser != null){
                 connections.sendMessageToUser(command.getGameID(), username, new ErrorMessage(messageToUser));
-                return;
             } else {
+                //load the new game for everyone
                 ChessGame gameToReturn = response.game();
                 LoadGameMessage loadGameMessage = new LoadGameMessage(gameToReturn);
                 connections.sendMessageToAll(command.getGameID(), loadGameMessage);
-
+                //send what move he made to everyone
+                String moveMessage = moveTranslator(command.getMove(), command.getTeamColor());
+                connections.sendMessageToAllButUser(command.getGameID(), username, new NotificationMessage(moveMessage));
+                //send game status message if there is one.
+                if (gameStatusMessage != null){
+                    connections.sendMessageToAll(command.getGameID(), new NotificationMessage(gameStatusMessage));
+                }
             }
-            //else load the game for everyone
-            //then send them the move message
-            //if gameStatus message is not empty, send that message
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
