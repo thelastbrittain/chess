@@ -4,6 +4,7 @@ import chess.ChessGame;
 import translationForClient.TranslatorForClient;
 import websocket.commands.ConnectCommand;
 import websocket.commands.LeaveGameCommand;
+import websocket.commands.MakeMoveCommand;
 import websocket.commands.ResignCommand;
 import websocket.messages.ServerMessage;
 
@@ -48,8 +49,6 @@ public class WSCommunicator extends Endpoint {
     //Endpoint requires this method, but you don't have to do anything
     @Override
     public void onOpen(Session session, EndpointConfig endpointConfig) {
-//        System.out.println("Connected to endpoint: " + session.getBasicRemote());
-//        this.session = session;
     }
 
     public void connect(ConnectCommand command) {
@@ -58,6 +57,14 @@ public class WSCommunicator extends Endpoint {
             this.session.getBasicRemote().sendText(TranslatorForClient.fromObjectToJson(command).toString());
         } catch (IOException ex) {
             System.out.println("Unable to send connection: " + ex.getMessage());
+        }
+    }
+
+    public void makeMove(MakeMoveCommand command){
+        try{
+            this.session.getBasicRemote().sendText(TranslatorForClient.fromObjectToJson(command).toString());
+        } catch (IOException e) {
+            System.out.println("Unable to make move: " + e.getMessage());
         }
     }
 

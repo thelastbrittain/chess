@@ -6,6 +6,7 @@ import translationForClient.TranslatorForClient;
 import ui.ClientMenu;
 import websocket.commands.ConnectCommand;
 import websocket.commands.LeaveGameCommand;
+import websocket.commands.MakeMoveCommand;
 import websocket.commands.ResignCommand;
 
 import java.io.IOException;
@@ -103,16 +104,20 @@ public class ServerFacade {
         wsCommunicator.leave(command);
     }
 
+    public void makeMoveInGame(MakeMoveCommand command){
+        wsCommunicator.makeMove(command);
+    }
+
+    public void resignGame(ResignCommand command){
+        wsCommunicator.resign(command);
+    }
+
     public void clearGame(){
         try {
             httpCommunicator.doDelete(url + "/db", null);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public void resignGame(ResignCommand command){
-        wsCommunicator.resign(command);
     }
 
 

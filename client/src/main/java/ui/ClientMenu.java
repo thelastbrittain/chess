@@ -10,6 +10,7 @@ import serverhandling.ServerFacade;
 import serverhandling.ServerMessageObserver;
 import websocket.commands.ConnectCommand;
 import websocket.commands.LeaveGameCommand;
+import websocket.commands.MakeMoveCommand;
 import websocket.commands.ResignCommand;
 import websocket.messages.ErrorMessage;
 import websocket.messages.LoadGameMessage;
@@ -299,7 +300,7 @@ public class ClientMenu implements ServerMessageObserver {
             return switch (cmd) {
                 case "2" -> redrawBoard(authToken);
                 case "3" -> leaveGame(authToken, gameID);
-                case "4" -> makeMove(authToken);
+                case "4" -> makeMove(authToken, gameID);
                 case "5" -> resign(authToken, gameID);
                 case "6" -> highlightLegalMoves(authToken, gameID);
                 default -> gameplayHelp();
@@ -320,9 +321,48 @@ public class ClientMenu implements ServerMessageObserver {
         facade.leaveGame(new LeaveGameCommand(authToken, gameID, teamColor));
         return false;
     }
-    private boolean makeMove(String authToken) {
+    private boolean makeMove(String authToken, int gameID) {
+        System.out.println("Enter the location of the piece you would like to move (Ex: a4): ");
+        ChessPosition startPosition = getPositionFromInput();
+        System.out.println("Enter the location you would like to move to (Ex: a5): ");
+        ChessPosition endPosition = getPositionFromInput();
+
+        ChessPiece.PieceType promotionPieceType = promotionOptions();
+        ChessMove newMove = new ChessMove(startPosition, endPosition, promotionPieceType);
+
+        facade.makeMoveInGame(new MakeMoveCommand(authToken, gameID, newMove, teamColor));
         return true;
     }
+
+    private ChessPiece.PieceType promotionOptions(){
+        System.out.println("If you are promoting a pawn, select the option below, or just press 0: ");
+        System.out.println("0: No promotion");
+        System.out.println("1: Queen");
+        System.out.println("2: Bishop");
+        System.out.println("3: Knight");
+        System.out.println("4: Rook");
+
+        Scanner scanner = new Scanner(System.in);
+        int pieceType = scanner.nextInt();
+        if (pieceType > 4 || pieceType < 0){
+            System.out.println("Incorrect input, try again.");
+            return promotionOptions();
+        }
+        return evalPieceType(pieceType);
+    }
+
+    private ChessPiece.PieceType evalPieceType(int pieceType) {
+        assert pieceType >= 0 && pieceType <= 4;
+        return switch(pieceType){
+            case 0 -> null;
+            case 1 -> ChessPiece.PieceType.QUEEN;
+            case 2 -> ChessPiece.PieceType.BISHOP;
+            case 3 -> ChessPiece.PieceType.KNIGHT;
+            case 4 -> ChessPiece.PieceType.ROOK;
+            default -> throw new IllegalArgumentException("Unexpected value: " + pieceType);
+        };
+    }
+
     private boolean resign(String authToken, int gameID) {
         facade.resignGame(new ResignCommand(authToken, gameID, teamColor));
         return true;
@@ -483,5 +523,19 @@ public class ClientMenu implements ServerMessageObserver {
     private void loadGame(ChessGame game){
         displayBoard(game.getBoard(), null);
         mostRecentBoard = game.getBoard();
+    }
+
+    private ChessPosition getPositionFromInput(){
+        Scanner scanner = new Scanner(System.in);
+        String location = scanner.nextLine();
+        //makes sure that there is a piece there and that it is for the right team potentially
+        int row = translateRow(location);
+        int col = translateCol(location);
+        System.out.println("Row = " + row + ". Col = " + col);
+        if (row >= 9 || col >= 9){
+            System.out.println("Invalid input, try again: ");
+            return getPositionFromInput();
+        }
+        return new ChessPosition(row, col);
     }
 }

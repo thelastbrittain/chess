@@ -2,9 +2,6 @@ package server.websocket;
 
 import chess.ChessGame;
 import chess.ChessMove;
-import dataaccess.interfaces.AuthDAO;
-import dataaccess.interfaces.GameDAO;
-import dataaccess.interfaces.UserDAO;
 import dataaccess.sqldaos.SQLAuthDAO;
 import dataaccess.sqldaos.SQLGameDAO;
 import dataaccess.sqldaos.SQLUserDAO;
@@ -64,7 +61,6 @@ public class WebSocketHandler {
 
     private void connect(Session session, String username, ConnectCommand command){
         String messageToOthers = String.format("%s has joined the game as %s", username, typeOfPlayer(command));
-        String messageToUser = "Loading game...";
         NotificationMessage notificationToOthers = new NotificationMessage(messageToOthers);
         ChessGame gameToReturn = gameService.returnGame(new GetGameRequest(command.getAuthString(), command.getGameID())).game();
 
@@ -87,11 +83,11 @@ public class WebSocketHandler {
         String messageToUser = response.message();
         String gameStatusMessage = null;
         String enemyColor = typeOfPlayer(command);
-        if (response.isInCheckmate() == true){
+        if (response.isInCheckmate()){
             gameStatusMessage = String.format("%s %s", enemyColor, CHECKMATEMESSAGE);
-        } else if (response.isInCheck() == true){
+        } else if (response.isInCheck()){
             gameStatusMessage = String.format("%s %s", enemyColor, CHECKMESSAGE);
-        } else if (response.isInStalemate() == true){
+        } else if (response.isInStalemate()){
             gameStatusMessage = STALEMATEMESSAGE;
         }
 
