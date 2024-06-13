@@ -25,7 +25,7 @@ public class ClientMenu implements ServerMessageObserver {
     private final ServerFacade facade;
     HashMap<Integer, Integer> gameIDMap;
     ChessGame.TeamColor teamColor;
-    ChessBoard mostRecentBoard;
+    ChessGame mostRecentGame;
 
 
     public ClientMenu(int port) {
@@ -312,7 +312,7 @@ public class ClientMenu implements ServerMessageObserver {
     }
 
     private boolean redrawBoard(String authToken) {
-        displayBoard(mostRecentBoard, null);
+        displayBoard(mostRecentGame.getBoard(), null);
         return true;
     }
 
@@ -376,14 +376,14 @@ public class ClientMenu implements ServerMessageObserver {
         //makes sure that there is a piece there and that it is for the right team potentially
         int row = translateRow(location);
         int col = translateCol(location);
-        System.out.println("Row = " + row + ". Col = " + col);
+//        System.out.println("Row = " + row + ". Col = " + col);
         if (row >= 9 || col >= 9){
             System.out.println("Invalid input");
             return highlightLegalMoves(authToken, gameID);
         }
         //get the list of potential moves for that piece
         Collection<ChessMove> chessMoves;
-        ChessGame game = getGame(gameID,authToken);
+        ChessGame game = mostRecentGame;
         assert game != null;
         if (game.getBoard().getPiece(new ChessPosition(row, col))!= null){
             chessMoves = game.validMoves(new ChessPosition(row, col));
@@ -392,7 +392,7 @@ public class ClientMenu implements ServerMessageObserver {
             return true;
         }
 
-        showBoard(gameID, authToken, chessMoves);
+        displayBoard(game.getBoard(), chessMoves);
 
         return true;
     }
@@ -427,31 +427,30 @@ public class ClientMenu implements ServerMessageObserver {
         boardCreator.createBoard(teamColor, board, validMoves);
     }
 
-    private void showBoard(int gameID, String authToken, Collection<ChessMove> validMoves){
-        BoardCreator boardCreator = new BoardCreator();
-        ChessGame game = getGame(gameID, authToken);
-        System.out.println("White Orientation");
-        assert game != null;
-        boardCreator.createBoard(ChessGame.TeamColor.WHITE, game.getBoard(), validMoves);
-        System.out.println("Black Orientation");
-        boardCreator.createBoard(ChessGame.TeamColor.BLACK, game.getBoard(), validMoves);
-    }
+//    private void showBoard(int gameID, String authToken, Collection<ChessMove> validMoves){
+//        BoardCreator boardCreator = new BoardCreator();
+//        ChessGame game = getGame(gameID, authToken);
+//        System.out.println("White Orientation");
+//        assert game != null;
+//        boardCreator.createBoard(ChessGame.TeamColor.WHITE, game.getBoard(), validMoves);
+//        System.out.println("Black Orientation");
+//        boardCreator.createBoard(ChessGame.TeamColor.BLACK, game.getBoard(), validMoves);
+//    }
 
-    private ChessGame getGame(int gameID, String authToken) {
-        ListGamesResponse listGamesResponse = facade.listGames(authToken);
-        for (GameData game : listGamesResponse.games()) {
-            if (gameIDMap.get(gameID) == game.getGameID()) {
-                return game.getGame();
-            }
-        }
-        return null;
-    }
+//    private ChessGame getGame(int gameID, String authToken) {
+//        ListGamesResponse listGamesResponse = facade.listGames(authToken);
+//        for (GameData game : listGamesResponse.games()) {
+//            if (gameIDMap.get(gameID) == game.getGameID()) {
+//                return game.getGame();
+//            }
+//        }
+//        return null;
+//    }
 
     private int translateRow(String location){
         if (location.length() == 2 && Character.isLetter(location.charAt(0)) && Character.isDigit(location.charAt(1))) {
             // Get the second character and convert it to an integer
             char numberChar = location.charAt(1);
-            System.out.println("Row number = " + numberChar);
             return Character.getNumericValue(numberChar);
         } else {
             return 10; // out of range
@@ -462,7 +461,6 @@ public class ClientMenu implements ServerMessageObserver {
         if (location.length() == 2 && Character.isLetter(location.charAt(0)) && Character.isDigit(location.charAt(1))) {
             // Get the second character and convert it to an integer
             char columnLetter = location.charAt(0);
-            System.out.println("Column letter = " + columnLetter);
             int col;
             switch (columnLetter){
                 case 'a':
@@ -504,7 +502,7 @@ public class ClientMenu implements ServerMessageObserver {
      */
     @Override
     public void notify(ServerMessage message) {
-        System.out.println("Entering client notifier. Recieved: " + message);
+//        System.out.println("Entering client notifier. Recieved: " + message);
         switch (message.getServerMessageType()) {
             case NOTIFICATION -> displayNotification(((NotificationMessage) message).getMessage());
             case ERROR -> displayError(((ErrorMessage) message).getErrorMessage());
@@ -521,8 +519,9 @@ public class ClientMenu implements ServerMessageObserver {
     }
 
     private void loadGame(ChessGame game){
+        mostRecentGame = game;
         displayBoard(game.getBoard(), null);
-        mostRecentBoard = game.getBoard();
+
     }
 
     private ChessPosition getPositionFromInput(){
@@ -531,7 +530,6 @@ public class ClientMenu implements ServerMessageObserver {
         //makes sure that there is a piece there and that it is for the right team potentially
         int row = translateRow(location);
         int col = translateCol(location);
-        System.out.println("Row = " + row + " Col = " + col);
         if (row >= 9 || col >= 9){
             System.out.println("Invalid input, try again: ");
             return getPositionFromInput();

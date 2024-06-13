@@ -85,6 +85,9 @@ public class GameService {
             System.out.println(e.toString() + e.getMessage());
             return new MakeMoveResponse(e.getMessage(), false, false, false, null);
         }
+
+        gameDAO.updateGame(request.gameID(), game);
+
         if (isInCheckmate(request.teamColor(), game)){
             return new MakeMoveResponse(null, false, true, false, game);
         } else if (isInCheck(request.teamColor(), game)){

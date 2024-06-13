@@ -24,21 +24,21 @@ public class WSCommunicator extends Endpoint {
             this.url = url.replace("http", "ws");
             URI socketURI = new URI(this.url + "/ws");
             this.messageObserver = messager;
-            System.out.println("Here is the URL: " + socketURI);
+//            System.out.println("Here is the URL: " + socketURI);
 
             WebSocketContainer container = ContainerProvider.getWebSocketContainer();
             this.session = container.connectToServer(this, socketURI);
-            System.out.println("Made a connection: " + session);
+//            System.out.println("Made a connection: " + session);
 
             //set message handler
             this.session.addMessageHandler(new MessageHandler.Whole<String>() {
                 @Override
                 public void onMessage(String message) {
-                    System.out.println("Made it into onMessage: " + message);
+//                    System.out.println("Made it into onMessage: " + message);
                     ServerMessage notification = TranslatorForClient.fromJsontoObjectNotRequest(message, ServerMessage.class);
-                    System.out.println("THis is the message: " + notification);
+//                    System.out.println("THis is the message: " + notification);
                     messageObserver.notify(notification);
-                    System.out.println("Message Observer notification sent.");
+//                    System.out.println("Message Observer notification sent.");
                 }
             });
 
