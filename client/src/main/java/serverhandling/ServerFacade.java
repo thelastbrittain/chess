@@ -1,5 +1,6 @@
 package serverhandling;
 
+import chess.ChessGame;
 import request.*;
 import response.*;
 import translationforclient.TranslatorForClient;
@@ -82,12 +83,14 @@ public class ServerFacade {
         }
     }
 
-    public JoinGameResponse joinGame(ConnectCommand command) {
+    public JoinGameResponse joinGame(ConnectCommand command, ChessGame.TeamColor teamColor) {
         //translate to json
         String jsonRequest = (String) TranslatorForClient.fromObjectToJson(command);
+        String httpRequest = (String) TranslatorForClient.fromObjectToJson(new JoinGameRequest(teamColor, command.getGameID(), command.getAuthString()));
         //Perform correct HTTP request
+        System.out.println("Here is the HTTP request (joinGame  SFacade): " + httpRequest) ;
         try {
-            String stringResponse = httpCommunicator.doPut(url + "/game", jsonRequest, command.getAuthString());
+            String stringResponse = httpCommunicator.doPut(url + "/game", httpRequest, command.getAuthString());
             System.out.println("This is the joinGameResponse in SFacade: " + stringResponse);
             wsCommunicator.connect(command);
             return TranslatorForClient.fromJsontoObjectNotRequest(stringResponse, JoinGameResponse.class);

@@ -240,8 +240,7 @@ public class ClientMenu implements ServerMessageObserver {
             teamColor = ChessGame.TeamColor.WHITE;
         }
 
-        facade.joinGame(new ConnectCommand(authToken, gameIDMap.get(gameNumber)));
-//        showBoard(gameNumber,authToken, null);
+        facade.joinGame(new ConnectCommand(authToken, gameIDMap.get(gameNumber)), teamColor);
 
         gameplayUI(authToken, gameNumber);
 

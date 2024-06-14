@@ -14,8 +14,9 @@ public class HTTPCommunicator {
 
     public String doPut(String urlString, String body, String authToken) throws IOException, IOException {
         HttpURLConnection connection = getHttpURLConnection(urlString, authToken, "PUT", true);
+//        System.out.println("About to do the requst (in doPut). Body is: " + body);
         sendRequest(connection, body);
-        System.out.println("In doPut. Here is the info: " + getResponseBody(connection));
+//        System.out.println("In doPut. Here is the info: " + getResponseBody(connection));
         return getResponseBody(connection);
     }
 
@@ -58,11 +59,15 @@ public class HTTPCommunicator {
     }
 
     private void sendRequest(HttpURLConnection connection, String body){
+        System.out.println(" in sendRequest in HTTPCom. Trying to send message to server.");
+        System.out.println("Body is: " + body);
+        System.out.println("Connection is: " + connection);
         try (OutputStream requestBody = connection.getOutputStream();) {
             byte[] input = body.getBytes("utf-8");
             requestBody.write(input, 0, input.length);
-//            System.out.println("Body sent to server");
+            System.out.println("Body sent to server");
         } catch (IOException e) {
+            System.out.println("Sending Request to Server failed. in sendRequest in HTTP COM. ");
             throw new RuntimeException(e);
         }
     }
