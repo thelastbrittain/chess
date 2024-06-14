@@ -148,6 +148,13 @@ public class WebSocketHandler {
     }
 
     private void resign(Session session, String username, ResignCommand command){
+        if (typeOfPlayer(command.getGameID(), username).equals("Observer")){
+            try {
+                connections.sendMessageToUser(command.getGameID(), username,new ErrorMessage("Observers can't resign."));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         String messageToOthers = String.format("%s has resigned the game", username);
         NotificationMessage notificationToOthers = new NotificationMessage(messageToOthers);
         LeaveGameResponse response = gameService.resignGame(new ResignGameRequest(command.getAuthString(), command.getGameID()));
