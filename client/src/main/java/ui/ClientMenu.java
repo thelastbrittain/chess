@@ -239,7 +239,7 @@ public class ClientMenu implements ServerMessageObserver {
             teamColor = ChessGame.TeamColor.WHITE;
         }
 
-        facade.joinGame(new ConnectCommand(authToken, gameIDMap.get(gameNumber), teamColor));
+        facade.joinGame(new ConnectCommand(authToken, gameIDMap.get(gameNumber)));
 //        showBoard(gameNumber,authToken, null);
 
         gameplayUI(authToken, gameNumber);
@@ -320,7 +320,7 @@ public class ClientMenu implements ServerMessageObserver {
 
     private boolean leaveGame(String authToken, int gameID) {
         teamColor = null;
-        facade.leaveGame(new LeaveGameCommand(authToken, gameID, teamColor));
+        facade.leaveGame(new LeaveGameCommand(authToken, gameID));
         return false;
     }
     private boolean makeMove(String authToken, int gameID) {
@@ -332,7 +332,7 @@ public class ClientMenu implements ServerMessageObserver {
         ChessPiece.PieceType promotionPieceType = promotionOptions();
         ChessMove newMove = new ChessMove(startPosition, endPosition, promotionPieceType);
 
-        facade.makeMoveInGame(new MakeMoveCommand(authToken, gameID, newMove, teamColor));
+        facade.makeMoveInGame(new MakeMoveCommand(authToken, gameID, newMove));
         return true;
     }
 
@@ -366,7 +366,7 @@ public class ClientMenu implements ServerMessageObserver {
     }
 
     private boolean resign(String authToken, int gameID) {
-        facade.resignGame(new ResignCommand(authToken, gameID, teamColor));
+        facade.resignGame(new ResignCommand(authToken, gameID));
         return true;
     }
 

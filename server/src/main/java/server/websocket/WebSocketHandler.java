@@ -69,7 +69,7 @@ public class WebSocketHandler {
     }
 
     private void connect(Session session, String username, ConnectCommand command) {
-        String messageToOthers = String.format("%s has joined the game as %s", username, typeOfPlayer(command));
+        String messageToOthers = String.format("%s has joined the game as %s", username, typeOfPlayer(command.getGameID(), username));
         NotificationMessage notificationToOthers = new NotificationMessage(messageToOthers);
         GetGameResponse response = gameService.returnGame(new GetGameRequest(command.getAuthString(), command.getGameID()));
 
@@ -88,11 +88,12 @@ public class WebSocketHandler {
     }
 
     private void makeMove(Session session, String username, MakeMoveCommand command){
-        MakeMoveResponse response = gameService.makeMove(new MakeMoveRequest(command.getAuthString(), command.getGameID(), command.getMove(), command.getTeamColor()));
+        assert getTeamColor(username, command.getGameID()) != null;
+        MakeMoveResponse response = gameService.makeMove(new MakeMoveRequest(command.getAuthString(), command.getGameID(), command.getMove(), getTeamColor(username, command.getGameID())));
 
         String messageToUser = response.message();
         String gameStatusMessage = null;
-        String enemyColor = typeOfPlayer(command);
+        ChessGame.TeamColor enemyColor = enemyColor(getTeamColor(username, command.getGameID()));
         if (response.isInCheckmate()){
             gameStatusMessage = String.format("%s %s", enemyColor, CHECKMATEMESSAGE);
         } else if (response.isInCheck()){
@@ -111,7 +112,7 @@ public class WebSocketHandler {
                 LoadGameMessage loadGameMessage = new LoadGameMessage(gameToReturn);
                 connections.sendMessageToAll(command.getGameID(), loadGameMessage);
                 //send what move he made to everyone
-                String moveMessage = moveTranslator(command.getMove(), command.getTeamColor());
+                String moveMessage = moveTranslator(command.getMove(), getTeamColor(username, command.getGameID()));
                 connections.sendMessageToAllButUser(command.getGameID(), username, new NotificationMessage(moveMessage));
                 //send game status message if there is one.
                 if (gameStatusMessage != null){
@@ -127,7 +128,7 @@ public class WebSocketHandler {
     private void leaveGame(Session session, String username, LeaveGameCommand command){
         String messageToOthers = String.format("%s has left the game", username);
         NotificationMessage notificationToOthers = new NotificationMessage(messageToOthers);
-        LeaveGameResponse response =  gameService.leaveGame(new LeaveGameRequest(command.getAuthString(), command.getGameID(), command.getTeamColor()));
+        LeaveGameResponse response =  gameService.leaveGame(new LeaveGameRequest(command.getAuthString(), command.getGameID(), getTeamColor(username, command.getGameID())));
         try {
             if (response.message() != null){
                 connections.sendMessageToUser(command.getGameID(),username ,new ErrorMessage(response.message()));
@@ -154,7 +155,13 @@ public class WebSocketHandler {
         }
     }
 
-    private String typeOfPlayer(ChessGame.TeamColor teamColor) {
+    private ChessGame.TeamColor getTeamColor(String username, int gameID){
+        return gameDAO.getTeamColor(gameID, username);
+    }
+
+    private String typeOfPlayer(int gameID, String username) {
+        ChessGame.TeamColor teamColor = gameDAO.getTeamColor(gameID, username);
+
         if (teamColor == null){
             return "Observer";
         } else if (teamColor.equals(ChessGame.TeamColor.WHITE)){
@@ -163,6 +170,16 @@ public class WebSocketHandler {
             return "Black Player";
         }
     }
+
+    private ChessGame.TeamColor enemyColor(ChessGame.TeamColor teamColor){
+        assert teamColor != null;
+        if (teamColor == ChessGame.TeamColor.WHITE){
+            return ChessGame.TeamColor.BLACK;
+        } else {
+            return ChessGame.TeamColor.WHITE;
+        }
+    }
+
 
     private String moveTranslator(ChessMove move, ChessGame.TeamColor teamColor) {
         int fromRow = move.getStartPosition().getRow();
@@ -213,9 +230,6 @@ public class WebSocketHandler {
         }
     }
 
-    private ChessGame.TeamColor getTeamColor(String username, int gameID){
-        return gameDAO.getTeamColor(gameID, username);
-    }
 
     @OnWebSocketError
     public void onError(Session session, Throwable throwable) {

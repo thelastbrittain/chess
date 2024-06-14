@@ -34,10 +34,6 @@ public class UserGameCommand {
         return authToken;
     }
 
-    private final ChessGame.TeamColor teamColor;
-
-    public ChessGame.TeamColor getTeamColor(){return teamColor;}
-
     private final int gameID;
 
     public CommandType getCommandType() {

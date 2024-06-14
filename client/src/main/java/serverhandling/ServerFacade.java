@@ -97,7 +97,7 @@ public class ServerFacade {
     }
 
     public void observeGame(String authToken, int gameID){
-        wsCommunicator.connect(new ConnectCommand(authToken, gameID, null));
+        wsCommunicator.connect(new ConnectCommand(authToken, gameID));
     }
 
     public void leaveGame(LeaveGameCommand command){
