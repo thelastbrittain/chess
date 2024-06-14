@@ -6,6 +6,7 @@ import dataaccess.sqldaos.SQLAuthDAO;
 import dataaccess.sqldaos.SQLGameDAO;
 import dataaccess.sqldaos.SQLUserDAO;
 import org.eclipse.jetty.websocket.api.Session;
+import org.eclipse.jetty.websocket.api.annotations.OnWebSocketError;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import request.GetGameRequest;
@@ -13,6 +14,7 @@ import request.LeaveGameRequest;
 import request.MakeMoveRequest;
 import request.ResignGameRequest;
 import response.GetGameResponse;
+import response.LeaveGameResponse;
 import response.MakeMoveResponse;
 import service.GameService;
 import translation.Translator;
@@ -22,6 +24,7 @@ import websocket.messages.LoadGameMessage;
 import websocket.messages.NotificationMessage;
 import websocket.messages.ServerMessage;
 
+import javax.websocket.OnError;
 import java.io.IOException;
 
 @WebSocket
@@ -116,23 +119,17 @@ public class WebSocketHandler {
         }
     }
 
-    private String moveTranslator(ChessMove move, ChessGame.TeamColor teamColor) {
-        int fromRow = move.getStartPosition().getRow();
-        String fromCol =  translateCol(move.getStartPosition().getColumn());
-        int toRow = move.getEndPosition().getRow();
-        String toCol = translateCol(move.getEndPosition().getColumn());
-        String from = fromCol + fromRow;
-        String to = toCol + toRow;
-
-        return String.format("%s player moved from %s to %s",teamColor, from, to );
-    }
 
     private void leaveGame(Session session, String username, LeaveGameCommand command){
         String messageToOthers = String.format("%s has left the game", username);
         NotificationMessage notificationToOthers = new NotificationMessage(messageToOthers);
-        gameService.leaveGame(new LeaveGameRequest(command.getAuthString(), command.getGameID(), command.getTeamColor()));
+        LeaveGameResponse response =  gameService.leaveGame(new LeaveGameRequest(command.getAuthString(), command.getGameID(), command.getTeamColor()));
         try {
-            connections.sendMessageToAllButUser(command.getGameID(), username, notificationToOthers);
+            if (response.message() != null){
+                connections.sendMessageToUser(command.getGameID(),username ,new ErrorMessage(response.message()));
+            } else {
+                connections.sendMessageToAllButUser(command.getGameID(), username, notificationToOthers);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -141,9 +138,13 @@ public class WebSocketHandler {
     private void resign(Session session, String username, ResignCommand command){
         String messageToOthers = String.format("%s has resigned the game", username);
         NotificationMessage notificationToOthers = new NotificationMessage(messageToOthers);
-        gameService.resignGame(new ResignGameRequest(command.getAuthString(), command.getGameID()));
+        LeaveGameResponse response = gameService.resignGame(new ResignGameRequest(command.getAuthString(), command.getGameID()));
         try {
-            connections.sendMessageToAllButUser(command.getGameID(), username, notificationToOthers);
+            if (response.message() != null){
+                connections.sendMessageToUser(command.getGameID(),username ,new ErrorMessage(response.message()));
+            } else {
+                connections.sendMessageToAllButUser(command.getGameID(), username, notificationToOthers);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -157,6 +158,17 @@ public class WebSocketHandler {
         } else {
             return "Black Player";
         }
+    }
+
+    private String moveTranslator(ChessMove move, ChessGame.TeamColor teamColor) {
+        int fromRow = move.getStartPosition().getRow();
+        String fromCol =  translateCol(move.getStartPosition().getColumn());
+        int toRow = move.getEndPosition().getRow();
+        String toCol = translateCol(move.getEndPosition().getColumn());
+        String from = fromCol + fromRow;
+        String to = toCol + toRow;
+
+        return String.format("%s player moved from %s to %s",teamColor, from, to );
     }
 
     private String translateCol(int col){
@@ -195,5 +207,11 @@ public class WebSocketHandler {
          else {
             return "Not valid"; // out of range
         }
+    }
+
+    @OnWebSocketError
+    public void onError(Session session, Throwable throwable) {
+        System.err.println("WebSocket error: " + throwable.getMessage() + throwable.getStackTrace());
+        // Add additional error handling logic here
     }
 }

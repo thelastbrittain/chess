@@ -26,10 +26,6 @@ public class ConnectionManager {
         });
     }
 
-//    public void remove(String visitorName) {
-//        connections.remove(visitorName);
-//    }
-
     public void sendMessageToAllButUser(int gameID, String excludeUsername, ServerMessage message) throws IOException {
         var removeList = new ArrayList<Connection>();
         Collection<Connection> gameConnections = connections.get(gameID);
@@ -74,6 +70,7 @@ public class ConnectionManager {
                     c.send(message.toString());
                 }
             } else {
+                System.out.println("The session is not open (sendMessage to user/ConnectionManager) ");
                 removeList.add(c);
             }
         }

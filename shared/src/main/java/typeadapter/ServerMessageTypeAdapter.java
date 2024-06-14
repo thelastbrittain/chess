@@ -125,47 +125,6 @@ public class ServerMessageTypeAdapter extends TypeAdapter<ServerMessage> {
 
         return new ChessPiece(teamColor, pieceType);
     }
-
-//    private ChessMove readChessMove(JsonReader jsonReader) throws IOException {
-//        ChessPosition startPosition = null;
-//        ChessPosition endPosition = null;
-//        ChessPiece.PieceType promotionPiece = null;
-//
-//        jsonReader.beginObject();
-//
-//        while (jsonReader.hasNext()) {
-//            String name = jsonReader.nextName();
-//            switch (name) {
-//                case "startPosition" -> startPosition = readChessPosition(jsonReader);
-//                case "endPosition" -> endPosition = readChessPosition(jsonReader);
-//                case "promotionPiece" -> promotionPiece = ChessPiece.PieceType.valueOf(jsonReader.nextString());
-//            }
-//        }
-//
-//        jsonReader.endObject();
-//
-//        return new ChessMove(startPosition, endPosition, promotionPiece);
-//    }
-
-//    private ChessPosition readChessPosition(JsonReader jsonReader) throws IOException {
-//        int x = 0;
-//        int y = 0;
-//
-//        jsonReader.beginObject();
-//
-//        while (jsonReader.hasNext()) {
-//            String name = jsonReader.nextName();
-//            switch (name) {
-//                case "x" -> x = jsonReader.nextInt();
-//                case "y" -> y = jsonReader.nextInt();
-//            }
-//        }
-//
-//        jsonReader.endObject();
-//
-//        return new ChessPosition(x, y);
-//    }
-
 }
 
 

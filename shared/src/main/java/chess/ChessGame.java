@@ -75,6 +75,7 @@ public class ChessGame {
     }
 
     private boolean moveChecks(ChessMove move) throws InvalidMoveException {
+        if (isGameOver()){throw new InvalidMoveException(InvalidMoves.NOTVALID);}
         if (board.getPiece(move.getStartPosition()) == null){throw new InvalidMoveException(InvalidMoves.NOPIECETHERE);}
 
         ChessGame.TeamColor teamColor= board.getPiece(move.getStartPosition()).getTeamColor();

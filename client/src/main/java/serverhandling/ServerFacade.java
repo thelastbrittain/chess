@@ -2,7 +2,7 @@ package serverhandling;
 
 import request.*;
 import response.*;
-import translationForClient.TranslatorForClient;
+import translationforclient.TranslatorForClient;
 import ui.ClientMenu;
 import websocket.commands.ConnectCommand;
 import websocket.commands.LeaveGameCommand;

@@ -377,7 +377,7 @@ public class ClientMenu implements ServerMessageObserver {
         String location = scanner.nextLine();
         //makes sure that there is a piece there and that it is for the right team potentially
         int row = translateRow(location);
-        int col = translateCol(location);
+        int col =  ColumnTranslator.translateCol(location);
 //        System.out.println("Row = " + row + ". Col = " + col);
         if (row >= 9 || col >= 9){
             System.out.println("Invalid input");
@@ -429,71 +429,11 @@ public class ClientMenu implements ServerMessageObserver {
         boardCreator.createBoard(teamColor, board, validMoves);
     }
 
-//    private void showBoard(int gameID, String authToken, Collection<ChessMove> validMoves){
-//        BoardCreator boardCreator = new BoardCreator();
-//        ChessGame game = getGame(gameID, authToken);
-//        System.out.println("White Orientation");
-//        assert game != null;
-//        boardCreator.createBoard(ChessGame.TeamColor.WHITE, game.getBoard(), validMoves);
-//        System.out.println("Black Orientation");
-//        boardCreator.createBoard(ChessGame.TeamColor.BLACK, game.getBoard(), validMoves);
-//    }
-
-//    private ChessGame getGame(int gameID, String authToken) {
-//        ListGamesResponse listGamesResponse = facade.listGames(authToken);
-//        for (GameData game : listGamesResponse.games()) {
-//            if (gameIDMap.get(gameID) == game.getGameID()) {
-//                return game.getGame();
-//            }
-//        }
-//        return null;
-//    }
-
     private int translateRow(String location){
         if (location.length() == 2 && Character.isLetter(location.charAt(0)) && Character.isDigit(location.charAt(1))) {
             // Get the second character and convert it to an integer
             char numberChar = location.charAt(1);
             return Character.getNumericValue(numberChar);
-        } else {
-            return 10; // out of range
-        }
-    }
-
-    private int translateCol(String location){
-        if (location.length() == 2 && Character.isLetter(location.charAt(0)) && Character.isDigit(location.charAt(1))) {
-            // Get the second character and convert it to an integer
-            char columnLetter = location.charAt(0);
-            int col;
-            switch (columnLetter){
-                case 'a':
-                    col = 1;
-                    break;
-                case 'b':
-                    col = 2;
-                    break;
-                case 'c':
-                    col = 3;
-                    break;
-                case 'd':
-                    col = 4;
-                    break;
-                case 'e':
-                    col = 5;
-                    break;
-                case 'f':
-                    col = 6;
-                    break;
-                case 'g':
-                    col = 7;
-                    break;
-                case 'h':
-                    col = 8;
-                    break;
-                default:
-                    col = 10;
-                    break;
-            }
-            return col;
         } else {
             return 10; // out of range
         }
@@ -535,7 +475,7 @@ public class ClientMenu implements ServerMessageObserver {
         String location = scanner.nextLine();
         //makes sure that there is a piece there and that it is for the right team potentially
         int row = translateRow(location);
-        int col = translateCol(location);
+        int col = ColumnTranslator.translateCol(location);
         if (row >= 9 || col >= 9){
             System.out.println("Invalid input, try again: ");
             return getPositionFromInput();

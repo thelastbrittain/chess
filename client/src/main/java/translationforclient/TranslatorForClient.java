@@ -1,10 +1,8 @@
-package translationForClient;
+package translationforclient;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import typeadapter.CommandTypeAdapter;
 import typeadapter.ServerMessageTypeAdapter;
-import websocket.commands.UserGameCommand;
 import websocket.messages.ServerMessage;
 
 public class TranslatorForClient {
