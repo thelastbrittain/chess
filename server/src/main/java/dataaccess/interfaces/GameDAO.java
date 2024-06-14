@@ -12,7 +12,10 @@ public interface GameDAO {
      boolean isVerifiedGame(int gameID);
      Collection<GameData> listGames();
      JoinGameResponse updateUserInGame(int gameID, String username, ChessGame.TeamColor teamColor);
-     void clearGames();
+
+    ChessGame.TeamColor getTeamColor(int gameID, String username);
+
+    void clearGames();
      int createGameID();
 
     ChessGame getGame(int i);

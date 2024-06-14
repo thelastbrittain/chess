@@ -100,4 +100,9 @@ public class MemoryGameDAO implements GameDAO {
     public void clearGames(){
         gameDataList.clear();
     }
+
+    @Override
+    public ChessGame.TeamColor getTeamColor(int gameID, String username) {
+        return null;
+    }
 }
