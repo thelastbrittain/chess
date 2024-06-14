@@ -133,6 +133,7 @@ public class WebSocketHandler {
             if (response.message() != null){
                 connections.sendMessageToUser(command.getGameID(),username ,new ErrorMessage(response.message()));
             } else {
+                connections.remove(command.getGameID(), username);
                 connections.sendMessageToAllButUser(command.getGameID(), username, notificationToOthers);
             }
         } catch (IOException e) {

@@ -26,6 +26,13 @@ public class ConnectionManager {
         });
     }
 
+    public void remove(int gameID, String username) {
+        connections.computeIfPresent(gameID, (key, existingCollection) -> {
+            existingCollection.removeIf(conn -> conn.username.equals(username));
+            return existingCollection.isEmpty() ? null : existingCollection;
+        });
+    }
+
     public void sendMessageToAllButUser(int gameID, String excludeUsername, ServerMessage message) throws IOException {
         var removeList = new ArrayList<Connection>();
         Collection<Connection> gameConnections = connections.get(gameID);
