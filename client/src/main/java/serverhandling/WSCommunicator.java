@@ -1,6 +1,6 @@
 package serverhandling;
 
-import translationforclient.TranslatorForClient;
+import translationForClient.TranslatorForClient;
 import websocket.commands.ConnectCommand;
 import websocket.commands.LeaveGameCommand;
 import websocket.commands.MakeMoveCommand;
