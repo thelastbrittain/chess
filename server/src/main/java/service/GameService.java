@@ -104,8 +104,11 @@ public class GameService {
 
     }
 
-    public ChessGame.TeamColor getTeamColor(String username, int gameID){
-        return  gameDAO.getTeamColor(gameID, username);
+    public GetTeamColorResponse getTeamColor(String username, int gameID){
+        if (!gameDAO.isVerifiedGame(gameID)) {
+            return new GetTeamColorResponse(ErrorMessages.BADREQUEST,null);
+        }
+        return new GetTeamColorResponse(null, gameDAO.getTeamColor(gameID, username));
     }
 
     private boolean isInCheck(ChessGame.TeamColor teamColor, ChessGame game){
