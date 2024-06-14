@@ -66,6 +66,9 @@ public class GameService {
             return new LeaveGameResponse(ErrorMessages.BADREQUEST);
         }
         ChessGame tempGame = gameDAO.getGame(request.gameID());
+        if (tempGame.isGameOver()){
+            return new LeaveGameResponse("Game is already over. Cannot Resign");
+        }
         tempGame.setGameOver(true);
 
         gameDAO.updateGame(request.gameID(), tempGame);

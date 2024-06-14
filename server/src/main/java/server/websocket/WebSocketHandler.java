@@ -134,14 +134,18 @@ public class WebSocketHandler {
     private void leaveGame(Session session, String username, LeaveGameCommand command){
         String messageToOthers = String.format("%s has left the game", username);
         NotificationMessage notificationToOthers = new NotificationMessage(messageToOthers);
-        LeaveGameResponse response =  gameService.leaveGame(new LeaveGameRequest(command.getAuthString(), command.getGameID(), getTeamColor(username, command.getGameID())));
+
         try {
-            if (response.message() != null){
-                connections.sendMessageToUser(command.getGameID(),username ,new ErrorMessage(response.message()));
-            } else {
-                connections.remove(command.getGameID(), username);
-                connections.sendMessageToAllButUser(command.getGameID(), username, notificationToOthers);
+            if (!typeOfPlayer(command.getGameID(), username).equals("Observer")){
+                LeaveGameResponse response =  gameService.leaveGame(new LeaveGameRequest(command.getAuthString(), command.getGameID(), getTeamColor(username, command.getGameID())));
+                if (response.message() != null){
+                    connections.sendMessageToUser(command.getGameID(),username ,new ErrorMessage(response.message()));
+                    return;
+                }
             }
+            connections.sendMessageToAllButUser(command.getGameID(), username, notificationToOthers);
+            connections.remove(command.getGameID(), username);
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -162,7 +166,7 @@ public class WebSocketHandler {
             if (response.message() != null){
                 connections.sendMessageToUser(command.getGameID(),username ,new ErrorMessage(response.message()));
             } else {
-                connections.sendMessageToAllButUser(command.getGameID(), username, notificationToOthers);
+                connections.sendMessageToAll(command.getGameID(), notificationToOthers);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

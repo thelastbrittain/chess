@@ -142,7 +142,7 @@ public class SQLGameDAO implements GameDAO {
         if (!(teamColor == ChessGame.TeamColor.WHITE || teamColor == ChessGame.TeamColor.BLACK)){
             return new JoinGameResponse(ErrorMessages.BADREQUEST);
         }
-        if (!isEmpty(gameID, teamColor)){return new JoinGameResponse(ErrorMessages.ALREADYTAKEN);}
+        if (!isEmpty(gameID, teamColor) && username != null){return new JoinGameResponse(ErrorMessages.ALREADYTAKEN);}
         String statement;
         if (teamColor.equals(ChessGame.TeamColor.WHITE)){
             statement = "UPDATE game SET white_username = ? WHERE game_id = ?";
@@ -158,6 +158,7 @@ public class SQLGameDAO implements GameDAO {
         }
         return new JoinGameResponse(null);
     }
+
 
     private boolean isEmpty(int gameID, ChessGame.TeamColor teamColor){
         String usernameType;
