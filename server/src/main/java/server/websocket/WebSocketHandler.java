@@ -154,10 +154,10 @@ public class WebSocketHandler {
         }
     }
 
-    private String typeOfPlayer(UserGameCommand command){
-        if (command.getTeamColor() == null){
+    private String typeOfPlayer(ChessGame.TeamColor teamColor) {
+        if (teamColor == null){
             return "Observer";
-        } else if (command.getTeamColor().equals(ChessGame.TeamColor.WHITE)){
+        } else if (teamColor.equals(ChessGame.TeamColor.WHITE)){
             return "White Player";
         } else {
             return "Black Player";
@@ -211,6 +211,10 @@ public class WebSocketHandler {
          else {
             return "Not valid"; // out of range
         }
+    }
+
+    private ChessGame.TeamColor getTeamColor(String username, int gameID){
+        return gameDAO.getTeamColor(gameID, username);
     }
 
     @OnWebSocketError
