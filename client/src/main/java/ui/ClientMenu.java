@@ -219,6 +219,7 @@ public class ClientMenu implements ServerMessageObserver {
         int gameID = gameIDMap.get(gameNumber);
         teamColor = ChessGame.TeamColor.WHITE;
         facade.observeGame(authToken, gameID);
+        gameplayUI(authToken, gameID);
 
         return "";
     }
@@ -465,6 +466,7 @@ public class ClientMenu implements ServerMessageObserver {
     }
 
     private void loadGame(ChessGame game){
+        System.out.println("Trying to display board.");
         mostRecentGame = game;
         displayBoard(game.getBoard(), null);
 

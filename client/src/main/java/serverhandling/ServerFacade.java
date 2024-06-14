@@ -88,6 +88,7 @@ public class ServerFacade {
         //Perform correct HTTP request
         try {
             String stringResponse = httpCommunicator.doPut(url + "/game", jsonRequest, command.getAuthString());
+            System.out.println("This is the joinGameResponse in SFacade: " + stringResponse);
             wsCommunicator.connect(command);
             return TranslatorForClient.fromJsontoObjectNotRequest(stringResponse, JoinGameResponse.class);
         } catch (IOException e) {

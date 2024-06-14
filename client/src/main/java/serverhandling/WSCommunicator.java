@@ -60,6 +60,7 @@ public class WSCommunicator extends Endpoint {
     }
 
     public void makeMove(MakeMoveCommand command){
+        System.out.println("Made it into makeMove in WSCommunicator");
         try{
             this.session.getBasicRemote().sendText(TranslatorForClient.fromObjectToJson(command).toString());
         } catch (IOException e) {

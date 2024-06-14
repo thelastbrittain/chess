@@ -69,6 +69,7 @@ public class WebSocketHandler {
     }
 
     private void connect(Session session, String username, ConnectCommand command) {
+        System.out.println("(Connect wsHandler: The server thinks that this person is a " + typeOfPlayer(command.getGameID(), username));
         String messageToOthers = String.format("%s has joined the game as %s", username, typeOfPlayer(command.getGameID(), username));
         NotificationMessage notificationToOthers = new NotificationMessage(messageToOthers);
         GetGameResponse response = gameService.returnGame(new GetGameRequest(command.getAuthString(), command.getGameID()));
@@ -88,8 +89,10 @@ public class WebSocketHandler {
     }
 
     private void makeMove(Session session, String username, MakeMoveCommand command){
+        System.out.println("Made it into makeMove in WSHandler");
         if (typeOfPlayer(command.getGameID(), username).equals("Observer")){
             try {
+                System.out.println("Person is observer. makeMove WSHandler");
                 connections.sendMessageToUser(command.getGameID(), username,new ErrorMessage("Observers can't make moves."));
             } catch (IOException e) {
                 throw new RuntimeException(e);
