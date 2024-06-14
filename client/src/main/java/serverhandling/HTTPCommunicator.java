@@ -59,15 +59,10 @@ public class HTTPCommunicator {
     }
 
     private void sendRequest(HttpURLConnection connection, String body){
-        System.out.println(" in sendRequest in HTTPCom. Trying to send message to server.");
-        System.out.println("Body is: " + body);
-        System.out.println("Connection is: " + connection);
         try (OutputStream requestBody = connection.getOutputStream();) {
             byte[] input = body.getBytes("utf-8");
             requestBody.write(input, 0, input.length);
-            System.out.println("Body sent to server");
         } catch (IOException e) {
-            System.out.println("Sending Request to Server failed. in sendRequest in HTTP COM. ");
             throw new RuntimeException(e);
         }
     }

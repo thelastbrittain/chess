@@ -88,14 +88,11 @@ public class ServerFacade {
         String jsonRequest = (String) TranslatorForClient.fromObjectToJson(command);
         String httpRequest = (String) TranslatorForClient.fromObjectToJson(new JoinGameRequest(teamColor, command.getGameID(), command.getAuthString()));
         //Perform correct HTTP request
-        System.out.println("Here is the HTTP request (joinGame  SFacade): " + httpRequest) ;
         try {
             String stringResponse = httpCommunicator.doPut(url + "/game", httpRequest, command.getAuthString());
-            System.out.println("This is the joinGameResponse in SFacade: " + stringResponse);
             wsCommunicator.connect(command);
             return TranslatorForClient.fromJsontoObjectNotRequest(stringResponse, JoinGameResponse.class);
         } catch (IOException e) {
-            System.out.println("Registering user failed: " + e.getMessage());
             return new JoinGameResponse("Join Game Failure");
         }
     }
