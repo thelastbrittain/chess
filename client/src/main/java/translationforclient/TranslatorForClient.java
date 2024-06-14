@@ -1,4 +1,4 @@
-package translationForClient;
+package translationforclient;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
