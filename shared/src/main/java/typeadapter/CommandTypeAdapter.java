@@ -41,7 +41,7 @@ public class CommandTypeAdapter extends TypeAdapter<UserGameCommand> {
                 case "gameID" -> gameID = jsonReader.nextInt();
                 case "commandType" -> commandType = UserGameCommand.CommandType.valueOf(jsonReader.nextString());
                 case "move" -> move = readChessMove(jsonReader);
-                case "teamColor" -> teamColor = ChessGame.TeamColor.valueOf(jsonReader.nextString());
+
             }
         }
 
@@ -51,10 +51,10 @@ public class CommandTypeAdapter extends TypeAdapter<UserGameCommand> {
             return null;
         } else {
             return switch (commandType) {
-                case CONNECT -> new ConnectCommand(authToken, gameID, teamColor);
-                case MAKE_MOVE -> new MakeMoveCommand(authToken, gameID, move, teamColor);
-                case LEAVE -> new LeaveGameCommand(authToken, gameID, teamColor);
-                case RESIGN -> new ResignCommand(authToken, gameID, teamColor);
+                case CONNECT -> new ConnectCommand(authToken, gameID);
+                case MAKE_MOVE -> new MakeMoveCommand(authToken, gameID, move);
+                case LEAVE -> new LeaveGameCommand(authToken, gameID);
+                case RESIGN -> new ResignCommand(authToken, gameID);
             };
         }
     }
