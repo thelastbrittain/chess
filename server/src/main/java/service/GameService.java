@@ -104,6 +104,10 @@ public class GameService {
 
     }
 
+    public ChessGame.TeamColor getTeamColor(String username, int gameID){
+        return  gameDAO.getTeamColor(gameID, username);
+    }
+
     private boolean isInCheck(ChessGame.TeamColor teamColor, ChessGame game){
         ChessGame.TeamColor enemyColor = getEnemyColor(teamColor);
         if (game.isInCheck(enemyColor)){
@@ -139,5 +143,7 @@ public class GameService {
             return ChessGame.TeamColor.WHITE;
         }
     }
+
+
 
 }
