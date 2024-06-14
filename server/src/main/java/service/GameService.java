@@ -82,6 +82,7 @@ public class GameService {
         }
 
         ChessGame game = returnGame(new GetGameRequest(request.authToken(), request.gameID())).game();
+        if (!game.getTeamTurn().equals(request.teamColor())){return new MakeMoveResponse("It is not your turn", false, false, false, null);}
         try {
             game.makeMove(request.move());
         } catch (InvalidMoveException e) {
