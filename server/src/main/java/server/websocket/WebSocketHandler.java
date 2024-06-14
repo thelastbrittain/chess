@@ -24,7 +24,6 @@ import websocket.messages.LoadGameMessage;
 import websocket.messages.NotificationMessage;
 import websocket.messages.ServerMessage;
 
-import javax.websocket.OnError;
 import java.io.IOException;
 
 @WebSocket
@@ -50,6 +49,11 @@ public class WebSocketHandler {
         try {
             UserGameCommand command = Translator.fromJsontoObjectNotRequest(message, UserGameCommand.class);
             String username = new SQLAuthDAO().getUsernameFromAuth(command.getAuthString()); //use handler/service/dao to get username
+            if (username == null){
+                session.getRemote().sendString(Translator.fromObjectToJson(new ErrorMessage("Invalid authToken.")).toString());
+                System.out.println("Bad auth token in onMesage WSHandler " + Translator.fromObjectToJson(new ErrorMessage("Invalid authToken.")).toString());
+                return;
+            }
             connections.add(command.getGameID(), username, session);
 
 

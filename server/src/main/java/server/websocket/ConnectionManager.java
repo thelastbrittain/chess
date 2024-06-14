@@ -35,6 +35,7 @@ public class ConnectionManager {
                     c.send(message.toString());
                 }
             } else {
+                System.out.println("The session is not open (sendMessage to user/ConnectionManager) ");
                 removeList.add(c);
             }
         }
@@ -52,6 +53,7 @@ public class ConnectionManager {
             if (c.session.isOpen()) {
                 c.send(message.toString());
             } else {
+                System.out.println("The session is not open (sendMessage to user/ConnectionManager) ");
                 removeList.add(c);
             }
         }
