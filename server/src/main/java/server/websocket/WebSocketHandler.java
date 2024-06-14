@@ -12,6 +12,7 @@ import request.GetGameRequest;
 import request.LeaveGameRequest;
 import request.MakeMoveRequest;
 import request.ResignGameRequest;
+import response.GetGameResponse;
 import response.MakeMoveResponse;
 import service.GameService;
 import translation.Translator;
@@ -19,6 +20,7 @@ import websocket.commands.*;
 import websocket.messages.ErrorMessage;
 import websocket.messages.LoadGameMessage;
 import websocket.messages.NotificationMessage;
+import websocket.messages.ServerMessage;
 
 import java.io.IOException;
 
@@ -59,19 +61,20 @@ public class WebSocketHandler {
         }
     }
 
-    private void connect(Session session, String username, ConnectCommand command){
+    private void connect(Session session, String username, ConnectCommand command) {
         String messageToOthers = String.format("%s has joined the game as %s", username, typeOfPlayer(command));
         NotificationMessage notificationToOthers = new NotificationMessage(messageToOthers);
-        ChessGame gameToReturn = gameService.returnGame(new GetGameRequest(command.getAuthString(), command.getGameID())).game();
+        GetGameResponse response = gameService.returnGame(new GetGameRequest(command.getAuthString(), command.getGameID()));
 
-        LoadGameMessage loadGameMessage = new LoadGameMessage(gameToReturn);
+
+        LoadGameMessage loadGameMessage = new LoadGameMessage(response.game());
         try {
-            connections.sendMessageToUser(command.getGameID(), username, loadGameMessage);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        try {
-            connections.sendMessageToAllButUser(command.getGameID(), username, notificationToOthers);
+            if (response.message() != null) {
+                connections.sendMessageToUser(command.getGameID(), username, new ErrorMessage(response.message()));
+            } else {
+                connections.sendMessageToUser(command.getGameID(), username, loadGameMessage);
+                connections.sendMessageToAllButUser(command.getGameID(), username, notificationToOthers);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

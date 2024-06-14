@@ -51,6 +51,9 @@ public class GameService {
 
     public GetGameResponse returnGame(GetGameRequest request){
         if (!authDAO.isVerifiedAuth(request.authToken())) {return new GetGameResponse(null, ErrorMessages.UNAUTHORIZED);}
+        if (!gameDAO.isVerifiedGame(request.gameID())) {
+            return new GetGameResponse(null, ErrorMessages.BADREQUEST);
+        }
 
         return new GetGameResponse(gameDAO.getGame(request.gameID()), null);
     }
