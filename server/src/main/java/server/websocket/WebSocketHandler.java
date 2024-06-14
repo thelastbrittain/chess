@@ -88,7 +88,13 @@ public class WebSocketHandler {
     }
 
     private void makeMove(Session session, String username, MakeMoveCommand command){
-        assert getTeamColor(username, command.getGameID()) != null;
+        if (typeOfPlayer(command.getGameID(), username).equals("Observer")){
+            try {
+                connections.sendMessageToUser(command.getGameID(), username,new ErrorMessage("Observers can't make moves."));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         MakeMoveResponse response = gameService.makeMove(new MakeMoveRequest(command.getAuthString(), command.getGameID(), command.getMove(), getTeamColor(username, command.getGameID())));
 
         String messageToUser = response.message();
