@@ -28,6 +28,7 @@ public class GameService {
             return new JoinGameResponse(ErrorMessages.UNAUTHORIZED);
         }
         if (!gameDAO.isVerifiedGame(joinGameRequest.gameID())) {
+            System.out.println("The game is not verified");
             return new JoinGameResponse(ErrorMessages.BADREQUEST);
         }
         return gameDAO.updateUserInGame(joinGameRequest.gameID(), authDAO.getUsernameFromAuth(joinGameRequest.authToken()), joinGameRequest.playerColor());

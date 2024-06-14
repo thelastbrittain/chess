@@ -15,6 +15,7 @@ public class HTTPCommunicator {
     public String doPut(String urlString, String body, String authToken) throws IOException, IOException {
         HttpURLConnection connection = getHttpURLConnection(urlString, authToken, "PUT", true);
         sendRequest(connection, body);
+        System.out.println("In doPut. Here is the info: " + getResponseBody(connection));
         return getResponseBody(connection);
     }
 
