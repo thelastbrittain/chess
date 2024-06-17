@@ -465,7 +465,6 @@ public class ClientMenu implements ServerMessageObserver {
     }
 
     private void loadGame(ChessGame game){
-        System.out.println("Trying to display board.");
         mostRecentGame = game;
         displayBoard(game.getBoard(), null);
 
